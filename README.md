@@ -6,3 +6,6 @@ A homemade command line where you can use the original Termux command. Here we h
 
 At the same time, some other useful commands are built in, such as SQLMap.
 与此同时，也内置了一些其他有用的命令，例如SQLMap等
+
+Now, it supports use on the computer (Windows) by simply double-clicking the .cmd file.
+现在，它已经支持了电脑端（Windows）使用，只需双击.cmd文件即可。
