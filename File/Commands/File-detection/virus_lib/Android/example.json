@@ -1,0 +1,42 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2024-01-01",
+  "description": "Trojan-Virus-Library",
+  "author": "rcl-1111",
+  "viruses": [
+    {
+      "name": "Example_Trojan_Android",
+      "type": "Trojan",
+      "platform": "Android",
+      "md5_hash": "d41d8cd98f00b204e9800998ecf8427e",
+      "sha1_hash": "da39a3ee5e6b4b0d3255bfef95601890afd80709",
+      "sha256_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "risk_level": "High",
+      "description": "示例木马病毒，用于测试",
+      "detection_date": "2024-01-01",
+      "signature": "恶意行为：创建后门，窃取信息",
+      "reference": "https://github.com/rcl-1111/Trojan-Virus-Library"
+    },
+  ],
+  "statistics": {
+    "total_viruses": 1,
+    "by_type": {
+      "Trojan": 1,
+      "Backdoor": 0,
+      "Ransomware": 0,
+      "Miner": 0,
+      "Spyware": 0
+    },
+    "by_platform": {
+      "Android": 1,
+      "Windows": 0,
+      "Linux": 0,
+      "Cross-Platform": 0
+    },
+    "by_risk_level": {
+      "Critical": 0,
+      "High": 1,
+      "Medium": 0
+    }
+  }
+}

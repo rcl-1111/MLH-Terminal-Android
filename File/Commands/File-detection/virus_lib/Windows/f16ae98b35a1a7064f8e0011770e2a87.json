@@ -1,0 +1,26 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2026-05-16",
+  "description": "Trojan-Virus-Library Individual Virus File",
+  "author": "rcl-1111",
+  "name": "莫妮卡病毒.exe",
+  "type": "Trojan",
+  "platform": "Windows",
+  "md5_hash": "f16ae98b35a1a7064f8e0011770e2a87",
+  "sha1_hash": "3ad569dcfb29b73fe995340b790286054b3b0997",
+  "sha256_hash": "b03430e39d20ba2724719eaba35cac35b9ea87625d3d4cfc414a08596a37cbdf",
+  "risk_level": "High",
+  "description": "依旧别人给的",
+  "detection_date": "2024-01-01",
+  "signature": "恶意行为",
+  "reference": "",
+  "tags": ["后门", "信息窃取", "Windows"],
+  "behavior": [
+    "创建系统后门",
+    "窃取用户敏感信息",
+    "自启动"
+  ],
+  "mitigation": [
+    "使用杀毒软件扫描",
+  ]
+}

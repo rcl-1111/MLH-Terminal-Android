@@ -1,0 +1,26 @@
+{
+  "version": "2.1.0",
+  "last_updated": "2026-05-15",
+  "description": "Trojan-Virus-Library Individual Virus File",
+  "author": "rcl-1111",
+  "name": "洛天依病毒2.1_Codename-天依无缝.exe",
+  "type": "Trojan",
+  "platform": "Windows",
+  "md5_hash": "60772997fc61e40ce733a842106e8199",
+  "sha1_hash": "3f9a48073f6ea169db4f39232167bca7a53bad72",
+  "sha256_hash": "7ebf10d5e5f62b1f1bca72c2500f8e2c1f6678cfed1fe058d25c560c1e3ad61d",
+  "risk_level": "High",
+  "description": "",
+  "detection_date": "2026-05-15",
+  "signature": "unknow",
+  "reference": "",
+  "tags": ["Windows"],
+  "behavior": [
+    "危害系统",
+    "窃取用户敏感信息",
+    "自启动"
+  ],
+  "mitigation": [
+    "使用杀毒软件扫描"
+  ]
+}

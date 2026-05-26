@@ -1,0 +1,125 @@
+#!/bin/bash
+# File-detection配置文件
+
+# 颜色定义
+RED='\033[1;31m'
+GREEN='\033[1;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[1;34m'
+MAGENTA='\033[1;35m'
+CYAN='\033[1;36m'
+WHITE='\033[1;37m'
+BOLD='\033[1m'
+NC='\033[0m'
+
+# 符号定义
+CHECK="${GREEN}[√]${NC}"
+CROSS="${RED}[×]${NC}"
+INFO="${YELLOW}[*]${NC}"
+WARN="${YELLOW}[!]${NC}"
+PLUS="${GREEN}[+]${NC}"
+MINUS="${RED}[-]${NC}"
+
+# 基本路径
+MLH_ROOT="/data/data/com.termux/files/home/MLH-Terminal"
+BASE_DIR="/data/data/com.termux/files/home/MLH-Terminal/File/Commands/File-detection"
+VIRUS_LIB_DIR="$BASE_DIR/virus_lib"
+DATA_DIR="$BASE_DIR/data"
+CACHE_DIR="$BASE_DIR/cache"
+LOG_DIR="$BASE_DIR/logs"
+
+# 病毒库信息
+VIRUS_LIB_REPO="https://github.com/rcl-1111/Trojan-Virus-Library"
+VIRUS_LIB_URL="https://raw.githubusercontent.com/rcl-1111/Trojan-Virus-Library/main"
+LOCAL_VERSION="0.0.0"
+REMOTE_VERSION="0.0.0"
+LAST_CHECK=0
+CHECK_INTERVAL=86400  # 24小时
+
+# 空文件哈希（用于识别示例文件）
+EMPTY_MD5="d41d8cd98f00b204e9800998ecf8427e"
+EMPTY_SHA1="da39a3ee5e6b4b0d3255bfef95601890afd80709"
+EMPTY_SHA256="e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca49599"
+
+# 文件类型定义
+EXECUTABLE_TYPES=("exe" "bat" "cmd" "com" "msi" "sh" "bash" "zsh" "ps1" "vbs" "js" "jar" "apk" "app" "dmg" "deb" "rpm" "bin")
+DOCUMENT_TYPES=("doc" "docx" "xls" "xlsx" "ppt" "pptx" "pdf" "txt" "rtf" "odt" "ods" "odp")
+MEDIA_TYPES=("mp3" "mp4" "avi" "mkv" "mov" "wav" "flac" "aac" "ogg" "jpg" "jpeg" "png" "gif" "bmp" "webp")
+ARCHIVE_TYPES=("zip" "rar" "7z" "tar" "gz" "bz2" "xz" "iso" "dmg")
+SCRIPT_TYPES=("py" "js" "php" "html" "htm" "xml" "json" "yaml" "yml" "cfg" "ini" "conf")
+
+# 危险命令模式
+DANGEROUS_COMMANDS=(
+    "rm -rf" "rm -rf /" "rm -rf /*" "rm -rf ~"
+    "chmod 777" "chmod 000" "chown root"
+    "dd if=/dev/zero" "dd of=/dev/null"
+    "mkfs" "fdisk" "format"
+    "wget" "curl" "nc" "netcat" "telnet" "ssh"
+    "sudo" "su" "chroot"
+    "killall" "pkill" "kill -9"
+    "iptables -F" "iptables -X"
+    "> /dev/sda" "dd if=/dev/urandom"
+    "crontab" "at" "anacron"
+    "setuid" "setgid" "chmod +s"
+    "exec" "system" "popen"
+    "fork" "vfork" "clone"
+    "mknod" "mount" "umount"
+    "insmod" "rmmod" "modprobe"
+    "useradd" "userdel" "groupadd"
+    "passwd" "shadow" "group"
+    "/bin/sh" "/bin/bash" "/bin/dash"
+    "perl -e" "python -c" "ruby -e"
+    "base64 -d" "uuencode" "xxd"
+    "tcpdump" "wireshark" "nmap"
+    "hydra" "metasploit" "sqlmap"
+    "john" "hashcat" "aircrack-ng"
+)
+
+# 危险URL模式
+DANGEROUS_URLS=(
+    "http://" "https://" "ftp://" "sftp://"
+    "www." ".com" ".net" ".org" ".ru" ".cn"
+    "bit.ly" "goo.gl" "tinyurl" "ow.ly"
+    "pastebin.com" "github.com" "git.io"
+    "drive.google.com" "dropbox.com"
+    "mega.nz" "mediafire.com"
+    "anonfiles.com" "file.io"
+)
+
+# 危险文件模式
+DANGEROUS_PATTERNS=(
+    "eval(" "exec(" "system(" "popen(" "shell_exec("
+    "base64_decode" "gzinflate" "str_rot13"
+    "php://input" "data://" "expect://"
+    "include(" "require(" "include_once("
+    "union select" "select * from" "insert into"
+    "drop table" "delete from" "update set"
+    "or 1=1" "' or '" "--" "#" "/*"
+    "document.cookie" "localStorage" "sessionStorage"
+    "XMLHttpRequest" "fetch(" "WebSocket"
+    "onload=" "onerror=" "onclick="
+    "javascript:" "vbscript:" "data:text/html"
+    "<script>" "</script>" "<iframe>" "</iframe>"
+    "<object>" "<embed>" "<applet>"
+    "powershell" "cmd.exe" "bash -c" "sh -c"
+    ".decode(" ".encode(" ".compile("
+    "__import__" "getattr" "setattr"
+    "subprocess" "os.system" "os.popen"
+    "Process.Start" "ShellExecute"
+    "WinExec" "CreateProcess"
+    "Runtime.getRuntime().exec"
+    "ProcessBuilder" "UNSAFE"
+)
+
+# 创建目录结构
+create_directories() {
+    mkdir -p "$VIRUS_LIB_DIR"
+    mkdir -p "$DATA_DIR"
+    mkdir -p "$CACHE_DIR"
+    mkdir -p "$LOG_DIR"
+    mkdir -p "$VIRUS_LIB_DIR/Android"
+    mkdir -p "$VIRUS_LIB_DIR/Linux"
+    mkdir -p "$VIRUS_LIB_DIR/Windows"
+    mkdir -p "$VIRUS_LIB_DIR/MacOS"
+    mkdir -p "$VIRUS_LIB_DIR/Other"
+}

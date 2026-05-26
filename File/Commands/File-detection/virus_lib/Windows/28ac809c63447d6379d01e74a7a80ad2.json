@@ -1,0 +1,26 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2026-05-16",
+  "description": "Trojan-Virus-Library Individual Virus File",
+  "author": "rcl-1111",
+  "name": "钉钉病毒.exe",
+  "type": "Trojan",
+  "platform": "Windows",
+  "md5_hash": "28ac809c63447d6379d01e74a7a80ad2",
+  "sha1_hash": "07f880c5d87801a2577a6536c6f8d75ec6579b42",
+  "sha256_hash": "b0d0fffab0ff62bf4500b181a5709a61a23b7539cbffff9477d27d06ba98de30",
+  "risk_level": "High",
+  "description": "别人给的",
+  "detection_date": "2024-01-01",
+  "signature": "恶意行为",
+  "reference": "",
+  "tags": ["后门", "信息窃取", "Windows"],
+  "behavior": [
+    "创建系统后门",
+    "窃取用户敏感信息",
+    "自启动"
+  ],
+  "mitigation": [
+    "使用杀毒软件扫描",
+  ]
+}

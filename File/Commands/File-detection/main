@@ -1,0 +1,501 @@
+#!/bin/bash
+# File-detection主文件
+
+source "$(dirname "$0")/config"
+source "$(dirname "$0")/utils"
+source "$(dirname "$0")/update"
+source "$(dirname "$0")/hash_tools"
+source "$(dirname "$0")/virus_check"
+
+# 新增：导入APK检测模块
+if [[ -f "$(dirname "$0")/apk_check" ]]; then
+    source "$(dirname "$0")/apk_check"
+fi
+
+# 新增：导入加壳检测模块
+if [[ -f "$(dirname "$0")/pack_check" ]]; then
+    source "$(dirname "$0")/pack_check"
+fi
+
+# 显示帮助
+show_help() {
+    echo -e "${CYAN}File-detection 命令 - 文件安全检测工具${NC}"
+    echo -e ""
+    echo -e "${GREEN}用法:${NC} file-detection [命令] [参数1] [参数2] [文件] [参数3]"
+    echo -e ""
+    echo -e "${GREEN}命令:${NC}"
+    echo -e "  update            更新病毒库到最新版本"
+    echo -e "  upgrade           同update，更新病毒库"
+    echo -e "  install-tools     安装所有必要工具"
+    echo -e ""
+    echo -e "${GREEN}参数1:${NC}"
+    echo -e "  -Ct, --creat-time 查看文件创建时间"
+    echo -e "  -ct, --change-time 查看文件最后修改时间"
+    echo -e "  -d,  --detection  检测文件"
+    echo -e "  --hash            查看文件哈希值"
+    echo -e "  --sha             查看文件SHA值"
+    echo -e "  --md5             查看文件MD5值"
+    echo -e "  --hsm             查看文件完整哈希信息(MD5,SHA1,SHA256)"
+    echo -e "  -a,  --apk        检测APK文件（Android应用）"
+    echo -e "  -p,  --pack       加壳/脱壳相关功能"
+    echo -e ""
+    echo -e "${GREEN}参数2 (仅在特定参数时使用):${NC}"
+    echo -e "  -l,  --list       列出可检测的文件类型"
+    echo -e "  -v,  --virus      检测文件是否为病毒（配合 -d 使用）"
+    echo -e "  --all             执行全面检测（配合 -d 使用）"
+    echo -e "  --permissions     分析APK权限（配合 -a 使用）"
+    echo -e "  -ppc, --Privacy-permission-check 检测APK隐私权限（配合 -a 使用）"
+    echo -e "  --test-install    测试APK安装（配合 -a 使用）"
+    echo -e "  --risks           评估APK风险（配合 -a 使用）"
+    echo -e "  --detect-pack     检测文件是否加壳（配合 -p 使用）"
+    echo -e "  --unpack          尝试脱壳（配合 -p 使用）"
+    echo -e "  --pack            对文件加壳（配合 -p 使用）"
+    echo -e ""
+    echo -e "${GREEN}文件:${NC}"
+    echo -e "  要检测的文件路径（支持相对路径和绝对路径）"
+    echo -e ""
+    echo -e "${GREEN}参数3:${NC}"
+    echo -e "  --quick           快速检测模式（跳过内容分析）"
+    echo -e "  --deep            深度检测模式（更详细的分析）"
+    echo -e "  --no-log          不记录检测日志"
+    echo -e "  --output [文件]   将结果输出到指定文件"
+    echo -e "  --force           强制检测，即使文件看起来安全"
+    echo -e ""
+    echo -e "${GREEN}示例:${NC}"
+    echo -e "  file-detection -Ct /path/to/file"
+    echo -e "  file-detection -d -v suspicious.exe"
+    echo -e "  file-detection -a app.apk"
+    echo -e "  file-detection -a --permissions app.apk"
+    echo -e "  file-detection -a -ppc app.apk"
+    echo -e "  file-detection -p --detect-pack program.exe"
+    echo -e "  file-detection -p --unpack packed.exe"
+    echo -e "  file-detection -p --pack program.exe"
+    echo -e "  file-detection --hsm document.pdf"
+    echo -e "  file-detection update"
+    echo -e "  file-detection install-tools"
+    echo -e "  file-detection -d -l"
+    echo -e ""
+    echo -e "${YELLOW}病毒库:${NC}"
+    echo -e "  首次运行会自动下载病毒库"
+    echo -e "  手动更新: file-detection update"
+    echo -e "  当前版本: $LOCAL_VERSION"
+    echo -e "  仓库地址: $VIRUS_LIB_REPO"
+    echo -e "  注意: 当前病毒库为示例版本，需要添加真实病毒哈希"
+}
+
+# 安装必要工具
+install_required_tools() {
+    echo -e "${PLUS} 开始安装所需工具..."
+    
+    # 基本工具
+    echo -e "${INFO} 安装基本工具..."
+    pkg update -y
+    pkg install -y curl file bc unzip
+    
+    # 病毒检测工具
+    echo -e "${INFO} 安装病毒检测工具..."
+    pkg install -y aapt android-tools
+    
+    # 加壳分析工具
+    echo -e "${INFO} 安装加壳分析工具..."
+    pkg install -y upx binutils
+    
+    # 图像处理工具（可选）
+    echo -e "${INFO} 安装图像处理工具..."
+    pkg install -y imagemagick
+    
+    # 熵值计算工具
+    echo -e "${INFO} 安装熵值计算工具..."
+    pkg install -y ent
+    
+    echo -e "${CHECK} 工具安装完成"
+    echo -e "${INFO} 建议重启MLH Terminal以确保所有工具生效"
+}
+
+# 增强的初始化函数
+enhanced_initialize() {
+    # 创建目录
+    create_directories
+    
+    # 检查本地版本
+    check_local_version
+    
+    # 如果是首次运行，下载病毒库
+    if [[ "$LOCAL_VERSION" == "0.0.0" ]] || [[ ! -f "$VIRUS_LIB_DIR/Android/example.json" ]]; then
+        echo -e "${PLUS} 首次运行，正在初始化..."
+        
+        # 安装基本工具
+        echo -e "${INFO} 检查基本工具..."
+        if ! command -v curl >/dev/null 2>&1; then
+            echo -e "${INFO} 安装curl..."
+            pkg install -y curl
+        fi
+        
+        if ! command -v file >/dev/null 2>&1; then
+            echo -e "${INFO} 安装file..."
+            pkg install -y file
+        fi
+        
+        if ! check_network; then
+            echo -e "${CROSS} 网络不可用，无法下载病毒库"
+            echo -e "${INFO} 将使用本地检测功能（无病毒库）"
+        else
+            update_virus_library
+        fi
+    else
+        # 自动检查更新
+        auto_update_check
+    fi
+    
+    # 检查是否需要安装APK工具
+    if [[ "$1" == "apk" ]] || [[ "$2" == "apk" ]]; then
+        install_apk_tools
+    fi
+    
+    # 检查是否需要安装加壳工具
+    if [[ "$1" == "pack" ]] || [[ "$2" == "pack" ]]; then
+        install_pack_tools
+    fi
+}
+
+# 主函数
+main() {
+    # 检查参数
+    if [[ $# -eq 0 ]]; then
+        show_help
+        exit 0
+    fi
+    
+    # 解析参数
+    local command=""
+    local param1=""
+    local param2=""
+    local file=""
+    local deep_mode=false
+    local quick_mode=false
+    local no_log=false
+    local output_file=""
+    local force_mode=false
+    local test_install=false
+    local check_permissions=false
+    local check_privacy_perms=false
+    local check_risks=false
+    local detect_pack=false
+    local do_unpack=false
+    local do_pack=false
+    
+    # 解析参数
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            update|upgrade)
+                manual_update
+                exit 0
+                ;;
+            install-tools)
+                install_required_tools
+                exit 0
+                ;;
+            -Ct|--creat-time)
+                param1="creat-time"
+                shift
+                ;;
+            -ct|--change-time)
+                param1="change-time"
+                shift
+                ;;
+            -d|--detection)
+                param1="detection"
+                shift
+                ;;
+            -a|--apk)
+                param1="apk"
+                shift
+                ;;
+            -p|--pack)
+                param1="pack"
+                shift
+                ;;
+            --hash)
+                param1="hash"
+                shift
+                ;;
+            --sha)
+                param1="sha"
+                shift
+                ;;
+            --md5)
+                param1="md5"
+                shift
+                ;;
+            --hsm)
+                param1="hsm"
+                shift
+                ;;
+            -l|--list)
+                if [[ "$param1" == "detection" ]]; then
+                    list_detectable_types
+                    exit 0
+                else
+                    echo -e "${CROSS} 错误: -l 参数只能与 -d 参数一起使用"
+                    exit 1
+                fi
+                ;;
+            -v|--virus)
+                if [[ "$param1" == "detection" ]]; then
+                    param2="virus"
+                else
+                    echo -e "${CROSS} 错误: -v 参数只能与 -d 参数一起使用"
+                    exit 1
+                fi
+                shift
+                ;;
+            --all)
+                if [[ "$param1" == "detection" ]] || [[ "$param1" == "apk" ]]; then
+                    param2="all"
+                else
+                    echo -e "${CROSS} 错误: --all 参数需要与检测类型一起使用"
+                    exit 1
+                fi
+                shift
+                ;;
+            --permissions)
+                if [[ "$param1" == "apk" ]]; then
+                    check_permissions=true
+                else
+                    echo -e "${CROSS} 错误: --permissions 参数只能与 -a 参数一起使用"
+                    exit 1
+                fi
+                shift
+                ;;
+            -ppc|--Privacy-permission-check)
+                if [[ "$param1" == "apk" ]]; then
+                    check_privacy_perms=true
+                else
+                    echo -e "${CROSS} 错误: -ppc 参数只能与 -a 参数一起使用"
+                    exit 1
+                fi
+                shift
+                ;;
+            --test-install)
+                if [[ "$param1" == "apk" ]]; then
+                    test_install=true
+                else
+                    echo -e "${CROSS} 错误: --test-install 参数只能与 -a 参数一起使用"
+                    exit 1
+                fi
+                shift
+                ;;
+            --risks)
+                if [[ "$param1" == "apk" ]]; then
+                    check_risks=true
+                else
+                    echo -e "${CROSS} 错误: --risks 参数只能与 -a 参数一起使用"
+                    exit 1
+                fi
+                shift
+                ;;
+            --detect-pack)
+                if [[ "$param1" == "pack" ]]; then
+                    detect_pack=true
+                else
+                    echo -e "${CROSS} 错误: --detect-pack 参数只能与 -p 参数一起使用"
+                    exit 1
+                fi
+                shift
+                ;;
+            --unpack)
+                if [[ "$param1" == "pack" ]]; then
+                    do_unpack=true
+                else
+                    echo -e "${CROSS} 错误: --unpack 参数只能与 -p 参数一起使用"
+                    exit 1
+                fi
+                shift
+                ;;
+            --pack)
+                if [[ "$param1" == "pack" ]]; then
+                    do_pack=true
+                else
+                    echo -e "${CROSS} 错误: --pack 参数只能与 -p 参数一起使用"
+                    exit 1
+                fi
+                shift
+                ;;
+            --deep)
+                deep_mode=true
+                shift
+                ;;
+            --quick)
+                quick_mode=true
+                shift
+                ;;
+            --no-log)
+                no_log=true
+                shift
+                ;;
+            --output)
+                shift
+                if [[ -n "$1" ]]; then
+                    output_file="$1"
+                    shift
+                else
+                    echo -e "${CROSS} 错误: --output 参数需要指定输出文件"
+                    exit 1
+                fi
+                ;;
+            --force)
+                force_mode=true
+                shift
+                ;;
+            --help|-h)
+                show_help
+                exit 0
+                ;;
+            -*)
+                echo -e "${CROSS} 错误: 未知参数: $1"
+                exit 1
+                ;;
+            *)
+                if [[ -z "$file" ]]; then
+                    file="$1"
+                fi
+                shift
+                ;;
+        esac
+    done
+    
+    # 初始化（根据检测类型选择）
+    enhanced_initialize "$param1" "$param2"
+    
+    # 如果没有指定文件，但需要文件参数
+    if [[ -z "$file" ]] && [[ "$param1" != "" ]] && [[ "$param1" != "detection" ]] && [[ "$param1" != "pack" ]]; then
+        echo -e "${CROSS} 错误: 请指定要检测的文件"
+        exit 1
+    fi
+    
+    # 根据参数1执行相应操作
+    case "$param1" in
+        creat-time)
+            echo -e "${INFO} 创建时间: $(get_creation_time "$file")"
+            ;;
+            
+        change-time)
+            echo -e "${INFO} 修改时间: $(get_modification_time "$file")"
+            ;;
+            
+        detection)
+            if [[ -z "$param2" ]]; then
+                echo -e "${CROSS} 错误: 请指定检测类型 (使用 -v, -a 或 -l)"
+                exit 1
+            fi
+            
+            if [[ "$param2" == "virus" ]] || [[ "$param2" == "all" ]]; then
+                if [[ -z "$file" ]]; then
+                    echo -e "${CROSS} 错误: 请指定要检测的文件"
+                    exit 1
+                fi
+                
+                # 执行检测
+                if [[ "$param2" == "virus" ]]; then
+                    detect_single_file "$file" "-v"
+                elif [[ "$param2" == "all" ]]; then
+                    detect_single_file "$file" "-a"
+                fi
+            fi
+            ;;
+            
+        apk)
+            if [[ -z "$file" ]]; then
+                echo -e "${CROSS} 错误: 请指定要检测的APK文件"
+                exit 1
+            fi
+            
+            # 检查是否是APK文件
+            if [[ ! "$file" =~ \.apk$ ]]; then
+                echo -e "${WARN} 文件扩展名不是.apk，但仍尝试分析..."
+            fi
+            
+            # 执行APK检测
+            if [[ "$param2" == "all" ]] || [[ "$check_permissions" == true ]] || [[ "$test_install" == true ]] || [[ "$check_risks" == true ]] || [[ "$check_privacy_perms" == true ]]; then
+                # 综合检测
+                detect_apk_comprehensive "$file"
+                
+                if [[ "$check_permissions" == true ]]; then
+                    analyze_apk_permissions "$file"
+                fi
+                
+                if [[ "$check_privacy_perms" == true ]]; then
+                    detect_privacy_permissions "$file"
+                fi
+                
+                if [[ "$test_install" == true ]]; then
+                    test_apk_installation "$file"
+                fi
+                
+                if [[ "$check_risks" == true ]]; then
+                    detect_apk_risks "$file"
+                fi
+            else
+                # 基本APK信息检测
+                get_apk_info "$file"
+            fi
+            ;;
+            
+        pack)
+            if [[ -z "$file" ]]; then
+                echo -e "${CROSS} 错误: 请指定要处理的文件"
+                exit 1
+            fi
+            
+            if [[ "$detect_pack" == true ]]; then
+                detect_packed "$file" true
+            elif [[ "$do_unpack" == true ]]; then
+                try_unpack "$file"
+            elif [[ "$do_pack" == true ]]; then
+                pack_file "$file"
+            else
+                echo -e "${CROSS} 错误: 请指定加壳操作类型 (--detect-pack, --unpack 或 --pack)"
+                exit 1
+            fi
+            ;;
+            
+        hash)
+            show_hash_info "$file"
+            ;;
+            
+        sha)
+            local sha1_hash=$(get_sha1 "$file")
+            local sha256_hash=$(get_sha256 "$file")
+            
+            if [[ "$sha1_hash" != "计算失败" ]] && [[ "$sha1_hash" != "文件不存在" ]]; then
+                echo -e "${INFO} SHA1:   $sha1_hash"
+            fi
+            if [[ "$sha256_hash" != "计算失败" ]] && [[ "$sha256_hash" != "文件不存在" ]]; then
+                echo -e "${INFO} SHA256: $sha256_hash"
+            fi
+            ;;
+            
+        md5)
+            local md5_hash=$(get_md5 "$file")
+            if [[ "$md5_hash" != "计算失败" ]] && [[ "$md5_hash" != "文件不存在" ]]; then
+                echo -e "${INFO} MD5: $md5_hash"
+            fi
+            ;;
+            
+        hsm)
+            show_full_file_info "$file"
+            ;;
+            
+        "")
+            show_help
+            ;;
+            
+        *)
+            echo -e "${CROSS} 错误: 未知的参数: $param1"
+            exit 1
+            ;;
+    esac
+}
+
+# 运行主函数
+main "$@"

@@ -1,0 +1,26 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2026-05-16",
+  "description": "Trojan-Virus-Library Individual Virus File",
+  "author": "rcl-1111",
+  "name": "蔡徐坤病毒.exe",
+  "type": "Trojan",
+  "platform": "Windows",
+  "md5_hash": "8378274b986cf3d8a327362018c42629",
+  "sha1_hash": "e2d2c0906ad0923472653deda472109d26764dac",
+  "sha256_hash": "d87bfc9b9ef2a37926ff3c58d17f177a60f3fefe1ceb9915e6b1d22462601875",
+  "risk_level": "High",
+  "description": "蔡徐坤病毒，别人给的",
+  "detection_date": "2024-01-01",
+  "signature": "恶意行为",
+  "reference": "",
+  "tags": ["后门", "信息窃取", "Windows"],
+  "behavior": [
+    "创建系统后门",
+    "窃取用户敏感信息",
+    "自启动"
+  ],
+  "mitigation": [
+    "使用杀毒软件扫描",
+  ]
+}

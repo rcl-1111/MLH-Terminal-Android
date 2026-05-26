@@ -1,0 +1,14 @@
+#!/bin/bash
+# SQLMap 移除命令
+# 版本: 1.0.0
+
+SQLMAP_TOOLS="/data/data/com.termux/files/home/MLH-Terminal/File/Commands/Tools/SQLMap"
+REMOVE_SCRIPT="$SQLMAP_TOOLS/remove"
+
+if [[ -f "$REMOVE_SCRIPT" ]]; then
+    bash "$REMOVE_SCRIPT"
+else
+    echo "SQLMap 移除脚本不存在"
+    echo "请检查: $SQLMAP_TOOLS/remove"
+    exit 1
+fi

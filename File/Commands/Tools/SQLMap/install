@@ -1,0 +1,64 @@
+#!/bin/bash
+# SQLMap 安装脚本
+# 版本: 1.0.0
+
+# 加载配置
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/config"
+
+echo "================================================"
+echo "        安装 MLH-Terminal SQLMap 工具        "
+echo "================================================"
+echo "安装时间: $(date '+%Y-%m-%d %H:%M:%S')"
+echo "安装目录: $SQLMAP_DIR"
+echo "================================================"
+echo ""
+
+# 检查依赖
+echo "检查系统依赖..."
+if ! command -v git >/dev/null 2>&1; then
+    echo "安装 git..."
+    pkg install -y git
+fi
+
+if ! command -v python >/dev/null 2>&1; then
+    echo "安装 python..."
+    pkg install -y python
+fi
+
+# 清理旧安装
+if [[ -d "$SQLMAP_DIR" ]]; then
+    echo "删除旧版本..."
+    rm -rf "$SQLMAP_DIR"
+fi
+
+# 克隆 SQLMap
+echo "克隆 SQLMap 仓库..."
+git clone --depth 1 --branch "$GIT_BRANCH" "$GIT_REPO" "$SQLMAP_DIR"
+
+if [[ $? -eq 0 ]]; then
+    echo "克隆成功"
+    
+    # 获取版本信息
+    cd "$SQLMAP_DIR"
+    VERSION=$(python "$SQLMAP_MAIN" --version 2>/dev/null | head -1 || echo "未知")
+    echo "$VERSION" > "$VERSION_FILE"
+    
+    # 创建安装标记
+    date > "$INSTALL_MARKER"
+    echo "安装时间: $(date '+%Y-%m-%d %H:%M:%S')" >> "$INSTALL_MARKER"
+    echo "版本: $VERSION" >> "$INSTALL_MARKER"
+    
+    echo ""
+    echo "安装完成!"
+    echo "SQLMap 版本: $VERSION"
+    echo "安装目录: $SQLMAP_DIR"
+else
+    echo "克隆失败"
+    exit 1
+fi
+
+echo ""
+echo "使用方法:"
+echo "  sqlmap --help"
+echo "================================================"

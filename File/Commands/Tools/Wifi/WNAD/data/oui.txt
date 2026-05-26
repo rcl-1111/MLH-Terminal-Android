@@ -1,0 +1,1728 @@
+000000	XEROX CORPORATION
+00037F	Apple, Inc.
+001018	Apple, Inc.
+001124	Apple, Inc.
+0013E8	Apple, Inc.
+001539	Apple, Inc.
+00163C	Apple, Inc.
+0017F2	Apple, Inc.
+001ADB	Apple, Inc.
+001CB0	Apple, Inc.
+001E52	Apple, Inc.
+002272	Apple, Inc.
+00241E	Apple, Inc.
+002608	Apple, Inc.
+0026B0	Apple, Inc.
+00295A	Apple, Inc.
+002B9C	Apple, Inc.
+002D3E	Apple, Inc.
+003065	Apple, Inc.
+003E11	Apple, Inc.
+005073	Apple, Inc.
+009C02	Apple, Inc.
+00A040	Apple, Inc.
+00D03E	Apple, Inc.
+00F46D	Apple, Inc.
+04B0A7	Apple, Inc.
+04D906	Apple, Inc.
+080007	Apple, Inc.
+0C1539	Apple, Inc.
+0C3EAD	Apple, Inc.
+0C4DE9	Apple, Inc.
+0C74C2	Apple, Inc.
+10A932	Apple, Inc.
+10F724	Apple, Inc.
+14B3BF	Apple, Inc.
+14C3D3	Apple, Inc.
+14DDA9	Apple, Inc.
+18009D	Apple, Inc.
+1C1B0D	Apple, Inc.
+1C5CFE	Apple, Inc.
+1CB907	Apple, Inc.
+1CE62B	Apple, Inc.
+1CF4CA	Apple, Inc.
+20AB37	Apple, Inc.
+20C9D0	Apple, Inc.
+240A64	Apple, Inc.
+24089D	Apple, Inc.
+24452F	Apple, Inc.
+2487BB	Apple, Inc.
+249B03	Apple, Inc.
+24A074	Apple, Inc.
+24F094	Apple, Inc.
+28CFE9	Apple, Inc.
+28E02C	Apple, Inc.
+289AF6	Apple, Inc.
+2C200B	Apple, Inc.
+2C542D	Apple, Inc.
+2C606C	Apple, Inc.
+2CBE08	Apple, Inc.
+34008D	Apple, Inc.
+34293B	Apple, Inc.
+347E5C	Apple, Inc.
+38832F	Apple, Inc.
+3C0754	Apple, Inc.
+3C15C2	Apple, Inc.
+3C22FB	Apple, Inc.
+400ED5	Apple, Inc.
+404A30	Apple, Inc.
+4060E1	Apple, Inc.
+4083DE	Apple, Inc.
+40A82E	Apple, Inc.
+44D2CA	Apple, Inc.
+44D884	Apple, Inc.
+48E9F1	Apple, Inc.
+48E7DA	Apple, Inc.
+4CE933	Apple, Inc.
+4C5276	Apple, Inc.
+5008A0	Apple, Inc.
+503AC6	Apple, Inc.
+504F94	Apple, Inc.
+5099AB	Apple, Inc.
+540DE7	Apple, Inc.
+54296B	Apple, Inc.
+58A928	Apple, Inc.
+58B14C	Apple, Inc.
+58C38A	Apple, Inc.
+58C518	Apple, Inc.
+5CA161	Apple, Inc.
+5CE2C4	Apple, Inc.
+60C385	Apple, Inc.
+60D0A9	Apple, Inc.
+60FACD	Apple, Inc.
+647627	Apple, Inc.
+64A76D	Apple, Inc.
+64B9E8	Apple, Inc.
+64E682	Apple, Inc.
+68A828	Apple, Inc.
+68AE20	Apple, Inc.
+68D16C	Apple, Inc.
+6CBAAC	Apple, Inc.
+6C8DB1	Apple, Inc.
+6CE0B2	Apple, Inc.
+6C96CF	Apple, Inc.
+6CA68B	Apple, Inc.
+705681	Apple, Inc.
+70A66D	Apple, Inc.
+70B3A6	Apple, Inc.
+70CD60	Apple, Inc.
+70D6B6	Apple, Inc.
+70E722	Apple, Inc.
+74D43E	Apple, Inc.
+783B98	Apple, Inc.
+78A351	Apple, Inc.
+78C6BB	Apple, Inc.
+7C04D0	Apple, Inc.
+7C110B	Apple, Inc.
+7C6B52	Apple, Inc.
+7CFAD8	Apple, Inc.
+8019F8	Apple, Inc.
+806C8B	Apple, Inc.
+80B03A	Apple, Inc.
+80BE05	Apple, Inc.
+80D605	Apple, Inc.
+84A134	Apple, Inc.
+84D9C8	Apple, Inc.
+88A5BD	Apple, Inc.
+88AE07	Apple, Inc.
+88D58C	Apple, Inc.
+8C2D90	Apple, Inc.
+8C7B1B	Apple, Inc.
+8C85E6	Apple, Inc.
+8CC9A3	Apple, Inc.
+8CF9C9	Apple, Inc.
+90B0ED	Apple, Inc.
+90B21F	Apple, Inc.
+90C143	Apple, Inc.
+90F4C1	Apple, Inc.
+9094E4	Apple, Inc.
+94A1A2	Apple, Inc.
+94B5C1	Apple, Inc.
+94D93C	Apple, Inc.
+98B0D1	Apple, Inc.
+98D6BB	Apple, Inc.
+98DA34	Apple, Inc.
+98E0D2	Apple, Inc.
+9C04EB	Apple, Inc.
+9C207B	Apple, Inc.
+9C30D9	Apple, Inc.
+9C35EB	Apple, Inc.
+9CA3A9	Apple, Inc.
+9CE192	Apple, Inc.
+A08869	Apple, Inc.
+A0D795	Apple, Inc.
+A40CC3	Apple, Inc.
+A4516F	Apple, Inc.
+A4B980	Apple, Inc.
+A4C361	Apple, Inc.
+A82066	Apple, Inc.
+A8DC60	Apple, Inc.
+AC29DA	Apple, Inc.
+AC388F	Apple, Inc.
+AC87A3	Apple, Inc.
+ACA32E	Apple, Inc.
+B0481A	Apple, Inc.
+B0E135	Apple, Inc.
+B0E5ED	Apple, Inc.
+B49CDF	Apple, Inc.
+B8552A	Apple, Inc.
+B8782E	Apple, Inc.
+B8C85E	Apple, Inc.
+B8E856	Apple, Inc.
+BC4CC2	Apple, Inc.
+BC52B4	Apple, Inc.
+BC6C21	Apple, Inc.
+C08CBD	Apple, Inc.
+C09F42	Apple, Inc.
+C0A5DD	Apple, Inc.
+C08D4B	Apple, Inc.
+C401A6	Apple, Inc.
+C41CFF	Apple, Inc.
+C44B44	Apple, Inc.
+C481F9	Apple, Inc.
+C89C1D	Apple, Inc.
+C8B5B7	Apple, Inc.
+CC0880	Apple, Inc.
+CC0D31	Apple, Inc.
+CC20E8	Apple, Inc.
+CC44D2	Apple, Inc.
+CC785C	Apple, Inc.
+D0A615	Apple, Inc.
+D4D748	Apple, Inc.
+D4612A	Apple, Inc.
+D87E8B	Apple, Inc.
+D8A25E	Apple, Inc.
+D8C361	Apple, Inc.
+D8D5B7	Apple, Inc.
+DCD2FC	Apple, Inc.
+E02A82	Apple, Inc.
+E0D7BA	Apple, Inc.
+E0F5C6	Apple, Inc.
+E40BD6	Apple, Inc.
+E44E7B	Apple, Inc.
+E494E9	Apple, Inc.
+E4C63A	Apple, Inc.
+E4C9E3	Apple, Inc.
+E4F35E	Apple, Inc.
+E87974	Apple, Inc.
+E8B2AC	Apple, Inc.
+E8C7B1	Apple, Inc.
+EC35E0	Apple, Inc.
+EC85FB	Apple, Inc.
+F01F3D	Apple, Inc.
+F031C1	Apple, Inc.
+F0A31E	Apple, Inc.
+F0C1F1	Apple, Inc.
+F0D5BF	Apple, Inc.
+F0DC87	Apple, Inc.
+F0FD1C	Apple, Inc.
+F40050	Apple, Inc.
+F40F1B	Apple, Inc.
+F4D9FB	Apple, Inc.
+F8032C	Apple, Inc.
+F80F84	Apple, Inc.
+F82FA0	Apple, Inc.
+F8C6B8	Apple, Inc.
+FC847C	Apple, Inc.
+FC9F5C	Apple, Inc.
+FC25D0	Apple, Inc.
+FCD4F2	Apple, Inc.
+0013EF	ASUSTek COMPUTER INC.
+0015F2	ASUSTek COMPUTER INC.
+001A92	ASUSTek COMPUTER INC.
+001E8C	ASUSTek COMPUTER INC.
+00262E	ASUSTek COMPUTER INC.
+0050C2	ASUS (A SUSTeK company)
+005A04	ASUSTek COMPUTER INC.
+00606E	ASUSTek COMPUTER INC.
+0080C8	ASUSTek COMPUTER INC.
+00C06C	ASUSTek COMPUTER INC.
+040684	ASUSTek COMPUTER INC.
+083E8C	ASUSTek COMPUTER INC.
+08606E	ASUSTek COMPUTER INC.
+0C6E4F	ASUSTek COMPUTER INC.
+0C9D92	ASUSTek COMPUTER INC.
+10B7F6	ASUSTek COMPUTER INC.
+10C508	ASUSTek COMPUTER INC.
+10F10A	ASUSTek COMPUTER INC.
+141FBA	ASUSTek COMPUTER INC.
+14784B	ASUSTek COMPUTER INC.
+14D64D	ASUSTek COMPUTER INC.
+18267C	ASUSTek COMPUTER INC.
+18F46A	ASUSTek COMPUTER INC.
+1CC1DE	ASUSTek COMPUTER INC.
+1CEFCE	ASUSTek COMPUTER INC.
+20CF30	ASUSTek COMPUTER INC.
+20F3A3	ASUSTek COMPUTER INC.
+24052A	ASUSTek COMPUTER INC.
+248706	ASUSTek COMPUTER INC.
+24BEB1	ASUSTek COMPUTER INC.
+24DE4B	ASUSTek COMPUTER INC.
+28C2DD	ASUSTek COMPUTER INC.
+2C3124	ASUSTek COMPUTER INC.
+2C4D79	ASUSTek COMPUTER INC.
+2C560C	ASUSTek COMPUTER INC.
+2C8444	ASUSTek COMPUTER INC.
+30B49E	ASUSTek COMPUTER INC.
+30B5F1	ASUSTek COMPUTER INC.
+34AFAB	ASUSTek COMPUTER INC.
+3C5282	ASUSTek COMPUTER INC.
+40550A	ASUSTek COMPUTER INC.
+4065A3	ASUSTek COMPUTER INC.
+446D57	ASUSTek COMPUTER INC.
+44D9E7	ASUSTek COMPUTER INC.
+4C028A	ASUSTek COMPUTER INC.
+4C2C6E	ASUSTek COMPUTER INC.
+4CA644	ASUSTek COMPUTER INC.
+506E6A	ASUSTek COMPUTER INC.
+586772	ASUSTek COMPUTER INC.
+5882A5	ASUSTek COMPUTER INC.
+5C4979	ASUSTek COMPUTER INC.
+5C6B90	ASUSTek COMPUTER INC.
+60A1A1	ASUSTek COMPUTER INC.
+60B1D5	ASUSTek COMPUTER INC.
+6494C2	ASUSTek COMPUTER INC.
+64D1A3	ASUSTek COMPUTER INC.
+68FF7B	ASUSTek COMPUTER INC.
+6A2C0B	ASUSTek COMPUTER INC.
+6C2995	ASUSTek COMPUTER INC.
+6D7334	ASUSTek COMPUTER INC.
+707108	ASUSTek COMPUTER INC.
+70C2FD	ASUSTek COMPUTER INC.
+74C6C3	ASUSTek COMPUTER INC.
+78B4CE	ASUSTek COMPUTER INC.
+78C40E	ASUSTek COMPUTER INC.
+7C8BCA	ASUSTek COMPUTER INC.
+7CD916	ASUSTek COMPUTER INC.
+80EA96	ASUSTek COMPUTER INC.
+84A6DA	ASUSTek COMPUTER INC.
+8C109A	ASUSTek COMPUTER INC.
+8C7C03	ASUSTek COMPUTER INC.
+8C8CAF	ASUSTek COMPUTER INC.
+90A42A	ASUSTek COMPUTER INC.
+90E6BA	ASUSTek COMPUTER INC.
+94C6A8	ASUSTek COMPUTER INC.
+98C2EB	ASUSTek COMPUTER INC.
+98DED0	ASUSTek COMPUTER INC.
+9C5C8D	ASUSTek COMPUTER INC.
+A0B3CC	ASUSTek COMPUTER INC.
+A0F017	ASUSTek COMPUTER INC.
+A4AE9A	ASUSTek COMPUTER INC.
+A81087	ASUSTek COMPUTER INC.
+AC22B2	ASUSTek COMPUTER INC.
+B068B6	ASUSTek COMPUTER INC.
+B488E1	ASUSTek COMPUTER INC.
+B8CDA7	ASUSTek COMPUTER INC.
+BC5FF4	ASUSTek COMPUTER INC.
+BCCD45	ASUSTek COMPUTER INC.
+C02BE7	ASUSTek COMPUTER INC.
+C0C976	ASUSTek COMPUTER INC.
+C483A0	ASUSTek COMPUTER INC.
+C4BFD6	ASUSTek COMPUTER INC.
+C4E97E	ASUSTek COMPUTER INC.
+C80C6C	ASUSTek COMPUTER INC.
+C8D15A	ASUSTek COMPUTER INC.
+CCF9E4	ASUSTek COMPUTER INC.
+D499C9	ASUSTek COMPUTER INC.
+D8E0E1	ASUSTek COMPUTER INC.
+DCEB34	ASUSTek COMPUTER INC.
+E03AD6	ASUSTek COMPUTER INC.
+E46C21	ASUSTek COMPUTER INC.
+E4A3F7	ASUSTek COMPUTER INC.
+E4D3F1	ASUSTek COMPUTER INC.
+E8A48F	ASUSTek COMPUTER INC.
+E8DA96	ASUSTek COMPUTER INC.
+E8D0E7	ASUSTek COMPUTER INC.
+EC4718	ASUSTek COMPUTER INC.
+F008C7	ASUSTek COMPUTER INC.
+F0761C	ASUSTek COMPUTER INC.
+F0792B	ASUSTek COMPUTER INC.
+F41277	ASUSTek COMPUTER INC.
+F46349	ASUSTek COMPUTER INC.
+F4E6D1	ASUSTek COMPUTER INC.
+F8A45F	ASUSTek COMPUTER INC.
+FC2F40	ASUSTek COMPUTER INC.
+FCEDB9	ASUSTek COMPUTER INC.
+00259C	Cisco Systems, Inc
+00D068	Cisco Systems, Inc
+0013F9	Google, Inc.
+001A11	Google, Inc.
+0022FB	Google, Inc.
+00246A	Google, Inc.
+0030EA	Google, Inc.
+040D84	Google, Inc.
+0470BC	Google, Inc.
+089489	Google, Inc.
+14A38B	Google, Inc.
+18CDC1	Google, Inc.
+1C4BD6	Google, Inc.
+1CF034	Google, Inc.
+246DB0	Google, Inc.
+2847AA	Google, Inc.
+30A24A	Google, Inc.
+387C9F	Google, Inc.
+38D989	Google, Inc.
+3CEA4F	Google, Inc.
+40478D	Google, Inc.
+4062B0	Google, Inc.
+441567	Google, Inc.
+44D9A1	Google, Inc.
+48B253	Google, Inc.
+50924B	Google, Inc.
+58C512	Google, Inc.
+6090A5	Google, Inc.
+60D819	Google, Inc.
+64FA3C	Google, Inc.
+6805CA	Google, Inc.
+681AB2	Google, Inc.
+6C8814	Google, Inc.
+70B7C4	Google, Inc.
+70EB5B	Google, Inc.
+741B6A	Google, Inc.
+747188	Google, Inc.
+78B9DC	Google, Inc.
+78D96E	Google, Inc.
+7C1980	Google, Inc.
+801F02	Google, Inc.
+84004E	Google, Inc.
+84902D	Google, Inc.
+88F488	Google, Inc.
+8C50D9	Google, Inc.
+9041EC	Google, Inc.
+949E08	Google, Inc.
+9C096D	Google, Inc.
+A0B4A5	Google, Inc.
+A47733	Google, Inc.
+A887ED	Google, Inc.
+ACD180	Google, Inc.
+B058C4	Google, Inc.
+B499BA	Google, Inc.
+B8A9AF	Google, Inc.
+B8C7A9	Google, Inc.
+BC49B3	Google, Inc.
+BCF685	Google, Inc.
+C0C1C0	Google, Inc.
+C4A8D9	Google, Inc.
+C87B5B	Google, Inc.
+CC3D82	Google, Inc.
+D099D5	Google, Inc.
+D4DCCD	Google, Inc.
+D89695	Google, Inc.
+DAC96A	Google, Inc.
+DC3A5E	Google, Inc.
+E0899D	Google, Inc.
+E0B345	Google, Inc.
+E0F46E	Google, Inc.
+E467BA	Google, Inc.
+E4B96A	Google, Inc.
+E848B8	Google, Inc.
+F0F61C	Google, Inc.
+F4B72A	Google, Inc.
+F4F5D8	Google, Inc.
+F84CE6	Google, Inc.
+F8E7D6	Google, Inc.
+FC166B	Google, Inc.
+FCAA14	Google, Inc.
+001122	Intel Corporate
+0013C3	Intel Corporate
+0013CE	Intel Corporate
+001500	Intel Corporate
+0015BC	Intel Corporate
+0016EA	Intel Corporate
+00176F	Intel Corporate
+001801	Intel Corporate
+001BBA	Intel Corporate
+001D4E	Intel Corporate
+001E64	Intel Corporate
+001F29	Intel Corporate
+001F3C	Intel Corporate
+001FC6	Intel Corporate
+002018	Intel Corporate
+0021E8	Intel Corporate
+002354	Intel Corporate
+00241D	Intel Corporate
+0025AB	Intel Corporate
+002622	Intel Corporate
+0026C6	Intel Corporate
+002786	Intel Corporate
+002F76	Intel Corporate
+0030E4	Intel Corporate
+0050B0	Intel Corporate
+001BFC	Samsung Electronics Co.,Ltd
+002155	Samsung Electronics Co.,Ltd
+002367	Samsung Electronics Co.,Ltd
+002392	Samsung Electronics Co.,Ltd
+0026F2	Samsung Electronics Co.,Ltd
+00287B	Samsung Electronics Co.,Ltd
+00291F	Samsung Electronics Co.,Ltd
+00305C	Samsung Electronics Co.,Ltd
+003155	Samsung Electronics Co.,Ltd
+00326B	Samsung Electronics Co.,Ltd
+0033A0	Samsung Electronics Co.,Ltd
+00348F	Samsung Electronics Co.,Ltd
+0035B8	Samsung Electronics Co.,Ltd
+0036A9	Samsung Electronics Co.,Ltd
+0432F4	Samsung Electronics Co.,Ltd
+08185A	Samsung Electronics Co.,Ltd
+0C1A92	Samsung Electronics Co.,Ltd
+0C35A4	Samsung Electronics Co.,Ltd
+0C5A19	Samsung Electronics Co.,Ltd
+0C6B14	Samsung Electronics Co.,Ltd
+0C8C8E	Samsung Electronics Co.,Ltd
+0CB534	Samsung Electronics Co.,Ltd
+0CE2B5	Samsung Electronics Co.,Ltd
+104765	Samsung Electronics Co.,Ltd
+1044A8	Samsung Electronics Co.,Ltd
+1063C9	Samsung Electronics Co.,Ltd
+10A932	Samsung Electronics Co.,Ltd
+14A37B	Samsung Electronics Co.,Ltd
+14B464	Samsung Electronics Co.,Ltd
+14C3E9	Samsung Electronics Co.,Ltd
+14E5F3	Samsung Electronics Co.,Ltd
+14F0C5	Samsung Electronics Co.,Ltd
+1860B9	Samsung Electronics Co.,Ltd
+18927C	Samsung Electronics Co.,Ltd
+18D5B6	Samsung Electronics Co.,Ltd
+1C1838	Samsung Electronics Co.,Ltd
+1C21D1	Samsung Electronics Co.,Ltd
+1C37BF	Samsung Electronics Co.,Ltd
+1C4584	Samsung Electronics Co.,Ltd
+1C5F2B	Samsung Electronics Co.,Ltd
+1CA857	Samsung Electronics Co.,Ltd
+1CC5C2	Samsung Electronics Co.,Ltd
+1CCB99	Samsung Electronics Co.,Ltd
+1CD50D	Samsung Electronics Co.,Ltd
+2008ED	Samsung Electronics Co.,Ltd
+202AEA	Samsung Electronics Co.,Ltd
+208A03	Samsung Electronics Co.,Ltd
+240F5D	Samsung Electronics Co.,Ltd
+246B0A	Samsung Electronics Co.,Ltd
+2486F4	Samsung Electronics Co.,Ltd
+24C44A	Samsung Electronics Co.,Ltd
+24E3A1	Samsung Electronics Co.,Ltd
+24F0FF	Samsung Electronics Co.,Ltd
+2810D5	Samsung Electronics Co.,Ltd
+281F65	Samsung Electronics Co.,Ltd
+28401A	Samsung Electronics Co.,Ltd
+2871E6	Samsung Electronics Co.,Ltd
+28C9A3	Samsung Electronics Co.,Ltd
+2C228B	Samsung Electronics Co.,Ltd
+2C5A71	Samsung Electronics Co.,Ltd
+2CB76C	Samsung Electronics Co.,Ltd
+2CD05B	Samsung Electronics Co.,Ltd
+2CF079	Samsung Electronics Co.,Ltd
+300A95	Samsung Electronics Co.,Ltd
+3044AA	Samsung Electronics Co.,Ltd
+3069D6	Samsung Electronics Co.,Ltd
+30B4B6	Samsung Electronics Co.,Ltd
+30CDA7	Samsung Electronics Co.,Ltd
+3429EA	Samsung Electronics Co.,Ltd
+3451C9	Samsung Electronics Co.,Ltd
+34853B	Samsung Electronics Co.,Ltd
+348C8E	Samsung Electronics Co.,Ltd
+34C3AC	Samsung Electronics Co.,Ltd
+34E283	Samsung Electronics Co.,Ltd
+380E4D	Samsung Electronics Co.,Ltd
+3C1B5C	Samsung Electronics Co.,Ltd
+3C390A	Samsung Electronics Co.,Ltd
+3C6AFB	Samsung Electronics Co.,Ltd
+400B1C	Samsung Electronics Co.,Ltd
+40E24C	Samsung Electronics Co.,Ltd
+40E6ED	Samsung Electronics Co.,Ltd
+406C8F	Samsung Electronics Co.,Ltd
+44300B	Samsung Electronics Co.,Ltd
+4466DA	Samsung Electronics Co.,Ltd
+44B172	Samsung Electronics Co.,Ltd
+44CC88	Samsung Electronics Co.,Ltd
+44EB39	Samsung Electronics Co.,Ltd
+4838C6	Samsung Electronics Co.,Ltd
+4C0232	Samsung Electronics Co.,Ltd
+4C1425	Samsung Electronics Co.,Ltd
+4C6FAC	Samsung Electronics Co.,Ltd
+4C730D	Samsung Electronics Co.,Ltd
+4CA260	Samsung Electronics Co.,Ltd
+4CBCA5	Samsung Electronics Co.,Ltd
+500101	Samsung Electronics Co.,Ltd
+500594	Samsung Electronics Co.,Ltd
+505913	Samsung Electronics Co.,Ltd
+509016	Samsung Electronics Co.,Ltd
+50AF73	Samsung Electronics Co.,Ltd
+50D45B	Samsung Electronics Co.,Ltd
+50E1AD	Samsung Electronics Co.,Ltd
+50ED78	Samsung Electronics Co.,Ltd
+5404A6	Samsung Electronics Co.,Ltd
+542BDE	Samsung Electronics Co.,Ltd
+547C69	Samsung Electronics Co.,Ltd
+54AE27	Samsung Electronics Co.,Ltd
+54B620	Samsung Electronics Co.,Ltd
+5801E1	Samsung Electronics Co.,Ltd
+5C5EAB	Samsung Electronics Co.,Ltd
+5C602B	Samsung Electronics Co.,Ltd
+5C74C4	Samsung Electronics Co.,Ltd
+5CB524	Samsung Electronics Co.,Ltd
+5CC30E	Samsung Electronics Co.,Ltd
+5CE223	Samsung Electronics Co.,Ltd
+5CF068	Samsung Electronics Co.,Ltd
+600194	Samsung Electronics Co.,Ltd
+6045CB	Samsung Electronics Co.,Ltd
+6081F6	Samsung Electronics Co.,Ltd
+609AA9	Samsung Electronics Co.,Ltd
+60B2BD	Samsung Electronics Co.,Ltd
+60C0BF	Samsung Electronics Co.,Ltd
+60C1CB	Samsung Electronics Co.,Ltd
+60E7B7	Samsung Electronics Co.,Ltd
+642C0D	Samsung Electronics Co.,Ltd
+646255	Samsung Electronics Co.,Ltd
+64852C	Samsung Electronics Co.,Ltd
+64A3CB	Samsung Electronics Co.,Ltd
+64BCCA	Samsung Electronics Co.,Ltd
+64CDA7	Samsung Electronics Co.,Ltd
+64E84F	Samsung Electronics Co.,Ltd
+684DA8	Samsung Electronics Co.,Ltd
+68B437	Samsung Electronics Co.,Ltd
+68C6E9	Samsung Electronics Co.,Ltd
+68D93C	Samsung Electronics Co.,Ltd
+6C1530	Samsung Electronics Co.,Ltd
+6C29E3	Samsung Electronics Co.,Ltd
+6C5C38	Samsung Electronics Co.,Ltd
+6C6B92	Samsung Electronics Co.,Ltd
+6C8336	Samsung Electronics Co.,Ltd
+6CD636	Samsung Electronics Co.,Ltd
+70B476	Samsung Electronics Co.,Ltd
+70C94E	Samsung Electronics Co.,Ltd
+70D9C1	Samsung Electronics Co.,Ltd
+70F101	Samsung Electronics Co.,Ltd
+7417A8	Samsung Electronics Co.,Ltd
+74B987	Samsung Electronics Co.,Ltd
+74D29E	Samsung Electronics Co.,Ltd
+78081D	Samsung Electronics Co.,Ltd
+781921	Samsung Electronics Co.,Ltd
+78B639	Samsung Electronics Co.,Ltd
+78D752	Samsung Electronics Co.,Ltd
+7C0B6C	Samsung Electronics Co.,Ltd
+7CB21B	Samsung Electronics Co.,Ltd
+7CC95A	Samsung Electronics Co.,Ltd
+7CD1A6	Samsung Electronics Co.,Ltd
+80123B	Samsung Electronics Co.,Ltd
+806638	Samsung Electronics Co.,Ltd
+806C94	Samsung Electronics Co.,Ltd
+808B95	Samsung Electronics Co.,Ltd
+80EB77	Samsung Electronics Co.,Ltd
+842B2B	Samsung Electronics Co.,Ltd
+845D52	Samsung Electronics Co.,Ltd
+849615	Samsung Electronics Co.,Ltd
+84EC4F	Samsung Electronics Co.,Ltd
+88A26A	Samsung Electronics Co.,Ltd
+88BDEA	Samsung Electronics Co.,Ltd
+8C7FA4	Samsung Electronics Co.,Ltd
+8CD3F8	Samsung Electronics Co.,Ltd
+8CDCDA	Samsung Electronics Co.,Ltd
+8CFB6C	Samsung Electronics Co.,Ltd
+8C54F2	Samsung Electronics Co.,Ltd
+8C7C92	Samsung Electronics Co.,Ltd
+900B2C	Samsung Electronics Co.,Ltd
+9003B7	Samsung Electronics Co.,Ltd
+9034FC	Samsung Electronics Co.,Ltd
+909732	Samsung Electronics Co.,Ltd
+90AF4F	Samsung Electronics Co.,Ltd
+A0338C	Samsung Electronics Co.,Ltd
+A0481C	Samsung Electronics Co.,Ltd
+A05C89	Samsung Electronics Co.,Ltd
+A0F9E0	Samsung Electronics Co.,Ltd
+A4134E	Samsung Electronics Co.,Ltd
+A4570E	Samsung Electronics Co.,Ltd
+A477D8	Samsung Electronics Co.,Ltd
+A494A1	Samsung Electronics Co.,Ltd
+A49B13	Samsung Electronics Co.,Ltd
+A4ADE7	Samsung Electronics Co.,Ltd
+A4D1D2	Samsung Electronics Co.,Ltd
+A87653	Samsung Electronics Co.,Ltd
+A897DC	Samsung Electronics Co.,Ltd
+A8B4F7	Samsung Electronics Co.,Ltd
+AC5D10	Samsung Electronics Co.,Ltd
+AC5F3E	Samsung Electronics Co.,Ltd
+ACB222	Samsung Electronics Co.,Ltd
+B05B9B	Samsung Electronics Co.,Ltd
+B072A6	Samsung Electronics Co.,Ltd
+B08BBB	Samsung Electronics Co.,Ltd
+B0D049	Samsung Electronics Co.,Ltd
+B0E214	Samsung Electronics Co.,Ltd
+B48727	Samsung Electronics Co.,Ltd
+B4994C	Samsung Electronics Co.,Ltd
+B4CEF6	Samsung Electronics Co.,Ltd
+B4FB9C	Samsung Electronics Co.,Ltd
+B5B5B7	Samsung Electronics Co.,Ltd
+B84D43	Samsung Electronics Co.,Ltd
+B8910D	Samsung Electronics Co.,Ltd
+B8B42B	Samsung Electronics Co.,Ltd
+B8CABB	Samsung Electronics Co.,Ltd
+B8DED0	Samsung Electronics Co.,Ltd
+BC6F1E	Samsung Electronics Co.,Ltd
+BC7670	Samsung Electronics Co.,Ltd
+C0205C	Samsung Electronics Co.,Ltd
+C0770B	Samsung Electronics Co.,Ltd
+C0D613	Samsung Electronics Co.,Ltd
+C0F456	Samsung Electronics Co.,Ltd
+C4143C	Samsung Electronics Co.,Ltd
+C42C03	Samsung Electronics Co.,Ltd
+C44F2E	Samsung Electronics Co.,Ltd
+C491AF	Samsung Electronics Co.,Ltd
+C495A2	Samsung Electronics Co.,Ltd
+C4AA33	Samsung Electronics Co.,Ltd
+C4BE84	Samsung Electronics Co.,Ltd
+C4E02A	Samsung Electronics Co.,Ltd
+C808E9	Samsung Electronics Co.,Ltd
+C8A236	Samsung Electronics Co.,Ltd
+C8BBE8	Samsung Electronics Co.,Ltd
+C84641	Samsung Electronics Co.,Ltd
+C84E1B	Samsung Electronics Co.,Ltd
+C8EE75	Samsung Electronics Co.,Ltd
+CC4AC4	Samsung Electronics Co.,Ltd
+CC68D8	Samsung Electronics Co.,Ltd
+CCB868	Samsung Electronics Co.,Ltd
+D02743	Samsung Electronics Co.,Ltd
+D039C0	Samsung Electronics Co.,Ltd
+D072DC	Samsung Electronics Co.,Ltd
+D0A304	Samsung Electronics Co.,Ltd
+D0B2FE	Samsung Electronics Co.,Ltd
+D0D309	Samsung Electronics Co.,Ltd
+D428B2	Samsung Electronics Co.,Ltd
+D48ABF	Samsung Electronics Co.,Ltd
+D49C28	Samsung Electronics Co.,Ltd
+D4AF36	Samsung Electronics Co.,Ltd
+D4BED9	Samsung Electronics Co.,Ltd
+D8B377	Samsung Electronics Co.,Ltd
+D8C99D	Samsung Electronics Co.,Ltd
+D8C4E8	Samsung Electronics Co.,Ltd
+D8FB32	Samsung Electronics Co.,Ltd
+E002FA	Samsung Electronics Co.,Ltd
+E03BF0	Samsung Electronics Co.,Ltd
+E05A9B	Samsung Electronics Co.,Ltd
+E0D31A	Samsung Electronics Co.,Ltd
+E41F13	Samsung Electronics Co.,Ltd
+E460C5	Samsung Electronics Co.,Ltd
+E49EE3	Samsung Electronics Co.,Ltd
+E4B318	Samsung Electronics Co.,Ltd
+E51034	Samsung Electronics Co.,Ltd
+E8A01D	Samsung Electronics Co.,Ltd
+E8A70E	Samsung Electronics Co.,Ltd
+E8B4C9	Samsung Electronics Co.,Ltd
+EC06A5	Samsung Electronics Co.,Ltd
+EC23EC	Samsung Electronics Co.,Ltd
+EC833A	Samsung Electronics Co.,Ltd
+F03A4B	Samsung Electronics Co.,Ltd
+F0B9D3	Samsung Electronics Co.,Ltd
+F0D7FB	Samsung Electronics Co.,Ltd
+F42A5A	Samsung Electronics Co.,Ltd
+F44D30	Samsung Electronics Co.,Ltd
+F4599F	Samsung Electronics Co.,Ltd
+F47A44	Samsung Electronics Co.,Ltd
+F4CE46	Samsung Electronics Co.,Ltd
+F4E6F4	Samsung Electronics Co.,Ltd
+F80B7E	Samsung Electronics Co.,Ltd
+F81EDF	Samsung Electronics Co.,Ltd
+F8472D	Samsung Electronics Co.,Ltd
+F86F14	Samsung Electronics Co.,Ltd
+F8A21B	Samsung Electronics Co.,Ltd
+F8B54A	Samsung Electronics Co.,Ltd
+F8B7E2	Samsung Electronics Co.,Ltd
+F8D130	Samsung Electronics Co.,Ltd
+FCF1D2	Samsung Electronics Co.,Ltd
+FCD4F2	Samsung Electronics Co.,Ltd
+00601D	Xiaomi Communications Co Ltd
+0026C0	Xiaomi Communications Co Ltd
+045E36	Xiaomi Communications Co Ltd
+1C257D	Xiaomi Communications Co Ltd
+1C7AE3	Xiaomi Communications Co Ltd
+24093E	Xiaomi Communications Co Ltd
+240A11	Xiaomi Communications Co Ltd
+28FD80	Xiaomi Communications Co Ltd
+2C13BE	Xiaomi Communications Co Ltd
+2CB0DF	Xiaomi Communications Co Ltd
+3410E5	Xiaomi Communications Co Ltd
+3C0356	Xiaomi Communications Co Ltd
+3C1873	Xiaomi Communications Co Ltd
+3C8C40	Xiaomi Communications Co Ltd
+40A53E	Xiaomi Communications Co Ltd
+449D04	Xiaomi Communications Co Ltd
+4CA919	Xiaomi Communications Co Ltd
+4CEB42	Xiaomi Communications Co Ltd
+4E900F	Xiaomi Communications Co Ltd
+50CC18	Xiaomi Communications Co Ltd
+5C0214	Xiaomi Communications Co Ltd
+60BE52	Xiaomi Communications Co Ltd
+647290	Xiaomi Communications Co Ltd
+687F74	Xiaomi Communications Co Ltd
+6C2E0B	Xiaomi Communications Co Ltd
+70140B	Xiaomi Communications Co Ltd
+7444B7	Xiaomi Communications Co Ltd
+781385	Xiaomi Communications Co Ltd
+7852A1	Xiaomi Communications Co Ltd
+78DA74	Xiaomi Communications Co Ltd
+7C188D	Xiaomi Communications Co Ltd
+80AD67	Xiaomi Communications Co Ltd
+8CA9A0	Xiaomi Communications Co Ltd
+8CEA50	Xiaomi Communications Co Ltd
+900D4E	Xiaomi Communications Co Ltd
+90B39C	Xiaomi Communications Co Ltd
+94E0D0	Xiaomi Communications Co Ltd
+98FDB4	Xiaomi Communications Co Ltd
+A007B9	Xiaomi Communications Co Ltd
+A0B862	Xiaomi Communications Co Ltd
+A42BB0	Xiaomi Communications Co Ltd
+A4CF99	Xiaomi Communications Co Ltd
+AC53D2	Xiaomi Communications Co Ltd
+ACD66E	Xiaomi Communications Co Ltd
+B06016	Xiaomi Communications Co Ltd
+B09C30	Xiaomi Communications Co Ltd
+B0E1CE	Xiaomi Communications Co Ltd
+B41B44	Xiaomi Communications Co Ltd
+B660E9	Xiaomi Communications Co Ltd
+B80E10	Xiaomi Communications Co Ltd
+BC3F73	Xiaomi Communications Co Ltd
+C09C48	Xiaomi Communications Co Ltd
+C0EE40	Xiaomi Communications Co Ltd
+C40ACA	Xiaomi Communications Co Ltd
+C49431	Xiaomi Communications Co Ltd
+C4B898	Xiaomi Communications Co Ltd
+C8BCC8	Xiaomi Communications Co Ltd
+CC59E3	Xiaomi Communications Co Ltd
+CC6B4F	Xiaomi Communications Co Ltd
+D099C0	Xiaomi Communications Co Ltd
+D09C40	Xiaomi Communications Co Ltd
+D0A3D8	Xiaomi Communications Co Ltd
+D412C2	Xiaomi Communications Co Ltd
+D4A971	Xiaomi Communications Co Ltd
+D89B84	Xiaomi Communications Co Ltd
+DC7F06	Xiaomi Communications Co Ltd
+E01D3B	Xiaomi Communications Co Ltd
+E4C7B5	Xiaomi Communications Co Ltd
+E84E53	Xiaomi Communications Co Ltd
+EC3E09	Xiaomi Communications Co Ltd
+F0A67A	Xiaomi Communications Co Ltd
+F4A72E	Xiaomi Communications Co Ltd
+F8A293	Xiaomi Communications Co Ltd
+FC1778	Xiaomi Communications Co Ltd
+FC7A2C	Xiaomi Communications Co Ltd
+FCB898	Xiaomi Communications Co Ltd
+001502	Huawei Technologies Co.,Ltd
+06623C	Huawei Technologies Co.,Ltd
+0C0FF3	Huawei Technologies Co.,Ltd
+0C1D24	Huawei Technologies Co.,Ltd
+0CAF5A	Huawei Technologies Co.,Ltd
+10A5D0	Huawei Technologies Co.,Ltd
+10AE60	Huawei Technologies Co.,Ltd
+180B2D	Huawei Technologies Co.,Ltd
+182032	Huawei Technologies Co.,Ltd
+1848DC	Huawei Technologies Co.,Ltd
+1C3263	Huawei Technologies Co.,Ltd
+1C789A	Huawei Technologies Co.,Ltd
+1C8122	Huawei Technologies Co.,Ltd
+208EF9	Huawei Technologies Co.,Ltd
+20DCB6	Huawei Technologies Co.,Ltd
+24DBAC	Huawei Technologies Co.,Ltd
+2469A5	Huawei Technologies Co.,Ltd
+28B0AE	Huawei Technologies Co.,Ltd
+28C0DA	Huawei Technologies Co.,Ltd
+2C31C3	Huawei Technologies Co.,Ltd
+2C5998	Huawei Technologies Co.,Ltd
+300E1A	Huawei Technologies Co.,Ltd
+3412AD	Huawei Technologies Co.,Ltd
+34F968	Huawei Technologies Co.,Ltd
+3842A6	Huawei Technologies Co.,Ltd
+38B9CD	Huawei Technologies Co.,Ltd
+3C1CBE	Huawei Technologies Co.,Ltd
+3CD0F8	Huawei Technologies Co.,Ltd
+40B7F3	Huawei Technologies Co.,Ltd
+44B32D	Huawei Technologies Co.,Ltd
+483A39	Huawei Technologies Co.,Ltd
+48A0F8	Huawei Technologies Co.,Ltd
+4C5448	Huawei Technologies Co.,Ltd
+4C623B	Huawei Technologies Co.,Ltd
+4CE2DD	Huawei Technologies Co.,Ltd
+4CFB63	Huawei Technologies Co.,Ltd
+504A4B	Huawei Technologies Co.,Ltd
+504E70	Huawei Technologies Co.,Ltd
+508CED	Huawei Technologies Co.,Ltd
+50DA00	Huawei Technologies Co.,Ltd
+540357	Huawei Technologies Co.,Ltd
+544E46	Huawei Technologies Co.,Ltd
+54BDD9	Huawei Technologies Co.,Ltd
+58761A	Huawei Technologies Co.,Ltd
+58BAF2	Huawei Technologies Co.,Ltd
+603A0C	Huawei Technologies Co.,Ltd
+6045BD	Huawei Technologies Co.,Ltd
+64247F	Huawei Technologies Co.,Ltd
+6464A3	Huawei Technologies Co.,Ltd
+647BFB	Huawei Technologies Co.,Ltd
+64C79E	Huawei Technologies Co.,Ltd
+68F004	Huawei Technologies Co.,Ltd
+6C0E56	Huawei Technologies Co.,Ltd
+6CA6E5	Huawei Technologies Co.,Ltd
+6CE0B6	Huawei Technologies Co.,Ltd
+700B1C	Huawei Technologies Co.,Ltd
+70DDA1	Huawei Technologies Co.,Ltd
+744CAC	Huawei Technologies Co.,Ltd
+74830C	Huawei Technologies Co.,Ltd
+78B5C3	Huawei Technologies Co.,Ltd
+78F9D0	Huawei Technologies Co.,Ltd
+7C039D	Huawei Technologies Co.,Ltd
+7CE9D7	Huawei Technologies Co.,Ltd
+805E0C	Huawei Technologies Co.,Ltd
+80768A	Huawei Technologies Co.,Ltd
+80C672	Huawei Technologies Co.,Ltd
+84575A	Huawei Technologies Co.,Ltd
+84616C	Huawei Technologies Co.,Ltd
+88D8C2	Huawei Technologies Co.,Ltd
+8C3AE9	Huawei Technologies Co.,Ltd
+8CAAC8	Huawei Technologies Co.,Ltd
+8CD52E	Huawei Technologies Co.,Ltd
+90B1A9	Huawei Technologies Co.,Ltd
+90BCDA	Huawei Technologies Co.,Ltd
+94F6D3	Huawei Technologies Co.,Ltd
+94F720	Huawei Technologies Co.,Ltd
+986423	Huawei Technologies Co.,Ltd
+98DB66	Huawei Technologies Co.,Ltd
+9C00B8	Huawei Technologies Co.,Ltd
+9C2964	Huawei Technologies Co.,Ltd
+9C6548	Huawei Technologies Co.,Ltd
+A01150	Huawei Technologies Co.,Ltd
+A04F5E	Huawei Technologies Co.,Ltd
+A07B8D	Huawei Technologies Co.,Ltd
+A07964	Huawei Technologies Co.,Ltd
+A0B4A5	Huawei Technologies Co.,Ltd
+A0498B	Huawei Technologies Co.,Ltd
+A44E2F	Huawei Technologies Co.,Ltd
+AC5B3B	Huawei Technologies Co.,Ltd
+AC853D	Huawei Technologies Co.,Ltd
+B0367D	Huawei Technologies Co.,Ltd
+B0C8D6	Huawei Technologies Co.,Ltd
+B0D2F5	Huawei Technologies Co.,Ltd
+B4907D	Huawei Technologies Co.,Ltd
+B4E6B5	Huawei Technologies Co.,Ltd
+B84B0D	Huawei Technologies Co.,Ltd
+BCC8F0	Huawei Technologies Co.,Ltd
+C0288D	Huawei Technologies Co.,Ltd
+C08A2D	Huawei Technologies Co.,Ltd
+C42234	Huawei Technologies Co.,Ltd
+C44B44	Huawei Technologies Co.,Ltd
+C48C9A	Huawei Technologies Co.,Ltd
+C86F1D	Huawei Technologies Co.,Ltd
+CC16E2	Huawei Technologies Co.,Ltd
+CC4AFB	Huawei Technologies Co.,Ltd
+CCF959	Huawei Technologies Co.,Ltd
+D0124F	Huawei Technologies Co.,Ltd
+D0C891	Huawei Technologies Co.,Ltd
+D4118A	Huawei Technologies Co.,Ltd
+D442B2	Huawei Technologies Co.,Ltd
+D467AD	Huawei Technologies Co.,Ltd
+D4A425	Huawei Technologies Co.,Ltd
+D4D7B6	Huawei Technologies Co.,Ltd
+D86DD7	Huawei Technologies Co.,Ltd
+D8A979	Huawei Technologies Co.,Ltd
+DCEB67	Huawei Technologies Co.,Ltd
+E00C74	Huawei Technologies Co.,Ltd
+E03B50	Huawei Technologies Co.,Ltd
+E0B909	Huawei Technologies Co.,Ltd
+E4175D	Huawei Technologies Co.,Ltd
+E4A3CC	Huawei Technologies Co.,Ltd
+E4B022	Huawei Technologies Co.,Ltd
+E85B5B	Huawei Technologies Co.,Ltd
+E8C322	Huawei Technologies Co.,Ltd
+EC2335	Huawei Technologies Co.,Ltd
+F05B9C	Huawei Technologies Co.,Ltd
+F0BCC4	Huawei Technologies Co.,Ltd
+F4308D	Huawei Technologies Co.,Ltd
+F46B8C	Huawei Technologies Co.,Ltd
+F4A696	Huawei Technologies Co.,Ltd
+F8507C	Huawei Technologies Co.,Ltd
+F856D3	Huawei Technologies Co.,Ltd
+F8B1DA	Huawei Technologies Co.,Ltd
+FC134A	Huawei Technologies Co.,Ltd
+FC51F5	Huawei Technologies Co.,Ltd
+001754	TP-Link Technologies CO.,LTD.
+001C5A	TP-Link Technologies CO.,LTD.
+002AAA	TP-Link Technologies CO.,LTD.
+003588	TP-Link Technologies CO.,LTD.
+005E50	TP-Link Technologies CO.,LTD.
+00666F	TP-Link Technologies CO.,LTD.
+0090F2	TP-Link Technologies CO.,LTD.
+00E04C	TP-Link Technologies CO.,LTD.
+00FC8E	TP-Link Technologies CO.,LTD.
+047C16	TP-Link Technologies CO.,LTD.
+04818D	TP-Link Technologies CO.,LTD.
+04C06F	TP-Link Technologies CO.,LTD.
+04E0C4	TP-Link Technologies CO.,LTD.
+086266	TP-Link Technologies CO.,LTD.
+0C8021	TP-Link Technologies CO.,LTD.
+0CC7C7	TP-Link Technologies CO.,LTD.
+0CD616	TP-DEK CO.,LTD.
+0CE73E	TP-Link Technologies CO.,LTD.
+10FE00	TP-Link Technologies CO.,LTD.
+14CF8D	TP-DEK CO.,LTD.
+14E6E4	TP-Link Technologies CO.,LTD.
+14F65A	TP-Link Technologies CO.,LTD.
+1840A2	TP-Link Technologies CO.,LTD.
+18A6F7	TP-Link Technologies CO.,LTD.
+1CC0E4	TP-Link Technologies CO.,LTD.
+1CE08F	TP-Link Technologies CO.,LTD.
+1EC911	TP-Link Technologies CO.,LTD.
+20DCE6	TP-Link Technologies CO.,LTD.
+240593	TP-Link Technologies CO.,LTD.
+2421AB	TP-Link Technologies CO.,LTD.
+24B657	TP-Link Technologies CO.,LTD.
+28A2A6	TP-Link Technologies CO.,LTD.
+28D06E	TP-Link Technologies CO.,LTD.
+28D244	TP-Link Technologies CO.,LTD.
+28E1D5	TP-Link Technologies CO.,LTD.
+28EE52	TP-Link Technologies CO.,LTD.
+2C37A7	TP-Link Technologies CO.,LTD.
+2C3F3E	TP-Link Technologies CO.,LTD.
+2C5A8E	TP-Link Technologies CO.,LTD.
+2C6E85	TP-Link Technologies CO.,LTD.
+2CB1B3	TP-Link Technologies CO.,LTD.
+2CC54A	TP-Link Technologies CO.,LTD.
+30B3A2	TP-Link Technologies CO.,LTD.
+30FC68	TP-Link Technologies CO.,LTD.
+340B40	TP-Link Technologies CO.,LTD.
+34C060	TP-Link Technologies CO.,LTD.
+348F27	TP-Link Technologies CO.,LTD.
+38A28C	TP-Link Technologies CO.,LTD.
+38ADB4	TP-Link Technologies CO.,LTD.
+38F66E	TP-Link Technologies CO.,LTD.
+3C46D8	TP-Link Technologies CO.,LTD.
+3C62C4	TP-Link Technologies CO.,LTD.
+3C7B47	TP-Link Technologies CO.,LTD.
+3C84A6	TP-Link Technologies CO.,LTD.
+3C9C0F	TP-Link Technologies CO.,LTD.
+3CA9F4	TP-Link Technologies CO.,LTD.
+3CC582	TP-Link Technologies CO.,LTD.
+3CE5A6	TP-Link Technologies CO.,LTD.
+400E67	TP-Link Technologies CO.,LTD.
+40B37B	TP-Link Technologies CO.,LTD.
+44CFD9	TP-Link Technologies CO.,LTD.
+481D70	TP-Link Technologies CO.,LTD.
+485B39	TP-Link Technologies CO.,LTD.
+48F3C7	TP-Link Technologies CO.,LTD.
+4C09B0	TP-Link Technologies CO.,LTD.
+4C16DD	TP-Link Technologies CO.,LTD.
+4C4B76	TP-Link Technologies CO.,LTD.
+4C9E80	TP-Link Technologies CO.,LTD.
+4CE1A1	TP-Link Technologies CO.,LTD.
+4CEBBC	TP-Link Technologies CO.,LTD.
+50A733	TP-Link Technologies CO.,LTD.
+50BD5F	TP-Link Technologies CO.,LTD.
+50C58D	TP-Link Technologies CO.,LTD.
+50C7BF	TP-Link Technologies CO.,LTD.
+54A54A	TP-Link Technologies CO.,LTD.
+54D642	TP-Link Technologies CO.,LTD.
+54DC4F	TP-Link Technologies CO.,LTD.
+5882A5	TP-Link Technologies CO.,LTD.
+58C598	TP-Link Technologies CO.,LTD.
+5C19EA	TP-Link Technologies CO.,LTD.
+5C7D9A	TP-Link Technologies CO.,LTD.
+5C936E	TP-Link Technologies CO.,LTD.
+603718	TP-Link Technologies CO.,LTD.
+60A4B0	TP-Link Technologies CO.,LTD.
+60B1D5	TP-Link Technologies CO.,LTD.
+60E701	TP-Link Technologies CO.,LTD.
+642DB7	TP-Link Technologies CO.,LTD.
+6460C5	TP-Link Technologies CO.,LTD.
+648D54	TP-Link Technologies CO.,LTD.
+64E682	TP-Link Technologies CO.,LTD.
+680927	TP-Link Technologies CO.,LTD.
+68FF7B	TP-Link Technologies CO.,LTD.
+6C19C0	TP-Link Technologies CO.,LTD.
+6C59E0	TP-Link Technologies CO.,LTD.
+6C9CED	TP-Link Technologies CO.,LTD.
+6CB37B	TP-Link Technologies CO.,LTD.
+70F1A1	TP-Link Technologies CO.,LTD.
+742E2C	TP-Link Technologies CO.,LTD.
+7445CE	TP-Link Technologies CO.,LTD.
+7472B2	TP-Link Technologies CO.,LTD.
+74A528	TP-Link Technologies CO.,LTD.
+74DA38	TP-Link Technologies CO.,LTD.
+74EA3A	TP-Link Technologies CO.,LTD.
+7802F1	TP-Link Technologies CO.,LTD.
+7823AD	TP-Link Technologies CO.,LTD.
+78A2A0	TP-Link Technologies CO.,LTD.
+78D195	TP-Link Technologies CO.,LTD.
+78DB48	TP-Link Technologies CO.,LTD.
+7C02E6	TP-Link Technologies CO.,LTD.
+7CF05F	TP-Link Technologies CO.,LTD.
+80A589	TP-Link Technologies CO.,LTD.
+84ACFB	TP-Link Technologies CO.,LTD.
+84D9CE	TP-Link Technologies CO.,LTD.
+84EA99	TP-Link Technologies CO.,LTD.
+88532E	TP-Link Technologies CO.,LTD.
+889D26	TP-Link Technologies CO.,LTD.
+88DEA9	TP-Link Technologies CO.,LTD.
+8C6B9E	TP-Link Technologies CO.,LTD.
+8CBEBE	TP-Link Technologies CO.,LTD.
+8CE1E6	TP-Link Technologies CO.,LTD.
+907271	TP-Link Technologies CO.,LTD.
+909B62	TP-Link Technologies CO.,LTD.
+90CC24	TP-Link Technologies CO.,LTD.
+90D11B	TP-Link Technologies CO.,LTD.
+90F652	TP-Link Technologies CO.,LTD.
+940C6D	TP-Link Technologies CO.,LTD.
+947FA4	TP-Link Technologies CO.,LTD.
+949C34	TP-Link Technologies CO.,LTD.
+94D9B3	TP-Link Technologies CO.,LTD.
+94E0D0	TP-Link Technologies CO.,LTD.
+980C82	TP-Link Technologies CO.,LTD.
+98D688	TP-Link Technologies CO.,LTD.
+98E7B4	TP-Link Technologies CO.,LTD.
+98F0B0	TP-Link Technologies CO.,LTD.
+9C21EB	TP-Link Technologies CO.,LTD.
+9C3DCF	TP-Link Technologies CO.,LTD.
+9C4FD8	TP-Link Technologies CO.,LTD.
+9C7930	TP-Link Technologies CO.,LTD.
+9C97BF	TP-Link Technologies CO.,LTD.
+9CD24B	TP-Link Technologies CO.,LTD.
+9CE373	TP-Link Technologies CO.,LTD.
+9CE6E7	TP-Link Technologies CO.,LTD.
+A019B2	TP-Link Technologies CO.,LTD.
+A051C6	TP-Link Technologies CO.,LTD.
+A09B62	TP-Link Technologies CO.,LTD.
+A0D791	TP-Link Technologies CO.,LTD.
+A4A84E	TP-Link Technologies CO.,LTD.
+A4D8C1	TP-Link Technologies CO.,LTD.
+A8D9D0	TP-Link Technologies CO.,LTD.
+A8F018	TP-Link Technologies CO.,LTD.
+AC15A2	TP-Link Technologies CO.,LTD.
+AC84C9	TP-Link Technologies CO.,LTD.
+B0070E	TP-Link Technologies CO.,LTD.
+B0487C	TP-Link Technologies CO.,LTD.
+B05369	TP-Link Technologies CO.,LTD.
+B09010	TP-Link Technologies CO.,LTD.
+B0BE76	TP-Link Technologies CO.,LTD.
+B0C559	TP-Link Technologies CO.,LTD.
+B0E0E4	TP-Link Technologies CO.,LTD.
+B48B0D	TP-Link Technologies CO.,LTD.
+B4A5A9	TP-Link Technologies CO.,LTD.
+B4B88D	TP-Link Technologies CO.,LTD.
+B8D276	TP-Link Technologies CO.,LTD.
+BCA5D0	TP-Link Technologies CO.,LTD.
+BCF61C	TP-Link Technologies CO.,LTD.
+C01ADE	TP-Link Technologies CO.,LTD.
+C025E9	TP-Link Technologies CO.,LTD.
+C08B6F	TP-Link Technologies CO.,LTD.
+C0B87C	TP-Link Technologies CO.,LTD.
+C0D012	TP-Link Technologies CO.,LTD.
+C0D044	TP-Link Technologies CO.,LTD.
+C0E422	TP-Link Technologies CO.,LTD.
+C0EEFB	TP-Link Technologies CO.,LTD.
+C40ACB	TP-Link Technologies CO.,LTD.
+C46AB7	TP-Link Technologies CO.,LTD.
+C4924C	TP-Link Technologies CO.,LTD.
+C89B3B	TP-Link Technologies CO.,LTD.
+C8CD71	TP-Link Technologies CO.,LTD.
+C8D5FE	TP-Link Technologies CO.,LTD.
+C8E22C	TP-Link Technologies CO.,LTD.
+CCCC81	TP-Link Technologies CO.,LTD.
+CCF67A	TP-Link Technologies CO.,LTD.
+D006DD	TP-Link Technologies CO.,LTD.
+D061C3	TP-Link Technologies CO.,LTD.
+D095D4	TP-Link Technologies CO.,LTD.
+D0C9FA	TP-Link Technologies CO.,LTD.
+D0D0FD	TP-Link Technologies CO.,LTD.
+D4150E	TP-Link Technologies CO.,LTD.
+D45DDF	TP-Link Technologies CO.,LTD.
+D4873B	TP-Link Technologies CO.,LTD.
+D4B1D8	TP-Link Technologies CO.,LTD.
+D4F0B4	TP-Link Technologies CO.,LTD.
+D8A3FD	TP-Link Technologies CO.,LTD.
+D8B04C	TP-Link Technologies CO.,LTD.
+D8C068	TP-Link Technologies CO.,LTD.
+D8D7D9	TP-Link Technologies CO.,LTD.
+DC09AF	TP-Link Technologies CO.,LTD.
+DC16B7	TP-Link Technologies CO.,LTD.
+DC44B6	TP-Link Technologies CO.,LTD.
+DC7F06	TP-Link Technologies CO.,LTD.
+DC8B4C	TP-Link Technologies CO.,LTD.
+DCC401	TP-Link Technologies CO.,LTD.
+DCF2CA	TP-Link Technologies CO.,LTD.
+E0041C	TP-Link Technologies CO.,LTD.
+E0A801	TP-Link Technologies CO.,LTD.
+E0C75B	TP-Link Technologies CO.,LTD.
+E0C97A	TP-Link Technologies CO.,LTD.
+E0D1E6	TP-Link Technologies CO.,LTD.
+E0D5A0	TP-Link Technologies CO.,LTD.
+E0E751	TP-Link Technologies CO.,LTD.
+E0F847	TP-Link Technologies CO.,LTD.
+E41218	TP-Link Technologies CO.,LTD.
+E4186B	TP-Link Technologies CO.,LTD.
+E46C21	TP-Link Technologies CO.,LTD.
+E468A3	TP-Link Technologies CO.,LTD.
+E473D6	TP-Link Technologies CO.,LTD.
+E494E9	TP-Link Technologies CO.,LTD.
+E4B2D3	TP-Link Technologies CO.,LTD.
+E8CD2D	TP-Link Technologies CO.,LTD.
+E8D0E7	TP-Link Technologies CO.,LTD.
+E8DEB0	TP-Link Technologies CO.,LTD.
+EC172F	TP-Link Technologies CO.,LTD.
+EC22B5	TP-Link Technologies CO.,LTD.
+EC6B2F	TP-Link Technologies CO.,LTD.
+EC88B2	TP-Link Technologies CO.,LTD.
+EC9A84	TP-Link Technologies CO.,LTD.
+ECC38A	TP-Link Technologies CO.,LTD.
+F02F74	TP-Link Technologies CO.,LTD.
+F08BFE	TP-Link Technologies CO.,LTD.
+F09B1E	TP-Link Technologies CO.,LTD.
+F09FC2	TP-Link Technologies CO.,LTD.
+F09FEA	TP-Link Technologies CO.,LTD.
+F0A3D0	TP-Link Technologies CO.,LTD.
+F0B0E7	TP-Link Technologies CO.,LTD.
+F0C88C	TP-Link Technologies CO.,LTD.
+F0F61C	TP-Link Technologies CO.,LTD.
+F43814	TP-Link Technologies CO.,LTD.
+F44C7F	TP-Link Technologies CO.,LTD.
+F45F69	TP-Link Technologies CO.,LTD.
+F4B546	TP-Link Technologies CO.,LTD.
+F4E6D1	TP-Link Technologies CO.,LTD.
+F4EC38	TP-Link Technologies CO.,LTD.
+F80B7E	TP-Link Technologies CO.,LTD.
+F81EDF	TP-Link Technologies CO.,LTD.
+F8D1D2	TP-Link Technologies CO.,LTD.
+F8DACE	TP-Link Technologies CO.,LTD.
+F8E7D6	TP-Link Technologies CO.,LTD.
+FC1CC0	TP-Link Technologies CO.,LTD.
+FC359E	TP-Link Technologies CO.,LTD.
+FC7516	TP-Link Technologies CO.,LTD.
+FC94E3	TP-Link Technologies CO.,LTD.
+FCDCF0	TP-Link Technologies CO.,LTD.
+FCE9E6	TP-Link Technologies CO.,LTD.
+FCBD67	TP-Link Technologies CO.,LTD.
+FCBDE8	TP-Link Technologies CO.,LTD.
+FCF1D2	TP-Link Technologies CO.,LTD.
+00A0C9	Broadcom Corporation
+001018	Broadcom Corporation
+0011D3	Broadcom Corporation
+001315	Broadcom Corporation
+0013E0	Broadcom Corporation
+001590	Broadcom Corporation
+00163C	Broadcom Corporation
+0016B4	Broadcom Corporation
+0017B7	Broadcom Corporation
+001928	Broadcom Corporation
+001AAB	Broadcom Corporation
+001BA3	Broadcom Corporation
+001C44	Broadcom Corporation
+001E6B	Broadcom Corporation
+001F33	Broadcom Corporation
+0021F7	Broadcom Corporation
+0023D4	Broadcom Corporation
+002425	Broadcom Corporation
+002440	Broadcom Corporation
+002512	Broadcom Corporation
+002618	Broadcom Corporation
+0026D8	Broadcom Corporation
+0050C2	Broadcom Corporation
+00D068	Broadcom Corporation
+3014C6	Ralink Technology, Corp.
+081385	MediaTek Inc.
+28110A	MediaTek Inc.
+2CA3A2	MediaTek Inc.
+40C443	MediaTek Inc.
+48DB50	MediaTek Inc.
+54037F	MediaTek Inc.
+747783	MediaTek Inc.
+A08D16	MediaTek Inc.
+A0F450	MediaTek Inc.
+E0056E	MediaTek Inc.
+E0A1D7	MediaTek Inc.
+E01630	MediaTek Inc.
+E865D4	MediaTek Inc.
+F0F62C	MediaTek Inc.
+000E08	Hewlett Packard
+001083	Hewlett Packard
+00124C	Hewlett Packard
+001480	Hewlett Packard
+0015B9	Hewlett Packard
+00163E	Hewlett Packard
+0017A4	Hewlett Packard
+0018FE	Hewlett Packard
+001B8F	Hewlett Packard
+001D9A	Hewlett Packard
+001E79	Hewlett Packard
+001EC3	Hewlett Packard
+00204B	Hewlett Packard
+002128	Hewlett Packard
+0022BD	Hewlett Packard
+00237D	Hewlett Packard
+0024D7	Hewlett Packard
+0025B3	Hewlett Packard
+0026C7	Hewlett Packard
+00279C	Hewlett Packard
+00284B	Hewlett Packard
+0029B3	Hewlett Packard
+002A82	Hewlett Packard
+003048	Hewlett Packard
+00C0B6	Realtek Semiconductor Corp.
+00132C	Microsoft Corporation
+0015C5	Microsoft Corporation
+001CAB	Microsoft Corporation
+002248	Microsoft Corporation
+0025D8	Microsoft Corporation
+002608	Microsoft Corporation
+00306E	Microsoft Corporation
+044711	Microsoft Corporation
+0C5CC8	Microsoft Corporation
+1817A6	Microsoft Corporation
+1C1D67	Microsoft Corporation
+1CF4CA	Microsoft Corporation
+1CFCBB	Microsoft Corporation
+240CB1	Microsoft Corporation
+247618	Microsoft Corporation
+2827BF	Microsoft Corporation
+2C60E4	Microsoft Corporation
+2C789A	Microsoft Corporation
+3018CF	Microsoft Corporation
+34C9D0	Microsoft Corporation
+384212	Microsoft Corporation
+4C52B1	Microsoft Corporation
+5057A8	Microsoft Corporation
+5850E6	Microsoft Corporation
+5CFFF9	Microsoft Corporation
+689C5E	Microsoft Corporation
+6CF049	Microsoft Corporation
+708CCC	Microsoft Corporation
+745323	Microsoft Corporation
+787E5E	Microsoft Corporation
+78B254	Microsoft Corporation
+7C1CF1	Microsoft Corporation
+7C5C6F	Microsoft Corporation
+7CB03B	Microsoft Corporation
+80FACB	Microsoft Corporation
+84E6CE	Microsoft Corporation
+8CB64F	Microsoft Corporation
+8C9B3B	Microsoft Corporation
+940B2D	Microsoft Corporation
+98A02A	Microsoft Corporation
+9C510E	Microsoft Corporation
+9CB06E	Microsoft Corporation
+A0A8CD	Microsoft Corporation
+A0CB5D	Microsoft Corporation
+A41F72	Microsoft Corporation
+A4A1C2	Microsoft Corporation
+A48C4D	Microsoft Corporation
+AC233F	Microsoft Corporation
+AC318F	Microsoft Corporation
+B413F0	Microsoft Corporation
+B482FE	Microsoft Corporation
+B8AEED	Microsoft Corporation
+BC0F2B	Microsoft Corporation
+C4E7BE	Microsoft Corporation
+C49CCF	Microsoft Corporation
+C89F1D	Microsoft Corporation
+D021AC	Microsoft Corporation
+D00ED8	Microsoft Corporation
+D05B8E	Microsoft Corporation
+D0634B	Microsoft Corporation
+D4E32D	Microsoft Corporation
+D82986	Microsoft Corporation
+D85DFB	Microsoft Corporation
+D8B3B4	Microsoft Corporation
+DC4E2B	Microsoft Corporation
+E0ADCC	Microsoft Corporation
+E47CF9	Microsoft Corporation
+E8A2D6	Microsoft Corporation
+EC23C0	Microsoft Corporation
+F0D1A9	Microsoft Corporation
+F4A52D	Microsoft Corporation
+F4D7EF	Microsoft Corporation
+F8A2D6	Microsoft Corporation
+FC02D3	Microsoft Corporation
+001B6C	Amazon Technologies Inc.
+001D0A	Amazon Technologies Inc.
+0022BD	Amazon Technologies Inc.
+0025FF	Amazon Technologies Inc.
+002679	Amazon Technologies Inc.
+0031B0	Amazon Technologies Inc.
+040D47	Amazon Technologies Inc.
+048B42	Amazon Technologies Inc.
+08AF5F	Amazon Technologies Inc.
+0CBD51	Amazon Technologies Inc.
+10AE60	Amazon Technologies Inc.
+18B2B1	Amazon Technologies Inc.
+1CC54C	Amazon Technologies Inc.
+1CFA68	Amazon Technologies Inc.
+20F454	Amazon Technologies Inc.
+28091A	Amazon Technologies Inc.
+2CF0A2	Amazon Technologies Inc.
+3030AB	Amazon Technologies Inc.
+305025	Amazon Technologies Inc.
+34D7F3	Amazon Technologies Inc.
+38CA9D	Amazon Technologies Inc.
+3C1758	Amazon Technologies Inc.
+40B4F0	Amazon Technologies Inc.
+40BCE3	Amazon Technologies Inc.
+44D9E7	Amazon Technologies Inc.
+4852A7	Amazon Technologies Inc.
+4C6FAC	Amazon Technologies Inc.
+4C7F62	Amazon Technologies Inc.
+504570	Amazon Technologies Inc.
+50F11D	Amazon Technologies Inc.
+54A5F0	Amazon Technologies Inc.
+582EFE	Amazon Technologies Inc.
+5C66AB	Amazon Technologies Inc.
+608962	Amazon Technologies Inc.
+645D92	Amazon Technologies Inc.
+6886A7	Amazon Technologies Inc.
+68FA05	Amazon Technologies Inc.
+6C4BEB	Amazon Technologies Inc.
+6C6F18	Amazon Technologies Inc.
+6C709F	Amazon Technologies Inc.
+70F395	Amazon Technologies Inc.
+74C722	Amazon Technologies Inc.
+78B718	Amazon Technologies Inc.
+809A1B	Amazon Technologies Inc.
+848EA8	Amazon Technologies Inc.
+84D9C8	Amazon Technologies Inc.
+881B99	Amazon Technologies Inc.
+88C6AC	Amazon Technologies Inc.
+8C5AF8	Amazon Technologies Inc.
+8CB82C	Amazon Technologies Inc.
+8CEA50	Amazon Technologies Inc.
+900FB6	Amazon Technologies Inc.
+9061B4	Amazon Technologies Inc.
+947649	Amazon Technologies Inc.
+9810E8	Amazon Technologies Inc.
+9852B1	Amazon Technologies Inc.
+A09351	Amazon Technologies Inc.
+A09E1B	Amazon Technologies Inc.
+A0F13F	Amazon Technologies Inc.
+A4469A	Amazon Technologies Inc.
+A46120	Amazon Technologies Inc.
+A483E7	Amazon Technologies Inc.
+A8D0E5	Amazon Technologies Inc.
+AC6318	Amazon Technologies Inc.
+AEA47B	Amazon Technologies Inc.
+B068B6	Amazon Technologies Inc.
+B8A75A	Amazon Technologies Inc.
+BC3BAE	Amazon Technologies Inc.
+BC8C7C	Amazon Technologies Inc.
+C04A00	Amazon Technologies Inc.
+C0A0C8	Amazon Technologies Inc.
+C4A81D	Amazon Technologies Inc.
+C88B97	Amazon Technologies Inc.
+CCD15B	Amazon Technologies Inc.
+D0A628	Amazon Technologies Inc.
+D4F0B4	Amazon Technologies Inc.
+D8DCDA	Amazon Technologies Inc.
+DC861C	Amazon Technologies Inc.
+E02538	Amazon Technologies Inc.
+E0BE03	Amazon Technologies Inc.
+E46B93	Amazon Technologies Inc.
+E8BE3C	Amazon Technologies Inc.
+EC0B4D	Amazon Technologies Inc.
+F0A225	Amazon Technologies Inc.
+F0B479	Amazon Technologies Inc.
+F0D36A	Amazon Technologies Inc.
+F0F002	Amazon Technologies Inc.
+F43E61	Amazon Technologies Inc.
+F48E92	Amazon Technologies Inc.
+F492C3	Amazon Technologies Inc.
+FC32F5	Amazon Technologies Inc.
+FC68B4	Amazon Technologies Inc.
+FC976D	Amazon Technologies Inc.
+FCAA81	Amazon Technologies Inc.
+002242	Dell Inc
+001150	Dell Inc
+0012A6	Dell Inc
+0013CF	Dell Inc
+0014FE	Dell Inc
+0015C9	Dell Inc
+001649	Dell Inc
+0017A0	Dell Inc
+00186B	Dell Inc
+0019B9	Dell Inc
+001A97	Dell Inc
+001B38	Dell Inc
+001C23	Dell Inc
+001C7E	Dell Inc
+001D09	Dell Inc
+001E06	Dell Inc
+001E4E	Dell Inc
+001F1A	Dell Inc
+001F5D	Dell Inc
+002059	Dell Inc
+00215B	Dell Inc
+0021A0	Dell Inc
+002264	Dell Inc
+00232A	Dell Inc
+002372	Dell Inc
+0024E4	Dell Inc
+002500	Dell Inc
+002559	Dell Inc
+0025AE	Dell Inc
+00264C	Dell Inc
+002706	Dell Inc
+00276B	Dell Inc
+00D0D3	Dell Inc
+0C7118	Dell Inc
+10DD1B	Dell Inc
+18FB7D	Dell Inc
+1C6F65	Dell Inc
+1CA2B1	Dell Inc
+20C0E3	Dell Inc
+2482B4	Dell Inc
+28A16B	Dell Inc
+3085A9	Dell Inc
+340A22	Dell Inc
+34E12D	Dell Inc
+380C72	Dell Inc
+3C1873	Dell Inc
+403B6B	Dell Inc
+408670	Dell Inc
+40A6A4	Dell Inc
+4844A8	Dell Inc
+4CBCB5	Dell Inc
+501A99	Dell Inc
+506B92	Dell Inc
+509329	Dell Inc
+542B36	Dell Inc
+54A5EF	Dell Inc
+5882B0	Dell Inc
+5CFFF9	Dell Inc
+6012AD	Dell Inc
+68285A	Dell Inc
+6C3B23	Dell Inc
+6C53B6	Dell Inc
+6CB311	Dell Inc
+7081EB	Dell Inc
+7483B2	Dell Inc
+749128	Dell Inc
+78AC44	Dell Inc
+7C6C8F	Dell Inc
+8013A4	Dell Inc
+841316	Dell Inc
+84B153	Dell Inc
+84B861	Dell Inc
+886B76	Dell Inc
+8C604F	Dell Inc
+8C7C92	Dell Inc
+8C8AE1	Dell Inc
+8CB82C	Dell Inc
+90090F	Dell Inc
+90303B	Dell Inc
+90855A	Dell Inc
+90B1E0	Dell Inc
+94C40D	Dell Inc
+9803D8	Dell Inc
+98F0D2	Dell Inc
+9C6B0E	Dell Inc
+9C7BD2	Dell Inc
+9CB206	Dell Inc
+A41BCD	Dell Inc
+A4485E	Dell Inc
+A486F4	Dell Inc
+A48D3B	Dell Inc
+A4C0E1	Dell Inc
+A8CC34	Dell Inc
+B03B64	Dell Inc
+B0D7CC	Dell Inc
+B89CC6	Dell Inc
+BC44F6	Dell Inc
+C0B713	Dell Inc
+C43DC7	Dell Inc
+C895B0	Dell Inc
+C8B106	Dell Inc
+CCB255	Dell Inc
+CCEF48	Dell Inc
+D08739	Dell Inc
+D4AE52	Dell Inc
+D4BED9	Dell Inc
+D867D9	Dell Inc
+DC0256	Dell Inc
+DC4444	Dell Inc
+DC720B	Dell Inc
+E0DB55	Dell Inc
+E4C0D1	Dell Inc
+E80AA5	Dell Inc
+E8B0B7	Dell Inc
+EC2E4E	Dell Inc
+EC89F5	Dell Inc
+F03E34	Dell Inc
+F4CEE4	Dell Inc
+F81FAF	Dell Inc
+F8DB7C	Dell Inc
+FC66CF	Dell Inc
+FCAA14	Dell Inc
+00AA01	Xerox Corporation
+00000C	Cisco Systems, Inc
+00001D	Cisco Systems, Inc
+00002C	Cisco Systems, Inc
+000043	Cisco Systems, Inc
+000065	Cisco Systems, Inc
+0000F8	Cisco Systems, Inc
+0001C7	Cisco Systems, Inc
+0001C9	Cisco Systems, Inc
+0001E6	Cisco Systems, Inc
+0001F7	Cisco Systems, Inc
+000204	Cisco Systems, Inc
+000210	Cisco Systems, Inc
+000215	Cisco Systems, Inc
+000222	Cisco Systems, Inc
+000229	Cisco Systems, Inc
+000244	Cisco Systems, Inc
+00054E	Cisco Systems, Inc
+000625	Cisco Systems, Inc
+000646	Cisco Systems, Inc
+000706	Cisco Systems, Inc
+000714	Cisco Systems, Inc
+000962	Cisco Systems, Inc
+000DBC	Cisco Systems, Inc
+001122	Cisco Systems, Inc
+001150	Cisco Systems, Inc
+001648	Cisco Systems, Inc
+0016C6	Cisco Systems, Inc
+0017DE	Cisco Systems, Inc
+001967	Cisco Systems, Inc
+001A6D	Cisco Systems, Inc
+001C0F	Cisco Systems, Inc
+001CFB	Cisco Systems, Inc
+001DF9	Cisco Systems, Inc
+001E14	Cisco Systems, Inc
+001E13	Cisco Systems, Inc
+001EBD	Cisco Systems, Inc
+001F9D	Cisco Systems, Inc
+001FCA	Cisco Systems, Inc
+001FFD	Cisco Systems, Inc
+0020DF	Cisco Systems, Inc
+00216A	Cisco Systems, Inc
+002206	Cisco Systems, Inc
+0022BD	Cisco Systems, Inc
+00238C	Cisco Systems, Inc
+002441	Cisco Systems, Inc
+0024C4	Cisco Systems, Inc
+002559	Cisco Systems, Inc
+0025AB	Cisco Systems, Inc
+005056	Cisco Systems, Inc
+0050C2	Cisco Systems, Inc
+00600B	Cisco Systems, Inc
+00603E	Cisco Systems, Inc
+00908C	Cisco Systems, Inc
+0090BF	Cisco Systems, Inc
+0090D9	Cisco Systems, Inc
+00D023	Cisco Systems, Inc
+00D088	Cisco Systems, Inc
+00D0BC	Cisco Systems, Inc
+00E0B0	Cisco Systems, Inc
+00E014	Cisco Systems, Inc
+00E01E	Cisco Systems, Inc
+00E0F9	Cisco Systems, Inc
+00F6C7	Cisco Systems, Inc
+080027	Oracle Corporation
+0013E8	Netgear Inc
+00155D	Netgear Inc
+001BB9	Netgear Inc
+00223D	Netgear Inc
+0024B7	Netgear Inc
+0026C0	Netgear Inc
+006012	Netgear Inc
+0090D0	Netgear Inc
+00C049	Netgear Inc
+04A7BF	Netgear Inc
+04B3B6	Netgear Inc
+0800B6	Netgear Inc
+0C4E54	Netgear Inc
+0CD5A6	Netgear Inc
+102C01	Netgear Inc
+1421BC	Netgear Inc
+18334E	Netgear Inc
+1CA158	Netgear Inc
+207896	Netgear Inc
+240AD4	Netgear Inc
+2837C9	Netgear Inc
+2CFADC	Netgear Inc
+304E4B	Netgear Inc
+34328C	Netgear Inc
+382377	Netgear Inc
+3833CD	Netgear Inc
+38B12A	Netgear Inc
+3C370B	Netgear Inc
+3C4C80	Netgear Inc
+402BAA	Netgear Inc
+443A29	Netgear Inc
+4CC60B	Netgear Inc
+504194	Netgear Inc
+542018	Netgear Inc
+54C48E	Netgear Inc
+5C044C	Netgear Inc
+5C49EE	Netgear Inc
+5CE78B	Netgear Inc
+64C011	Netgear Inc
+681AEF	Netgear Inc
+6C19FF	Netgear Inc
+6CB0CE	Netgear Inc
+6CEC5B	Netgear Inc
+700AFB	Netgear Inc
+740447	Netgear Inc
+78A511	Netgear Inc
+78D004	Netgear Inc
+7C8941	Netgear Inc
+84AAA8	Netgear Inc
+8C09F4	Netgear Inc
+8C19B2	Netgear Inc
+8CCDA4	Netgear Inc
+8E98CD	Netgear Inc
+9407A0	Netgear Inc
+945103	Netgear Inc
+98D62D	Netgear Inc
+9C3BA0	Netgear Inc
+A0369F	Netgear Inc
+A04E04	Netgear Inc
+A0D357	Netgear Inc
+A41163	Netgear Inc
+A461C0	Netgear Inc
+A47E39	Netgear Inc
+A86CDE	Netgear Inc
+AC2518	Netgear Inc
+B05611	Netgear Inc
+B0F5C5	Netgear Inc
+B40EDC	Netgear Inc
+B4921C	Netgear Inc
+B83E75	Netgear Inc
+BC5FF4	Netgear Inc
+BCD1D3	Netgear Inc
+C04E1A	Netgear Inc
+C0D842	Netgear Inc
+C422AA	Netgear Inc
+C45DD8	Netgear Inc
+C80E47	Netgear Inc
+C877AB	Netgear Inc
+C8A070	Netgear Inc
+CC54D9	Netgear Inc
+CCB886	Netgear Inc
+D02C45	Netgear Inc
+D4304D	Netgear Inc
+D880C8	Netgear Inc
+DC3A5E	Netgear Inc
+DC0C5C	Netgear Inc
+DC9B9F	Netgear Inc
+E03F49	Netgear Inc
+E09DB8	Netgear Inc
+E0CDA1	Netgear Inc
+E0F5CA	Netgear Inc
+E49901	Netgear Inc
+E4F3C5	Netgear Inc
+E8A1CD	Netgear Inc
+E8B748	Netgear Inc
+EC4480	Netgear Inc
+F04A51	Netgear Inc
+F0B0E7	Netgear Inc
+F0B479	Netgear Inc
+F0F002	Netgear Inc
+F46F6E	Netgear Inc
+F49E2D	Netgear Inc
+F4B164	Netgear Inc
+F80C71	Netgear Inc
+F8323A	Netgear Inc
+F85B6C	Netgear Inc
+F8B6A9	Netgear Inc
+F8D5A3	Netgear Inc
+FC3500	Netgear Inc
+FCB733	Netgear Inc
+FCF2BD	Netgear Inc

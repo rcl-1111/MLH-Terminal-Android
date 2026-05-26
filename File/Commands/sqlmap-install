@@ -1,0 +1,14 @@
+#!/bin/bash
+# SQLMap 安装命令
+# 版本: 1.0.0
+
+SQLMAP_TOOLS="/data/data/com.termux/files/home/MLH-Terminal/File/Commands/Tools/SQLMap"
+INSTALL_SCRIPT="$SQLMAP_TOOLS/install"
+
+if [[ -f "$INSTALL_SCRIPT" ]]; then
+    bash "$INSTALL_SCRIPT"
+else
+    echo "SQLMap 安装脚本不存在"
+    echo "请检查: $SQLMAP_TOOLS/install"
+    exit 1
+fi

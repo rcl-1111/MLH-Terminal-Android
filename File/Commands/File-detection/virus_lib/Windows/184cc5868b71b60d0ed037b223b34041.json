@@ -1,0 +1,26 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2026-05-16",
+  "description": "Trojan-Virus-Library Individual Virus File",
+  "author": "rcl-1111",
+  "name": "金坷垃病毒.exe",
+  "type": "Trojan",
+  "platform": "Windows",
+  "md5_hash": "184cc5868b71b60d0ed037b223b34041",
+  "sha1_hash": "4b24e0cc8eac25be8dc3d94a51cab5a0c0066298",
+  "sha256_hash": "f09a530d4b0d54628dbe5f191a2e3ea014ec3c2fa4e9a49b91b9fb25f6e4bd7c",
+  "risk_level": "High",
+  "description": "金坷垃病毒样本，别人给的",
+  "detection_date": "2024-01-01",
+  "signature": "恶意行为",
+  "reference": "",
+  "tags": ["后门", "信息窃取", "Windows"],
+  "behavior": [
+    "创建系统后门",
+    "窃取用户敏感信息",
+    "自启动"
+  ],
+  "mitigation": [
+    "使用杀毒软件扫描",
+  ]
+}

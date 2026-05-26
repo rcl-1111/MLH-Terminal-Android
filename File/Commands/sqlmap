@@ -1,0 +1,21 @@
+#!/bin/bash
+# SQLMap 主命令
+# 版本: 1.0.0
+
+SQLMAP_TOOLS="/data/data/com.termux/files/home/MLH-Terminal/File/Commands/Tools/SQLMap"
+SQLMAP_DIR="$SQLMAP_TOOLS/sqlmap"
+SQLMAP_MAIN="$SQLMAP_DIR/sqlmap.py"
+
+# 检查 SQLMap 是否安装
+if [[ ! -f "$SQLMAP_MAIN" ]]; then
+    echo "SQLMap 未安装"
+    echo ""
+    echo "请先运行安装命令:"
+    echo "  sqlmap-install"
+    echo ""
+    exit 1
+fi
+
+# 执行 SQLMap
+cd "$SQLMAP_DIR"
+exec python sqlmap.py "$@"

@@ -1,0 +1,492 @@
+#!/bin/bash
+# File-detection加壳检测和脱壳模块
+
+source "$(dirname "$0")/config"
+source "$(dirname "$0")/utils"
+
+# 检查加壳/脱壳工具
+check_pack_tools() {
+    local missing_tools=()
+    
+    # 检查upx（加壳/脱壳工具）
+    if ! command -v upx >/dev/null 2>&1; then
+        echo -e "${INFO} 需要安装upx进行加壳/脱壳分析"
+        echo -e "  请运行: pkg install upx -y"
+        missing_tools+=("upx")
+    fi
+    
+    # 检查readelf（ELF文件分析）
+    if ! command -v readelf >/dev/null 2>&1; then
+        echo -e "${INFO} 需要安装readelf进行ELF文件分析"
+        echo -e "  请运行: pkg install binutils -y"
+        missing_tools+=("readelf")
+    fi
+    
+    # 检查objdump（PE文件分析）
+    if ! command -v objdump >/dev/null 2>&1; then
+        echo -e "${INFO} 需要安装objdump进行二进制文件分析"
+        echo -e "  请运行: pkg install binutils -y"
+        missing_tools+=("objdump")
+    fi
+    
+    if [[ ${#missing_tools[@]} -gt 0 ]]; then
+        echo -e "${WARN} 缺少加壳分析工具: ${missing_tools[*]}"
+        return 1
+    fi
+    
+    return 0
+}
+
+# 自动安装加壳工具
+install_pack_tools() {
+    echo -e "${PLUS} 正在安装加壳分析工具..."
+    
+    local installed=false
+    
+    # 安装upx
+    if ! command -v upx >/dev/null 2>&1; then
+        echo -e "${INFO} 安装upx..."
+        pkg install upx -y 2>/dev/null
+        if command -v upx >/dev/null 2>&1; then
+            echo -e "${CHECK} upx安装成功"
+            installed=true
+        else
+            echo -e "${CROSS} upx安装失败"
+        fi
+    fi
+    
+    # 安装binutils
+    if ! command -v readelf >/dev/null 2>&1 || ! command -v objdump >/dev/null 2>&1; then
+        echo -e "${INFO} 安装binutils..."
+        pkg install binutils -y 2>/dev/null
+        if command -v readelf >/dev/null 2>&1 && command -v objdump >/dev/null 2>&1; then
+            echo -e "${CHECK} binutils安装成功"
+            installed=true
+        fi
+    fi
+    
+    if [[ "$installed" == true ]]; then
+        echo -e "${CHECK} 加壳工具安装完成"
+    fi
+    
+    return 0
+}
+
+# 检测文件是否加壳
+detect_packed() {
+    local file="$1"
+    local detailed="$2"
+    
+    if [[ ! -f "$file" ]]; then
+        echo -e "${CROSS} 文件不存在: $file"
+        return 1
+    fi
+    
+    echo -e "${CYAN}加壳检测: $file${NC}"
+    echo -e "${BOLD}┌────────────────────────────────────────────────────────┐${NC}"
+    
+    # 基本文件信息
+    echo -e "${INFO} 文件类型: $(get_file_type "$file")"
+    
+    local packed=false
+    local packer_name=""
+    local packer_info=""
+    
+    # 1. 使用upx检测
+    if command -v upx >/dev/null 2>&1; then
+        echo -e "${INFO} 使用UPX检测加壳..."
+        local upx_output=$(upx -l "$file" 2>/dev/null)
+        
+        if echo "$upx_output" | grep -q "packed"; then
+            packed=true
+            packer_name="UPX"
+            packer_info=$(echo "$upx_output" | grep -A1 "packed" | tail -1 | sed 's/^[[:space:]]*//')
+            echo -e "${CROSS} 检测到UPX加壳"
+        else
+            echo -e "${CHECK} 未检测到UPX加壳"
+        fi
+    fi
+    
+    # 2. 检查文件头特征
+    if [[ "$packed" != true ]]; then
+        echo -e "${INFO} 分析文件头特征..."
+        local file_header=$(head -c 100 "$file" 2>/dev/null | xxd 2>/dev/null | head -10)
+        
+        # 常见的加壳器特征
+        local packer_patterns=(
+            ["UPX"]="UPX"
+            ["ASPack"]="ASPack"
+            ["PECompact"]="PECompact"
+            ["Themida"]="Themida"
+            ["VMProtect"]="VMProtect"
+            ["Armadillo"]="Armadillo"
+            ["Obsidium"]="Obsidium"
+            ["Enigma"]="Enigma"
+            ["MPRESS"]="MPRESS"
+            ["RLPack"]="RLPack"
+        )
+        
+        for packer in "${!packer_patterns[@]}"; do
+            if echo "$file_header" | grep -q "${packer_patterns[$packer]}"; then
+                packed=true
+                packer_name="$packer"
+                echo -e "${CROSS} 检测到${packer}加壳特征"
+                break
+            fi
+        done
+        
+        if [[ "$packed" != true ]]; then
+            # 检查节区名称
+            if command -v objdump >/dev/null 2>&1 && [[ "$file" =~ \.(exe|dll)$ ]]; then
+                local sections=$(objdump -h "$file" 2>/dev/null | grep -o "^\s*[0-9]\+ [^ ]*" | awk '{print $2}')
+                
+                # 常见的加壳节区名称
+                local packed_sections=(
+                    ".upx" ".upx0" ".upx1"
+                    ".aspack" ".adata"
+                    ".pdata" ".edata" ".idata"
+                    ".rsrc" ".reloc"
+                )
+                
+                for section in $sections; do
+                    for packed_section in "${packed_sections[@]}"; do
+                        if [[ "$section" == "$packed_section" ]]; then
+                            packed=true
+                            packer_name="未知加壳器（节区: $section）"
+                            echo -e "${WARN} 发现可疑节区: $section"
+                            break 2
+                        fi
+                    done
+                done
+            fi
+        fi
+    fi
+    
+    # 3. 检查入口点特征
+    if [[ "$packed" != true ]] && command -v objdump >/dev/null 2>&1 && [[ "$file" =~ \.(exe|dll)$ ]]; then
+        echo -e "${INFO} 分析入口点..."
+        local entry_info=$(objdump -f "$file" 2>/dev/null | grep -i "entry")
+        
+        if [[ -n "$entry_info" ]]; then
+            # 检查入口点是否在代码段
+            local entry_point=$(echo "$entry_info" | grep -o "0x[0-9a-f]\+")
+            
+            if [[ -n "$entry_point" ]]; then
+                # 获取代码段地址
+                local code_section=$(objdump -h "$file" 2>/dev/null | grep -E "\.text|CODE" | head -1)
+                if [[ -n "$code_section" ]]; then
+                    local code_start=$(echo "$code_section" | awk '{print "0x"$4}')
+                    local code_end=$(echo "$code_section" | awk '{print "0x"$4 "+0x"$3}')
+                    
+                    # 转换十六进制为十进制进行比较
+                    local entry_dec=$((entry_point))
+                    local code_start_dec=$((code_start))
+                    local code_end_dec=$((code_end))
+                    
+                    if (( entry_dec < code_start_dec || entry_dec > code_end_dec )); then
+                        packed=true
+                        packer_name="入口点异常"
+                        echo -e "${WARN} 入口点异常: $entry_point (不在代码段内)"
+                    fi
+                fi
+            fi
+        fi
+    fi
+    
+    # 4. 检查熵值（高熵值可能表示加密/压缩）
+    if [[ "$packed" != true ]]; then
+        echo -e "${INFO} 计算文件熵值..."
+        if command -v ent >/dev/null 2>&1; then
+            local entropy_output=$(ent "$file" 2>/dev/null | grep -i "entropy")
+            local entropy=$(echo "$entropy_output" | grep -o "[0-9]\.[0-9]\+")
+            
+            if [[ -n "$entropy" ]]; then
+                echo -e "${INFO} 熵值: $entropy bits/byte"
+                
+                # 高熵值（大于7.5）可能表示加密/压缩
+                if (( $(echo "$entropy > 7.5" | bc -l 2>/dev/null || echo 0) )); then
+                    packed=true
+                    packer_name="高熵值加密"
+                    echo -e "${WARN} 高熵值，可能被加密/压缩"
+                fi
+            fi
+        fi
+    fi
+    
+    # 输出结果
+    if [[ "$packed" == true ]]; then
+        echo -e "${CROSS} 文件被加壳/加密"
+        echo -e "${INFO} 加壳类型: $packer_name"
+        
+        if [[ -n "$packer_info" ]]; then
+            echo -e "${INFO} 详细信息: $packer_info"
+        fi
+        
+        # 显示详细分析
+        if [[ "$detailed" == true ]]; then
+            show_packed_details "$file"
+        fi
+    else
+        echo -e "${CHECK} 文件未检测到加壳"
+    fi
+    
+    echo -e "${BOLD}└────────────────────────────────────────────────────────┘${NC}"
+    return 0
+}
+
+# 显示加壳详细信息
+show_packed_details() {
+    local file="$1"
+    
+    echo -e "\n${YELLOW}[+] 加壳详细分析:${NC}"
+    
+    # 1. 显示节区信息
+    if command -v objdump >/dev/null 2>&1 && [[ "$file" =~ \.(exe|dll)$ ]]; then
+        echo -e "${INFO} 节区信息:"
+        objdump -h "$file" 2>/dev/null | head -20
+    fi
+    
+    # 2. 显示导入表
+    echo -e "\n${INFO} 导入函数分析:"
+    if command -v objdump >/dev/null 2>&1 && [[ "$file" =~ \.(exe|dll)$ ]]; then
+        local import_count=$(objdump -p "$file" 2>/dev/null | grep -c "DLL Name:")
+        echo -e "  导入DLL数量: $import_count"
+        
+        if [[ $import_count -lt 5 ]]; then
+            echo -e "  ${WARN} 导入DLL过少，可能被隐藏"
+        fi
+        
+        # 显示前5个导入DLL
+        objdump -p "$file" 2>/dev/null | grep "DLL Name:" | head -5 | while read line; do
+            echo -e "  • $line"
+        done
+    fi
+    
+    # 3. 显示资源信息
+    echo -e "\n${INFO} 资源节区检查:"
+    if command -v objdump >/dev/null 2>&1 && [[ "$file" =~ \.(exe|dll)$ ]]; then
+        local has_rsrc=$(objdump -h "$file" 2>/dev/null | grep -c "\.rsrc")
+        if [[ $has_rsrc -eq 0 ]]; then
+            echo -e "  ${WARN} 无资源节区，可能被隐藏"
+        else
+            echo -e "  ${CHECK} 存在资源节区"
+        fi
+    fi
+}
+
+# 尝试脱壳
+try_unpack() {
+    local file="$1"
+    local output="${2:-${file%.*}_unpacked.${file##*.}}"
+    
+    if [[ ! -f "$file" ]]; then
+        echo -e "${CROSS} 文件不存在: $file"
+        return 1
+    fi
+    
+    echo -e "${CYAN}尝试脱壳: $file${NC}"
+    echo -e "${BOLD}┌────────────────────────────────────────────────────────┐${NC}"
+    
+    # 先检测是否加壳
+    detect_packed "$file" false
+    
+    # 检查upx是否可用
+    if ! command -v upx >/dev/null 2>&1; then
+        echo -e "${CROSS} 需要upx工具进行脱壳"
+        echo -e "${INFO} 请安装: pkg install upx -y"
+        echo -e "${BOLD}└────────────────────────────────────────────────────────┘${NC}"
+        return 1
+    fi
+    
+    echo -e "${PLUS} 尝试使用UPX脱壳..."
+    
+    # 创建备份
+    local backup_file="${file}.backup.$(date +%Y%m%d%H%M%S)"
+    cp "$file" "$backup_file"
+    echo -e "${INFO} 已创建备份: $backup_file"
+    
+    # 尝试脱壳
+    local unpack_result=$(upx -d "$file" -o "$output" 2>&1)
+    
+    if echo "$unpack_result" | grep -q "Unpacked"; then
+        echo -e "${CHECK} UPX脱壳成功"
+        echo -e "${INFO} 脱壳文件: $output"
+        
+        # 比较文件大小
+        local original_size=$(stat -c%s "$backup_file")
+        local unpacked_size=$(stat -c%s "$output")
+        local size_diff=$((original_size - unpacked_size))
+        
+        echo -e "${INFO} 原始大小: $(get_file_size "$backup_file")"
+        echo -e "${INFO} 脱壳大小: $(get_file_size "$output")"
+        
+        if [[ $size_diff -gt 0 ]]; then
+            echo -e "${INFO} 减少大小: $(echo "scale=2; $size_diff/1024" | bc) KB"
+        fi
+        
+        # 验证脱壳文件
+        echo -e "${INFO} 验证脱壳文件..."
+        local verify_result=$(upx -l "$output" 2>&1)
+        
+        if echo "$verify_result" | grep -q "Not packed"; then
+            echo -e "${CHECK} 脱壳验证成功: 文件已完全脱壳"
+        else
+            echo -e "${WARN} 脱壳验证: 文件可能仍有加壳"
+        fi
+        
+        echo -e "${BOLD}└────────────────────────────────────────────────────────┘${NC}"
+        return 0
+    else
+        echo -e "${CROSS} UPX脱壳失败"
+        echo -e "${INFO} 错误信息: $unpack_result"
+        
+        # 尝试其他脱壳方法
+        echo -e "${PLUS} 尝试其他脱壳方法..."
+        try_alternative_unpack "$file" "$output"
+        
+        echo -e "${BOLD}└────────────────────────────────────────────────────────┘${NC}"
+        return 1
+    fi
+}
+
+# 尝试替代脱壳方法
+try_alternative_unpack() {
+    local file="$1"
+    local output="$2"
+    
+    echo -e "${INFO} 1. 检查是否为ELF文件..."
+    if file "$file" 2>/dev/null | grep -q "ELF"; then
+        echo -e "${INFO} 检测到ELF文件，尝试修复..."
+        
+        if command -v strip >/dev/null 2>&1; then
+            strip --strip-unneeded "$file" -o "$output"
+            if [[ $? -eq 0 ]]; then
+                echo -e "${CHECK} ELF清理完成: $output"
+            fi
+        fi
+    fi
+    
+    echo -e "${INFO} 2. 检查节区信息..."
+    if command -v objcopy >/dev/null 2>&1; then
+        echo -e "${INFO} 尝试重建节区..."
+        objcopy --set-section-flags .data=alloc,load,contents "$file" "$output.tmp" 2>/dev/null
+        
+        if [[ -f "$output.tmp" ]]; then
+            mv "$output.tmp" "$output"
+            echo -e "${INFO} 节区重建完成"
+        fi
+    fi
+    
+    # 清理临时文件
+    rm -f "$output.tmp" 2>/dev/null
+    
+    echo -e "${WARN} 注意: 部分加壳器需要专用脱壳工具"
+    echo -e "  推荐工具:"
+    echo -e "  • UPX: 通用加壳器"
+    echo -e "  • OllyDbg: Windows调试器"
+    echo -e "  • x64dbg: 64位调试器"
+    echo -e "  • IDA Pro: 专业反汇编工具"
+}
+
+# 对文件加壳
+pack_file() {
+    local file="$1"
+    local output="${2:-${file%.*}_packed.${file##*.}}"
+    local level="${3:-9}"  # 压缩级别 1-9
+    
+    if [[ ! -f "$file" ]]; then
+        echo -e "${CROSS} 文件不存在: $file"
+        return 1
+    fi
+    
+    echo -e "${CYAN}文件加壳: $file${NC}"
+    echo -e "${BOLD}┌────────────────────────────────────────────────────────┐${NC}"
+    
+    # 检查upx是否可用
+    if ! command -v upx >/dev/null 2>&1; then
+        echo -e "${CROSS} 需要upx工具进行加壳"
+        echo -e "${INFO} 请安装: pkg install upx -y"
+        echo -e "${BOLD}└────────────────────────────────────────────────────────┘${NC}"
+        return 1
+    fi
+    
+    # 检查文件是否已加壳
+    local check_result=$(upx -l "$file" 2>/dev/null)
+    if echo "$check_result" | grep -q "packed"; then
+        echo -e "${WARN} 文件已加壳，跳过加壳操作"
+        echo -e "${BOLD}└────────────────────────────────────────────────────────┘${NC}"
+        return 1
+    fi
+    
+    echo -e "${PLUS} 使用UPX加壳..."
+    echo -e "${INFO} 压缩级别: $level"
+    echo -e "${INFO} 输出文件: $output"
+    
+    # 执行加壳
+    local pack_result=$(upx -$level "$file" -o "$output" 2>&1)
+    
+    if [[ $? -eq 0 ]] && [[ -f "$output" ]]; then
+        echo -e "${CHECK} 加壳成功"
+        
+        # 比较文件大小
+        local original_size=$(stat -c%s "$file")
+        local packed_size=$(stat -c%s "$output")
+        local compression_ratio=$(echo "scale=2; (1 - $packed_size/$original_size) * 100" | bc)
+        
+        echo -e "${INFO} 原始大小: $(get_file_size "$file")"
+        echo -e "${INFO} 加壳大小: $(get_file_size "$output")"
+        echo -e "${INFO} 压缩率: $compression_ratio%"
+        
+        # 验证加壳
+        echo -e "${INFO} 验证加壳..."
+        local verify_result=$(upx -l "$output" 2>&1)
+        
+        if echo "$verify_result" | grep -q "packed"; then
+            echo -e "${CHECK} 加壳验证成功"
+        else
+            echo -e "${WARN} 加壳验证失败"
+        fi
+        
+        echo -e "${BOLD}└────────────────────────────────────────────────────────┘${NC}"
+        return 0
+    else
+        echo -e "${CROSS} 加壳失败"
+        echo -e "${INFO} 错误信息: $pack_result"
+        echo -e "${BOLD}└────────────────────────────────────────────────────────┘${NC}"
+        return 1
+    fi
+}
+
+# 加壳/脱壳综合功能
+pack_unpack_comprehensive() {
+    local file="$1"
+    local action="$2"  # pack 或 unpack
+    
+    if [[ ! -f "$file" ]]; then
+        echo -e "${CROSS} 文件不存在: $file"
+        return 1
+    fi
+    
+    # 检查并安装工具
+    check_pack_tools
+    if [[ $? -ne 0 ]]; then
+        echo -e "${INFO} 正在自动安装工具..."
+        install_pack_tools
+    fi
+    
+    case "$action" in
+        pack)
+            pack_file "$file"
+            ;;
+        unpack)
+            try_unpack "$file"
+            ;;
+        detect)
+            detect_packed "$file" true
+            ;;
+        *)
+            echo -e "${CROSS} 未知操作: $action"
+            return 1
+            ;;
+    esac
+}

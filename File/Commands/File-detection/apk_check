@@ -1,0 +1,742 @@
+#!/bin/bash
+# File-detection APK检测模块
+
+source "$(dirname "$0")/config"
+source "$(dirname "$0")/utils"
+
+# 检查并安装APK分析工具
+check_apk_tools() {
+    local missing_tools=()
+    
+    # 检查aapt (Android Asset Packaging Tool)
+    if ! command -v aapt >/dev/null 2>&1; then
+        echo -e "${INFO} 需要安装aapt进行APK分析"
+        echo -e "  请运行: pkg install aapt -y"
+        missing_tools+=("aapt")
+    fi
+    
+    # 检查adb (Android Debug Bridge) - 可选
+    if ! command -v adb >/dev/null 2>&1; then
+        echo -e "${INFO} 未找到adb，安装测试功能将受限"
+        echo -e "  可选安装: pkg install android-tools -y"
+    fi
+    
+    # 检查unzip
+    if ! command -v unzip >/dev/null 2>&1; then
+        echo -e "${INFO} 需要安装unzip"
+        echo -e "  请运行: pkg install unzip -y"
+        missing_tools+=("unzip")
+    fi
+    
+    if [[ ${#missing_tools[@]} -gt 0 ]]; then
+        echo -e "${WARN} 缺少APK分析工具: ${missing_tools[*]}"
+        return 1
+    fi
+    
+    return 0
+}
+
+# 自动安装APK工具
+install_apk_tools() {
+    echo -e "${PLUS} 正在安装APK分析工具..."
+    
+    local installed=false
+    
+    # 尝试安装aapt
+    if ! command -v aapt >/dev/null 2>&1; then
+        echo -e "${INFO} 安装aapt..."
+        pkg install aapt -y 2>/dev/null
+        if command -v aapt >/dev/null 2>&1; then
+            echo -e "${CHECK} aapt安装成功"
+            installed=true
+        else
+            echo -e "${CROSS} aapt安装失败"
+        fi
+    fi
+    
+    # 尝试安装adb
+    if ! command -v adb >/dev/null 2>&1; then
+        echo -e "${INFO} 安装adb..."
+        pkg install android-tools -y 2>/dev/null
+        if command -v adb >/dev/null 2>&1; then
+            echo -e "${CHECK} adb安装成功"
+            installed=true
+        else
+            echo -e "${INFO} adb安装跳过（可选）"
+        fi
+    fi
+    
+    # 尝试安装unzip
+    if ! command -v unzip >/dev/null 2>&1; then
+        echo -e "${INFO} 安装unzip..."
+        pkg install unzip -y 2>/dev/null
+        if command -v unzip >/dev/null 2>&1; then
+            echo -e "${CHECK} unzip安装成功"
+            installed=true
+        fi
+    fi
+    
+    if [[ "$installed" == true ]]; then
+        echo -e "${CHECK} APK工具安装完成"
+    fi
+    
+    return 0
+}
+
+# 获取APK信息
+get_apk_info() {
+    local apk_file="$1"
+    
+    if [[ ! -f "$apk_file" ]]; then
+        echo -e "${CROSS} APK文件不存在: $apk_file"
+        return 1
+    fi
+    
+    echo -e "${CYAN}APK文件分析: $apk_file${NC}"
+    echo -e "${BOLD}┌────────────────────────────────────────────────────────┐${NC}"
+    
+    # 检查aapt工具
+    if ! command -v aapt >/dev/null 2>&1; then
+        echo -e "${CROSS} 需要aapt工具来分析APK"
+        echo -e "${INFO} 请先运行: pkg install aapt -y"
+        echo -e "${BOLD}└────────────────────────────────────────────────────────┘${NC}"
+        return 1
+    fi
+    
+    # 基本文件信息
+    echo -e "${INFO} 文件大小: $(get_file_size "$apk_file")"
+    echo -e "${INFO} 文件类型: $(get_file_type "$apk_file")"
+    
+    # 使用aapt获取APK信息
+    local apk_info
+    apk_info=$(aapt dump badging "$apk_file" 2>/dev/null)
+    
+    if [[ -z "$apk_info" ]]; then
+        echo -e "${CROSS} 无法解析APK文件，可能已损坏或不是有效的APK"
+        echo -e "${BOLD}└────────────────────────────────────────────────────────┘${NC}"
+        return 1
+    fi
+    
+    # 提取包名
+    local package_name=$(echo "$apk_info" | grep -o "package: name='[^']*'" | cut -d"'" -f2)
+    if [[ -n "$package_name" ]]; then
+        echo -e "${INFO} 包名: $package_name"
+    fi
+    
+    # 提取版本信息
+    local version_code=$(echo "$apk_info" | grep -o "versionCode='[^']*'" | cut -d"'" -f2)
+    local version_name=$(echo "$apk_info" | grep -o "versionName='[^']*'" | cut -d"'" -f2)
+    if [[ -n "$version_name" ]]; then
+        echo -e "${INFO} 版本: $version_name (Code: $version_code)"
+    fi
+    
+    # 提取SDK信息
+    local min_sdk=$(echo "$apk_info" | grep -o "sdkVersion:'[^']*'" | cut -d"'" -f2)
+    local target_sdk=$(echo "$apk_info" | grep -o "targetSdkVersion:'[^']*'" | cut -d"'" -f2)
+    
+    if [[ -n "$min_sdk" ]]; then
+        echo -e "${INFO} 最低SDK版本: $min_sdk"
+        
+        # 转换SDK版本为Android版本
+        local android_version=""
+        case $min_sdk in
+            34) android_version="Android 14 (Upside Down Cake)";;
+            33) android_version="Android 13 (Tiramisu)";;
+            32) android_version="Android 12L (Snow Cone)";;
+            31) android_version="Android 12 (Snow Cone)";;
+            30) android_version="Android 11 (Red Velvet Cake)";;
+            29) android_version="Android 10 (Queen Cake)";;
+            28) android_version="Android 9 (Pie)";;
+            27) android_version="Android 8.1 (Oreo)";;
+            26) android_version="Android 8.0 (Oreo)";;
+            25) android_version="Android 7.1 (Nougat)";;
+            24) android_version="Android 7.0 (Nougat)";;
+            23) android_version="Android 6.0 (Marshmallow)";;
+            22) android_version="Android 5.1 (Lollipop)";;
+            21) android_version="Android 5.0 (Lollipop)";;
+            19) android_version="Android 4.4 (KitKat)";;
+            18) android_version="Android 4.3 (Jelly Bean)";;
+            17) android_version="Android 4.2 (Jelly Bean)";;
+            16) android_version="Android 4.1 (Jelly Bean)";;
+            *)  android_version="未知版本 (SDK $min_sdk)";;
+        esac
+        echo -e "${INFO} 最低Android版本: $android_version"
+    fi
+    
+    if [[ -n "$target_sdk" ]]; then
+        echo -e "${INFO} 目标SDK版本: $target_sdk"
+    fi
+    
+    # 提取支持的屏幕尺寸
+    local supports_screens=$(echo "$apk_info" | grep -o "supports-screens:.*" | head -1)
+    if [[ -n "$supports_screens" ]]; then
+        echo -e "${INFO} 支持的屏幕: $(echo "$supports_screens" | sed 's/supports-screens://')"
+    fi
+    
+    # 提取支持的密度
+    local densities=$(echo "$apk_info" | grep -o "densities:.*" | head -1)
+    if [[ -n "$densities" ]]; then
+        echo -e "${INFO} 支持的密度: $(echo "$densities" | sed 's/densities://')"
+    fi
+    
+    echo -e "${BOLD}└────────────────────────────────────────────────────────┘${NC}"
+    
+    return 0
+}
+
+# 分析APK权限
+analyze_apk_permissions() {
+    local apk_file="$1"
+    
+    if [[ ! -f "$apk_file" ]]; then
+        return 1
+    fi
+    
+    if ! command -v aapt >/dev/null 2>&1; then
+        return 1
+    fi
+    
+    echo -e "${CYAN}APK权限分析${NC}"
+    echo -e "${BOLD}┌────────────────────────────────────────────────────────┐${NC}"
+    
+    # 获取权限列表
+    local permissions=$(aapt dump permissions "$apk_file" 2>/dev/null | grep -o "android.permission.[^']*" | sort -u)
+    
+    if [[ -z "$permissions" ]]; then
+        # 尝试另一种方式获取权限
+        permissions=$(aapt dump badging "$apk_file" 2>/dev/null | grep -o "uses-permission: name='[^']*'" | cut -d"'" -f2)
+    fi
+    
+    if [[ -z "$permissions" ]]; then
+        echo -e "${INFO} 未找到权限声明"
+    else
+        local permission_count=$(echo "$permissions" | wc -l)
+        echo -e "${INFO} 权限数量: $permission_count"
+        echo -e ""
+        
+        # 危险权限分类
+        echo -e "${YELLOW}[!] 危险权限检查:${NC}"
+        
+        # 定义危险权限
+        local dangerous_perms=(
+            "android.permission.READ_SMS"
+            "android.permission.SEND_SMS"
+            "android.permission.RECEIVE_SMS"
+            "android.permission.READ_CONTACTS"
+            "android.permission.WRITE_CONTACTS"
+            "android.permission.ACCESS_FINE_LOCATION"
+            "android.permission.ACCESS_COARSE_LOCATION"
+            "android.permission.CAMERA"
+            "android.permission.RECORD_AUDIO"
+            "android.permission.CALL_PHONE"
+            "android.permission.READ_CALL_LOG"
+            "android.permission.WRITE_CALL_LOG"
+            "android.permission.READ_EXTERNAL_STORAGE"
+            "android.permission.WRITE_EXTERNAL_STORAGE"
+            "android.permission.BODY_SENSORS"
+        )
+        
+        local dangerous_count=0
+        echo "$permissions" | while read perm; do
+            for dangerous_perm in "${dangerous_perms[@]}"; do
+                if [[ "$perm" == "$dangerous_perm" ]]; then
+                    echo -e "  ${RED}⚠ $perm${NC}"
+                    dangerous_count=$((dangerous_count + 1))
+                    break
+                fi
+            done
+        done
+        
+        if [[ $dangerous_count -eq 0 ]]; then
+            echo -e "  ${CHECK} 未发现危险权限"
+        else
+            echo -e "  ${WARN} 发现 $dangerous_count 个危险权限"
+        fi
+        
+        # 显示所有权限
+        if [[ $permission_count -le 20 ]]; then
+            echo -e ""
+            echo -e "${INFO} 所有权限:"
+            echo "$permissions" | while read perm; do
+                local is_dangerous=false
+                for dangerous_perm in "${dangerous_perms[@]}"; do
+                    if [[ "$perm" == "$dangerous_perm" ]]; then
+                        is_dangerous=true
+                        break
+                    fi
+                done
+                
+                if [[ "$is_dangerous" == true ]]; then
+                    echo -e "  ${RED}• $perm${NC}"
+                else
+                    echo -e "  • $perm"
+                fi
+            done
+        fi
+    fi
+    
+    echo -e "${BOLD}└────────────────────────────────────────────────────────┘${NC}"
+    return 0
+}
+
+# 检测APK隐私权限
+detect_privacy_permissions() {
+    local apk_file="$1"
+    
+    if [[ ! -f "$apk_file" ]]; then
+        echo -e "${CROSS} APK文件不存在: $apk_file"
+        return 1
+    fi
+    
+    echo -e "${CYAN}APK隐私权限检测: $apk_file${NC}"
+    echo -e "${BOLD}┌────────────────────────────────────────────────────────┐${NC}"
+    
+    # 检查aapt工具
+    if ! command -v aapt >/dev/null 2>&1; then
+        echo -e "${CROSS} 需要aapt工具来分析APK权限"
+        echo -e "${INFO} 请先运行: pkg install aapt -y"
+        echo -e "${BOLD}└────────────────────────────────────────────────────────┘${NC}"
+        return 1
+    fi
+    
+    # 获取权限列表
+    local permissions=$(aapt dump permissions "$apk_file" 2>/dev/null | grep -o "android.permission.[^']*" | sort -u)
+    
+    if [[ -z "$permissions" ]]; then
+        # 尝试另一种方式获取权限
+        permissions=$(aapt dump badging "$apk_file" 2>/dev/null | grep -o "uses-permission: name='[^']*'" | cut -d"'" -f2)
+    fi
+    
+    if [[ -z "$permissions" ]]; then
+        echo -e "${INFO} 未找到权限声明"
+        echo -e "${BOLD}└────────────────────────────────────────────────────────┘${NC}"
+        return 0
+    fi
+    
+    # 定义隐私权限分类
+    local privacy_categories=()
+    
+    # 联系人相关权限
+    local contact_perms=(
+        "android.permission.READ_CONTACTS"
+        "android.permission.WRITE_CONTACTS"
+        "android.permission.GET_ACCOUNTS"
+    )
+    
+    # 短信相关权限
+    local sms_perms=(
+        "android.permission.SEND_SMS"
+        "android.permission.RECEIVE_SMS"
+        "android.permission.READ_SMS"
+        "android.permission.RECEIVE_MMS"
+        "android.permission.RECEIVE_WAP_PUSH"
+    )
+    
+    # 通话记录权限
+    local call_perms=(
+        "android.permission.READ_CALL_LOG"
+        "android.permission.WRITE_CALL_LOG"
+        "android.permission.PROCESS_OUTGOING_CALLS"
+        "android.permission.CALL_PHONE"
+    )
+    
+    # 位置权限
+    local location_perms=(
+        "android.permission.ACCESS_FINE_LOCATION"
+        "android.permission.ACCESS_COARSE_LOCATION"
+        "android.permission.ACCESS_BACKGROUND_LOCATION"
+    )
+    
+    # 相机权限
+    local camera_perms=(
+        "android.permission.CAMERA"
+    )
+    
+    # 麦克风权限
+    local microphone_perms=(
+        "android.permission.RECORD_AUDIO"
+    )
+    
+    # 存储权限
+    local storage_perms=(
+        "android.permission.READ_EXTERNAL_STORAGE"
+        "android.permission.WRITE_EXTERNAL_STORAGE"
+        "android.permission.MANAGE_EXTERNAL_STORAGE"
+    )
+    
+    # 日历权限
+    local calendar_perms=(
+        "android.permission.READ_CALENDAR"
+        "android.permission.WRITE_CALENDAR"
+    )
+    
+    # 传感器权限
+    local sensor_perms=(
+        "android.permission.BODY_SENSORS"
+        "android.permission.ACTIVITY_RECOGNITION"
+    )
+    
+    # 电话状态权限
+    local phone_state_perms=(
+        "android.permission.READ_PHONE_STATE"
+        "android.permission.READ_PHONE_NUMBERS"
+    )
+    
+    # 其他敏感权限
+    local other_sensitive_perms=(
+        "android.permission.ACCESS_MEDIA_LOCATION"
+        "android.permission.ACCESS_WIFI_STATE"
+        "android.permission.CHANGE_WIFI_STATE"
+        "android.permission.ACCESS_NETWORK_STATE"
+        "android.permission.CHANGE_NETWORK_STATE"
+        "android.permission.BLUETOOTH"
+        "android.permission.BLUETOOTH_ADMIN"
+        "com.android.voicemail.permission.ADD_VOICEMAIL"
+    )
+    
+    # 危险权限组合（可能暗示恶意行为）
+    local dangerous_combinations=(
+        "READ_SMS+SEND_SMS+RECEIVE_SMS"
+        "READ_CONTACTS+WRITE_CONTACTS"
+        "ACCESS_FINE_LOCATION+ACCESS_BACKGROUND_LOCATION"
+        "CAMERA+RECORD_AUDIO"
+        "READ_EXTERNAL_STORAGE+WRITE_EXTERNAL_STORAGE"
+    )
+    
+    echo -e "${YELLOW}[!] 隐私权限检测结果:${NC}"
+    echo ""
+    
+    local found_privacy_perms=0
+    local high_risk_count=0
+    local medium_risk_count=0
+    local low_risk_count=0
+    
+    # 检测各类隐私权限
+    detect_permission_category "联系人权限" contact_perms
+    detect_permission_category "短信权限" sms_perms
+    detect_permission_category "通话记录权限" call_perms
+    detect_permission_category "位置权限" location_perms
+    detect_permission_category "相机权限" camera_perms
+    detect_permission_category "麦克风权限" microphone_perms
+    detect_permission_category "存储权限" storage_perms
+    detect_permission_category "日历权限" calendar_perms
+    detect_permission_category "传感器权限" sensor_perms
+    detect_permission_category "电话状态权限" phone_state_perms
+    detect_permission_category "其他敏感权限" other_sensitive_perms
+    
+    # 统计结果
+    echo -e "${BOLD}┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄┄${NC}"
+    echo -e "${INFO} 检测统计:"
+    echo -e "  发现隐私权限总数: $found_privacy_perms"
+    echo -e "  高风险权限: $high_risk_count"
+    echo -e "  中风险权限: $medium_risk_count"
+    echo -e "  低风险权限: $low_risk_count"
+    echo ""
+    
+    # 风险评估
+    local total_risk=$((high_risk_count * 3 + medium_risk_count * 2 + low_risk_count))
+    
+    if [[ $total_risk -eq 0 ]]; then
+        echo -e "${CHECK} 隐私风险评估: 低风险"
+        echo -e "  该应用请求的权限较为合理，隐私风险较低"
+    elif [[ $total_risk -le 5 ]]; then
+        echo -e "${WARN} 隐私风险评估: 中低风险"
+        echo -e "  该应用请求了一些隐私权限，但仍在合理范围内"
+    elif [[ $total_risk -le 10 ]]; then
+        echo -e "${WARN} 隐私风险评估: 中等风险"
+        echo -e "  该应用请求了较多隐私权限，请谨慎使用"
+    else
+        echo -e "${CROSS} 隐私风险评估: 高风险"
+        echo -e "  该应用请求了大量隐私权限，可能存在隐私风险"
+    fi
+    
+    # 检测危险权限组合
+    echo ""
+    echo -e "${YELLOW}[!] 危险权限组合检测:${NC}"
+    local found_dangerous_combos=0
+    
+    for combo in "${dangerous_combinations[@]}"; do
+        local combo_found=true
+        IFS='+' read -ra perms <<< "$combo"
+        
+        for perm in "${perms[@]}"; do
+            if ! echo "$permissions" | grep -q "android.permission.$perm"; then
+                combo_found=false
+                break
+            fi
+        done
+        
+        if [[ "$combo_found" == true ]]; then
+            echo -e "  ${RED}⚠ 发现危险组合: $combo${NC}"
+            found_dangerous_combos=$((found_dangerous_combos + 1))
+        fi
+    done
+    
+    if [[ $found_dangerous_combos -eq 0 ]]; then
+        echo -e "  ${CHECK} 未发现危险权限组合"
+    fi
+    
+    # 权限建议
+    echo ""
+    echo -e "${INFO} 权限使用建议:"
+    
+    if [[ $high_risk_count -gt 0 ]]; then
+        echo -e "  • 高风险权限需要谨慎授权"
+        echo -e "  • 确认应用确实需要这些权限才能正常运行"
+    fi
+    
+    if echo "$permissions" | grep -q "MANAGE_EXTERNAL_STORAGE"; then
+        echo -e "  • MANAGE_EXTERNAL_STORAGE 是Android 11+的特殊权限"
+        echo -e "  • 该权限允许应用访问所有文件，请特别关注"
+    fi
+    
+    if echo "$permissions" | grep -q "ACCESS_BACKGROUND_LOCATION"; then
+        echo -e "  • ACCESS_BACKGROUND_LOCATION 允许后台获取位置"
+        echo -e "  • 非地图类应用通常不需要此权限"
+    fi
+    
+    echo -e "${BOLD}└────────────────────────────────────────────────────────┘${NC}"
+    
+    return 0
+}
+
+# 检测特定权限类别
+detect_permission_category() {
+    local category_name="$1"
+    shift
+    local perm_list=("$@")
+    
+    local found_perms=()
+    
+    for perm in "${perm_list[@]}"; do
+        if echo "$permissions" | grep -q "$perm"; then
+            found_perms+=("$perm")
+        fi
+    done
+    
+    if [[ ${#found_perms[@]} -gt 0 ]]; then
+        # 风险评估
+        local risk_level="低风险"
+        local color="$GREEN"
+        
+        case "$category_name" in
+            "短信权限"|"位置权限"|"相机权限"|"麦克风权限")
+                risk_level="高风险"
+                color="$RED"
+                high_risk_count=$((high_risk_count + ${#found_perms[@]}))
+                ;;
+            "联系人权限"|"通话记录权限"|"存储权限"|"传感器权限")
+                risk_level="中风险"
+                color="$YELLOW"
+                medium_risk_count=$((medium_risk_count + ${#found_perms[@]}))
+                ;;
+            *)
+                risk_level="低风险"
+                color="$GREEN"
+                low_risk_count=$((low_risk_count + ${#found_perms[@]}))
+                ;;
+        esac
+        
+        found_privacy_perms=$((found_privacy_perms + ${#found_perms[@]}))
+        
+        echo -e "  ${color}▸ $category_name (${#found_perms[@]}个, $risk_level)${NC}"
+        
+        for perm in "${found_perms[@]}"; do
+            local perm_name=$(echo "$perm" | sed 's/android\.permission\.//')
+            echo -e "    ${color}• $perm_name${NC}"
+        done
+    fi
+}
+
+# 测试APK安装
+test_apk_installation() {
+    local apk_file="$1"
+    
+    if [[ ! -f "$apk_file" ]]; then
+        return 1
+    fi
+    
+    echo -e "${CYAN}APK安装测试${NC}"
+    echo -e "${BOLD}┌────────────────────────────────────────────────────────┐${NC}"
+    
+    # 检查adb
+    if ! command -v adb >/dev/null 2>&1; then
+        echo -e "${CROSS} 需要adb工具进行安装测试"
+        echo -e "${INFO} 请安装: pkg install android-tools -y"
+        echo -e "${BOLD}└────────────────────────────────────────────────────────┘${NC}"
+        return 1
+    fi
+    
+    # 检查设备连接
+    echo -e "${INFO} 检查设备连接..."
+    local devices=$(adb devices 2>/dev/null | grep -v "List of devices" | grep "device$" | wc -l)
+    
+    if [[ $devices -eq 0 ]]; then
+        echo -e "${CROSS} 未找到已连接的Android设备"
+        echo -e "${INFO} 请确保:"
+        echo -e "  1. Android设备已通过USB连接"
+        echo -e "  2. 已启用USB调试模式"
+        echo -e "  3. 在设备上确认授权"
+        echo -e "${BOLD}└────────────────────────────────────────────────────────┘${NC}"
+        return 1
+    fi
+    
+    echo -e "${CHECK} 找到 $devices 个已连接设备"
+    
+    # 获取包名
+    local package_name=$(aapt dump badging "$apk_file" 2>/dev/null | grep -o "package: name='[^']*'" | cut -d"'" -f2)
+    
+    if [[ -z "$package_name" ]]; then
+        echo -e "${CROSS} 无法获取APK包名"
+        echo -e "${BOLD}└────────────────────────────────────────────────────────┘${NC}"
+        return 1
+    fi
+    
+    echo -e "${INFO} 测试安装: $package_name"
+    
+    # 检查是否已安装
+    local is_installed=$(adb shell pm list packages | grep -c "$package_name")
+    
+    if [[ $is_installed -gt 0 ]]; then
+        echo -e "${WARN} 应用已安装，先卸载..."
+        adb uninstall "$package_name" >/dev/null 2>&1
+        sleep 2
+    fi
+    
+    # 尝试安装
+    echo -e "${INFO} 正在安装..."
+    local install_result=$(adb install -r "$apk_file" 2>&1)
+    
+    if echo "$install_result" | grep -q "Success"; then
+        echo -e "${CHECK} 安装测试成功"
+        
+        # 清理：卸载测试应用
+        echo -e "${INFO} 清理测试应用..."
+        adb uninstall "$package_name" >/dev/null 2>&1
+        
+        if [[ $? -eq 0 ]]; then
+            echo -e "${CHECK} 已成功卸载测试应用"
+        fi
+        
+        echo -e "${BOLD}└────────────────────────────────────────────────────────┘${NC}"
+        return 0
+    else
+        echo -e "${CROSS} 安装测试失败"
+        
+        # 提取错误信息
+        local error_msg=$(echo "$install_result" | grep -i "error\|failure\|failed" | head -1)
+        if [[ -n "$error_msg" ]]; then
+            echo -e "${INFO} 错误信息: $error_msg"
+        fi
+        
+        echo -e "${BOLD}└────────────────────────────────────────────────────────┘${NC}"
+        return 1
+    fi
+}
+
+# 检测APK中的潜在风险
+detect_apk_risks() {
+    local apk_file="$1"
+    
+    if [[ ! -f "$apk_file" ]]; then
+        return 1
+    fi
+    
+    echo -e "${CYAN}APK安全风险评估${NC}"
+    echo -e "${BOLD}┌────────────────────────────────────────────────────────┐${NC}"
+    
+    local risk_score=0
+    local risk_items=()
+    
+    # 1. 检查文件大小
+    local file_size=$(stat -c%s "$apk_file" 2>/dev/null || echo 0)
+    if [[ $file_size -gt 100000000 ]]; then
+        risk_score=$((risk_score + 2))
+        risk_items+=("文件过大 ($(get_file_size "$apk_file"))")
+    elif [[ $file_size -lt 1024 ]]; then
+        risk_score=$((risk_score + 3))
+        risk_items+=("文件过小 (可能不完整)")
+    fi
+    
+    # 2. 检查是否有可执行文件
+    if command -v unzip >/dev/null 2>&1; then
+        local has_native_lib=$(unzip -l "$apk_file" 2>/dev/null | grep -c "\.so$")
+        if [[ $has_native_lib -gt 0 ]]; then
+            risk_score=$((risk_score + 1))
+            risk_items+=("包含原生库 (.so文件)")
+        fi
+        
+        local has_dex=$(unzip -l "$apk_file" 2>/dev/null | grep -c "classes.*\.dex")
+        if [[ $has_dex -eq 0 ]]; then
+            risk_score=$((risk_score + 3))
+            risk_items+=("未找到DEX文件 (可能不是有效APK)")
+        fi
+    fi
+    
+    # 3. 检查证书信息
+    if command -v unzip >/dev/null 2>&1; then
+        local has_cert=$(unzip -l "$apk_file" 2>/dev/null | grep -c "META-INF/.*\.RSA\|META-INF/.*\.DSA")
+        if [[ $has_cert -eq 0 ]]; then
+            risk_score=$((risk_score + 2))
+            risk_items+=("未找到签名证书")
+        fi
+    fi
+    
+    # 4. 检查病毒库
+    local md5_hash=$(get_md5 "$apk_file")
+    local sha1_hash=$(get_sha1 "$apk_file")
+    local sha256_hash=$(get_sha256 "$apk_file")
+    
+    if ! check_virus_library "$apk_file" "$md5_hash" "$sha1_hash" "$sha256_hash"; then
+        risk_score=$((risk_score + 5))
+        risk_items+=("病毒库匹配")
+    fi
+    
+    # 输出风险评估
+    if [[ $risk_score -eq 0 ]]; then
+        echo -e "${CHECK} 风险评估: 低风险"
+    elif [[ $risk_score -le 3 ]]; then
+        echo -e "${WARN} 风险评估: 中低风险 (分数: $risk_score)"
+    elif [[ $risk_score -le 6 ]]; then
+        echo -e "${WARN} 风险评估: 中等风险 (分数: $risk_score)"
+    else
+        echo -e "${CROSS} 风险评估: 高风险 (分数: $risk_score)"
+    fi
+    
+    # 列出风险项
+    if [[ ${#risk_items[@]} -gt 0 ]]; then
+        echo -e ""
+        echo -e "${YELLOW}[!] 发现的风险项:${NC}"
+        for item in "${risk_items[@]}"; do
+            echo -e "  • $item"
+        done
+    else
+        echo -e "${CHECK} 未发现明显风险项"
+    fi
+    
+    echo -e "${BOLD}└────────────────────────────────────────────────────────┘${NC}"
+    return $risk_score
+}
+
+# 综合APK检测
+detect_apk_comprehensive() {
+    local apk_file="$1"
+    
+    if [[ ! -f "$apk_file" ]]; then
+        echo -e "${CROSS} 文件不存在: $apk_file"
+        return 1
+    fi
+    
+    echo -e "${PLUS} 正在检测APK文件: $apk_file"
+    
+    # 检查并安装所需工具
+    check_apk_tools
+    
+    # 执行各项检测
+    get_apk_info "$apk_file"
+    analyze_apk_permissions "$apk_file"
+    detect_apk_risks "$apk_file"
+    
+    echo -e "${CHECK} APK检测完成"
+    return 0
+}

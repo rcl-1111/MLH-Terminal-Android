@@ -1,0 +1,1398 @@
+#!/bin/bash
+# File-detection工具函数模块
+
+source "$(dirname "$0")/config"
+
+# 检查网络连接
+check_network() {
+    echo -e "${INFO} 检查网络连接..."
+    if ping -c 1 -W 2 8.8.8.8 >/dev/null 2>&1; then
+        echo -e "${CHECK} 网络连接正常"
+        return 0
+    fi
+    
+    if curl -s --connect-timeout 3 https://github.com >/dev/null 2>&1; then
+        echo -e "${CHECK} 网络连接正常"
+        return 0
+    fi
+    
+    echo -e "${CROSS} 网络连接失败"
+    return 1
+}
+
+# 下载文件
+download_file() {
+    local url="$1"
+    local output="$2"
+    
+    echo -e "${INFO} 正在下载: $url"
+    
+    if curl -s -L -o "$output" "$url"; then
+        if [[ -s "$output" ]]; then
+            echo -e "${CHECK} 下载完成: $(basename "$output")"
+            return 0
+        else
+            echo -e "${CROSS} 下载的文件为空"
+            rm -f "$output" 2>/dev/null
+            return 1
+        fi
+    else
+        echo -e "${CROSS} 下载失败: $url"
+        return 1
+    fi
+}
+
+# 获取文件创建时间（修复版）
+get_creation_time() {
+    local file="$1"
+    if [[ ! -f "$file" ]]; then
+        echo "文件不存在"
+        return
+    fi
+    
+    # 尝试多种方法获取创建时间
+    local create_time=""
+    
+    # 方法1: 使用stat命令
+    if command -v stat >/dev/null 2>&1; then
+        create_time=$(stat -c %w "$file" 2>/dev/null | cut -d. -f1 2>/dev/null)
+        
+        # 检查stat输出是否有效
+        if [[ -n "$create_time" ]] && [[ "$create_time" != "-" ]] && [[ "$create_time" != "?" ]]; then
+            echo "$create_time"
+            return
+        fi
+    fi
+    
+    # 方法2: 尝试使用ls命令
+    if command -v ls >/dev/null 2>&1; then
+        create_time=$(ls -l --time=birth --time-style=full-iso "$file" 2>/dev/null 2>&1 | awk '{print $6" "$7}' 2>/dev/null | cut -d. -f1 2>/dev/null)
+        
+        if [[ -n "$create_time" ]] && [[ "$create_time" != "-" ]]; then
+            echo "$create_time"
+            return
+        fi
+    fi
+    
+    # 方法3: 在Android/Termux中，创建时间可能无法获取，返回修改时间
+    if command -v stat >/dev/null 2>&1; then
+        create_time=$(stat -c %y "$file" 2>/dev/null | cut -d. -f1 2>/dev/null)
+        if [[ -n "$create_time" ]]; then
+            echo "$create_time (修改时间)"
+        else
+            echo "无法获取"
+        fi
+    else
+        echo "无法获取"
+    fi
+}
+
+
+# 获取文件修改时间
+get_modification_time() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if command -v stat >/dev/null 2>&1; then
+            stat -c %y "$file" 2>/dev/null | cut -d. -f1 || echo "未知"
+        else
+            echo "stat命令未安装"
+        fi
+    else
+        echo "文件不存在"
+    fi
+}
+
+# 获取文件访问时间
+get_access_time() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if command -v stat >/dev/null 2>&1; then
+            stat -c %x "$file" 2>/dev/null | cut -d. -f1 || echo "未知"
+        else
+            echo "stat命令未安装"
+        fi
+    else
+        echo "文件不存在"
+    fi
+}
+
+# 计算文件MD5
+get_md5() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if command -v md5sum >/dev/null 2>&1; then
+            md5sum "$file" 2>/dev/null | cut -d' ' -f1 || echo "计算失败"
+        else
+            echo "md5sum命令未安装"
+        fi
+    else
+        echo "文件不存在"
+    fi
+}
+
+# 计算文件SHA1
+get_sha1() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if command -v sha1sum >/dev/null 2>&1; then
+            sha1sum "$file" 2>/dev/null | cut -d' ' -f1 || echo "计算失败"
+        else
+            echo "sha1sum命令未安装"
+        fi
+    else
+        echo "文件不存在"
+    fi
+}
+
+# 计算文件SHA256
+get_sha256() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if command -v sha256sum >/dev/null 2>&1; then
+            sha256sum "$file" 2>/dev/null | cut -d' ' -f1 || echo "计算失败"
+        else
+            echo "sha256sum命令未安装"
+        fi
+    else
+        echo "文件不存在"
+    fi
+}
+
+# 获取文件大小（人类可读）
+get_file_size() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if command -v stat >/dev/null 2>&1; then
+            local size=$(stat -c%s "$file" 2>/dev/null || echo 0)
+            
+            if [[ $size -ge 1073741824 ]]; then
+                # GB
+                echo "$(echo "scale=2; $size/1073741824" | bc 2>/dev/null || echo "?") GB"
+            elif [[ $size -ge 1048576 ]]; then
+                # MB
+                echo "$(echo "scale=2; $size/1048576" | bc 2>/dev/null || echo "?") MB"
+            elif [[ $size -ge 1024 ]]; then
+                # KB
+                echo "$(echo "scale=2; $size/1024" | bc 2>/dev/null || echo "?") KB"
+            else
+                # Bytes
+                echo "${size} B"
+            fi
+        else
+            echo "stat命令未安装"
+        fi
+    else
+        echo "文件不存在"
+    fi
+}
+
+# 获取文件类型
+get_file_type() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if command -v file >/dev/null 2>&1; then
+            file -b "$file" 2>/dev/null | head -c 100 | sed 's/,.*//' || echo "未知"
+        else
+            echo "file命令未安装"
+        fi
+    else
+        echo "文件不存在"
+    fi
+}
+
+# 检查文件是否可执行（改进版）
+is_executable() {
+    local file="$1"
+    
+    if [[ ! -f "$file" ]]; then
+        return 1
+    fi
+    
+    # 方法1: 检查文件是否具有可执行权限
+    if [[ -x "$file" ]]; then
+        return 0
+    fi
+    
+    # 方法2: 检查文件类型
+    local file_type=$(get_file_type "$file" 2>/dev/null)
+    
+    if [[ -n "$file_type" ]]; then
+        # Windows可执行文件
+        if [[ "$file_type" == *"PE32"* ]] || \
+           [[ "$file_type" == *"MS-DOS"* ]] || \
+           [[ "$file_type" == *"executable"* ]] || \
+           [[ "$file_type" == *"Windows"* ]]; then
+            return 0
+        fi
+        
+        # Linux可执行文件
+        if [[ "$file_type" == *"ELF"* ]] || \
+           [[ "$file_type" == *"shared object"* ]]; then
+            return 0
+        fi
+        
+        # Shell脚本
+        if [[ "$file_type" == *"shell script"* ]] || \
+           [[ "$file_type" == *"Bourne-Again"* ]]; then
+            return 0
+        fi
+        
+        # macOS可执行文件
+        if [[ "$file_type" == *"Mach-O"* ]]; then
+            return 0
+        fi
+    fi
+    
+    # 方法3: 检查文件扩展名
+    local extension="${file##*.}"
+    extension=$(echo "$extension" | tr '[:upper:]' '[:lower:]')
+    
+    # 可执行文件扩展名列表
+    local exec_extensions=(
+        "exe" "com" "bat" "cmd" "msi" "app" "dmg" "pkg" "deb" "rpm"
+        "bin" "run" "out" "so" "dll" "sys" "ocx" "cpl" "drv" "sh"
+        "bash" "zsh" "py" "pl" "rb" "php" "jar" "apk" "ipa" "vbs"
+        "js" "ps1" "psm1" "scr" "cpl" "ocx" "sys" "drv" "efi" "ko"
+    )
+    
+    for ext in "${exec_extensions[@]}"; do
+        if [[ "$extension" == "$ext" ]]; then
+            return 0
+        fi
+    done
+    
+    return 1
+}
+
+# 获取文件权限
+get_file_permissions() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if command -v stat >/dev/null 2>&1; then
+            stat -c %A "$file" 2>/dev/null || echo "未知"
+        else
+            echo "stat命令未安装"
+        fi
+    else
+        echo "未知"
+    fi
+}
+
+# 获取文件的数字权限
+get_numeric_permissions() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if command -v stat >/dev/null 2>&1; then
+            stat -c %a "$file" 2>/dev/null || echo "未知"
+        else
+            echo "stat命令未安装"
+        fi
+    else
+        echo "未知"
+    fi
+}
+
+# 检查文件是否在病毒库中
+check_virus_library() {
+    local file="$1"
+    local md5_hash="$2"
+    local sha1_hash="$3"
+    local sha256_hash="$4"
+    
+    # 跳过空文件哈希（示例文件）
+    if [[ "$md5_hash" == "$EMPTY_MD5" ]] || \
+       [[ "$sha1_hash" == "$EMPTY_SHA1" ]] || \
+       [[ "$sha256_hash" == "$EMPTY_SHA256" ]]; then
+        return 0
+    fi
+    
+    local found=false
+    
+    # 检查各平台病毒库
+    for platform in Android Linux Windows MacOS Other; do
+        local virus_dir="$VIRUS_LIB_DIR/$platform"
+        if [[ -d "$virus_dir" ]]; then
+            for json_file in "$virus_dir"/*.json; do
+                if [[ -f "$json_file" ]]; then
+                    if detect_virus_in_json "$json_file" "$md5_hash" "$sha1_hash" "$sha256_hash"; then
+                        found=true
+                    fi
+                fi
+            done
+        fi
+    done
+    
+    if [[ "$found" == true ]]; then
+        return 1
+    else
+        return 0
+    fi
+}
+
+# 在JSON文件中检测病毒
+detect_virus_in_json() {
+    local json_file="$1"
+    local md5_hash="$2"
+    local sha1_hash="$3"
+    local sha256_hash="$4"
+    
+    local virus_info=""
+    
+    # 检查MD5
+    if grep -q "\"md5\":\"$md5_hash\"" "$json_file" 2>/dev/null || \
+       grep -q "\"md5_hash\":\"$md5_hash\"" "$json_file" 2>/dev/null; then
+        virus_info=$(grep -B5 -A5 "\"md5\":\"$md5_hash\"" "$json_file" 2>/dev/null | grep "\"name\":" | head -1 | cut -d'"' -f4)
+        if [[ -z "$virus_info" ]]; then
+            virus_info="未知病毒"
+        fi
+        echo -e "${CROSS} 检测到病毒: $virus_info (MD5匹配)"
+        return 0
+    fi
+    
+    # 检查SHA1
+    if grep -q "\"sha1\":\"$sha1_hash\"" "$json_file" 2>/dev/null || \
+       grep -q "\"sha1_hash\":\"$sha1_hash\"" "$json_file" 2>/dev/null; then
+        virus_info=$(grep -B5 -A5 "\"sha1\":\"$sha1_hash\"" "$json_file" 2>/dev/null | grep "\"name\":" | head -1 | cut -d'"' -f4)
+        if [[ -z "$virus_info" ]]; then
+            virus_info="未知病毒"
+        fi
+        echo -e "${CROSS} 检测到病毒: $virus_info (SHA1匹配)"
+        return 0
+    fi
+    
+    # 检查SHA256
+    if grep -q "\"sha256\":\"$sha256_hash\"" "$json_file" 2>/dev/null || \
+       grep -q "\"sha256_hash\":\"$sha256_hash\"" "$json_file" 2>/dev/null; then
+        virus_info=$(grep -B5 -A5 "\"sha256\":\"$sha256_hash\"" "$json_file" 2>/dev/null | grep "\"name\":" | head -1 | cut -d'"' -f4)
+        if [[ -z "$virus_info" ]]; then
+            virus_info="未知病毒"
+        fi
+        echo -e "${CROSS} 检测到病毒: $virus_info (SHA256匹配)"
+        return 0
+    fi
+    
+    return 1
+}
+
+# 检查文件内容中的危险命令
+check_dangerous_content() {
+    local file="$1"
+    local suspicious_count=0
+    
+    if [[ ! -f "$file" ]]; then
+        return 0
+    fi
+    
+    # 只检查文本文件
+    if file "$file" 2>/dev/null | grep -q "text"; then
+        echo -e "${INFO} 正在扫描文件内容..."
+        
+        # 检查危险命令
+        for pattern in "${DANGEROUS_COMMANDS[@]}"; do
+            if grep -iq "$pattern" "$file" 2>/dev/null; then
+                echo -e "${WARN} 发现可疑命令: $pattern"
+                ((suspicious_count++))
+            fi
+        done
+        
+        # 检查危险URL
+        for pattern in "${DANGEROUS_URLS[@]}"; do
+            if grep -iq "$pattern" "$file" 2>/dev/null; then
+                echo -e "${WARN} 发现可疑URL模式: $pattern"
+                ((suspicious_count++))
+            fi
+        done
+        
+        # 检查危险模式
+        for pattern in "${DANGEROUS_PATTERNS[@]}"; do
+            if grep -iq "$pattern" "$file" 2>/dev/null; then
+                echo -e "${WARN} 发现可疑代码模式: $pattern"
+                ((suspicious_count++))
+            fi
+        done
+    fi
+    
+    if [[ $suspicious_count -gt 0 ]]; then
+        echo -e "${WARN} 文件包含 $suspicious_count 个可疑内容"
+        return 1
+    else
+        echo -e "${CHECK} 文件内容未发现明显威胁"
+        return 0
+    fi
+}
+
+# 检查文件扩展名
+check_file_extension() {
+    local file="$1"
+    local extension="${file##*.}"
+    extension=$(echo "$extension" | tr '[:upper:]' '[:lower:]')
+    
+    # 检查可执行文件类型
+    for exe_type in "${EXECUTABLE_TYPES[@]}"; do
+        if [[ "$extension" == "$exe_type" ]]; then
+            echo -e "${WARN} 检测到可执行文件类型: .$extension"
+            return 1
+        fi
+    done
+    
+    # 检查脚本类型
+    for script_type in "${SCRIPT_TYPES[@]}"; do
+        if [[ "$extension" == "$script_type" ]]; then
+            echo -e "${WARN} 检测到脚本文件类型: .$script_type"
+            return 1
+        fi
+    done
+    
+    # 检查压缩包类型
+    for archive_type in "${ARCHIVE_TYPES[@]}"; do
+        if [[ "$extension" == "$archive_type" ]]; then
+            echo -e "${WARN} 检测到压缩文件类型: .$archive_type"
+            return 1
+        fi
+    done
+    
+    return 0
+}
+
+# 检查文件是否包含恶意代码模式
+check_malicious_patterns() {
+    local file="$1"
+    local suspicious_patterns=0
+    
+    if [[ ! -f "$file" ]]; then
+        return 0
+    fi
+    
+    # 只检查文本文件
+    if file "$file" 2>/dev/null | grep -q "text"; then
+        echo -e "${INFO} 检查恶意代码模式..."
+        
+        # 常见的恶意代码模式
+        local malicious_patterns=(
+            "eval(base64_decode"
+            "gzinflate("
+            "str_rot13("
+            "preg_replace.*\/e"
+            "create_function"
+            "assert("
+            "system("
+            "shell_exec("
+            "exec("
+            "passthru("
+            "pcntl_exec"
+            "proc_open"
+            "popen("
+            "curl_init"
+            "fsockopen"
+            "fopen.*http"
+            "file_get_contents.*http"
+            "include.*http"
+            "require.*http"
+            "php://input"
+            "data://"
+            "expect://"
+        )
+        
+        for pattern in "${malicious_patterns[@]}"; do
+            if grep -iq "$pattern" "$file" 2>/dev/null; then
+                echo -e "${WARN} 发现恶意代码模式: $pattern"
+                ((suspicious_patterns++))
+            fi
+        done
+    fi
+    
+    if [[ $suspicious_patterns -gt 0 ]]; then
+        echo -e "${WARN} 文件包含 $suspicious_patterns 个恶意代码模式"
+        return 1
+    else
+        echo -e "${CHECK} 未发现恶意代码模式"
+        return 0
+    fi
+}
+
+# 检查文件是否包含可疑字符串
+check_suspicious_strings() {
+    local file="$1"
+    local suspicious_strings=0
+    
+    if [[ ! -f "$file" ]]; then
+        return 0
+    fi
+    
+    # 只检查文本文件
+    if file "$file" 2>/dev/null | grep -q "text"; then
+        echo -e "${INFO} 检查可疑字符串..."
+        
+        # 可疑字符串
+        local suspicious_strings_list=(
+            "password"
+            "secret"
+            "key"
+            "token"
+            "api_key"
+            "access_token"
+            "private_key"
+            "database"
+            "mysql_connect"
+            "pg_connect"
+            "ssh-rsa"
+            "BEGIN RSA PRIVATE KEY"
+            "BEGIN PRIVATE KEY"
+            "BEGIN OPENSSH PRIVATE KEY"
+        )
+        
+        for string in "${suspicious_strings_list[@]}"; do
+            if grep -iq "$string" "$file" 2>/dev/null; then
+                echo -e "${WARN} 发现可疑字符串: $string"
+                ((suspicious_strings++))
+            fi
+        done
+    fi
+    
+    if [[ $suspicious_strings -gt 0 ]]; then
+        echo -e "${WARN} 文件包含 $suspicious_strings 个可疑字符串"
+        return 1
+    else
+        echo -e "${CHECK} 未发现可疑字符串"
+        return 0
+    fi
+}
+
+# 检查文件是否包含加密/编码数据
+check_encoded_data() {
+    local file="$1"
+    local encoded_patterns=0
+    
+    if [[ ! -f "$file" ]]; then
+        return 0
+    fi
+    
+    # 只检查文本文件
+    if file "$file" 2>/dev/null | grep -q "text"; then
+        echo -e "${INFO} 检查编码数据..."
+        
+        # 常见的编码模式
+        local encoded_patterns_list=(
+            "base64"
+            "rot13"
+            "uuencode"
+            "xxd"
+            "hex"
+            "binary"
+            "md5"
+            "sha1"
+            "sha256"
+        )
+        
+        for pattern in "${encoded_patterns_list[@]}"; do
+            if grep -iq "$pattern" "$file" 2>/dev/null; then
+                echo -e "${WARN} 发现编码数据模式: $pattern"
+                ((encoded_patterns++))
+            fi
+        done
+    fi
+    
+    if [[ $encoded_patterns -gt 0 ]]; then
+        echo -e "${WARN} 文件包含 $encoded_patterns 个编码数据模式"
+        return 1
+    else
+        echo -e "${CHECK} 未发现编码数据模式"
+        return 0
+    fi
+}
+
+# 获取文件的MIME类型
+get_mime_type() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if command -v file >/dev/null 2>&1; then
+            file --mime-type "$file" 2>/dev/null | cut -d' ' -f2- || echo "未知"
+        else
+            echo "file命令未安装"
+        fi
+    else
+        echo "文件不存在"
+    fi
+}
+
+# 获取文件的所有者
+get_file_owner() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if command -v stat >/dev/null 2>&1; then
+            stat -c %U "$file" 2>/dev/null || echo "未知"
+        else
+            echo "stat命令未安装"
+        fi
+    else
+        echo "文件不存在"
+    fi
+}
+
+# 获取文件的组
+get_file_group() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if command -v stat >/dev/null 2>&1; then
+            stat -c %G "$file" 2>/dev/null || echo "未知"
+        else
+            echo "stat命令未安装"
+        fi
+    else
+        echo "文件不存在"
+    fi
+}
+
+# 获取文件的inode编号
+get_inode_number() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if command -v stat >/dev/null 2>&1; then
+            stat -c %i "$file" 2>/dev/null || echo "未知"
+        else
+            echo "stat命令未安装"
+        fi
+    else
+        echo "文件不存在"
+    fi
+}
+
+# 获取文件的硬链接数量
+get_hardlink_count() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if command -v stat >/dev/null 2>&1; then
+            stat -c %h "$file" 2>/dev/null || echo "未知"
+        else
+            echo "stat命令未安装"
+        fi
+    else
+        echo "文件不存在"
+    fi
+}
+
+# 检查文件是否是符号链接
+is_symlink() {
+    local file="$1"
+    if [[ -L "$file" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# 获取符号链接的目标
+get_symlink_target() {
+    local file="$1"
+    if [[ -L "$file" ]]; then
+        readlink "$file" 2>/dev/null || echo "未知"
+    else
+        echo "不是符号链接"
+    fi
+}
+
+# 计算文件的CRC32哈希
+get_crc32() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if command -v cksum >/dev/null 2>&1; then
+            cksum "$file" 2>/dev/null | cut -d' ' -f1 || echo "计算失败"
+        else
+            echo "cksum未安装"
+        fi
+    else
+        echo "文件不存在"
+    fi
+}
+
+# 获取文件的块大小
+get_block_size() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if command -v stat >/dev/null 2>&1; then
+            stat -c %o "$file" 2>/dev/null || echo "未知"
+        else
+            echo "stat命令未安装"
+        fi
+    else
+        echo "文件不存在"
+    fi
+}
+
+# 获取文件占用的磁盘块数
+get_block_count() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if command -v stat >/dev/null 2>&1; then
+            stat -c %b "$file" 2>/dev/null || echo "未知"
+        else
+            echo "stat命令未安装"
+        fi
+    else
+        echo "文件不存在"
+    fi
+}
+
+# 获取文件占用的磁盘大小
+get_disk_usage() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        local blocks=$(get_block_count "$file")
+        local block_size=$(get_block_size "$file")
+        
+        if [[ "$blocks" != "未知" ]] && [[ "$block_size" != "未知" ]]; then
+            local usage=$((blocks * block_size))
+            if [[ $usage -ge 1073741824 ]]; then
+                echo "$(echo "scale=2; $usage/1073741824" | bc 2>/dev/null || echo "?") GB"
+            elif [[ $usage -ge 1048576 ]]; then
+                echo "$(echo "scale=2; $usage/1048576" | bc 2>/dev/null || echo "?") MB"
+            elif [[ $usage -ge 1024 ]]; then
+                echo "$(echo "scale=2; $usage/1024" | bc 2>/dev/null || echo "?") KB"
+            else
+                echo "${usage} B"
+            fi
+        else
+            echo "未知"
+        fi
+    else
+        echo "文件不存在"
+    fi
+}
+
+# 检查文件是否被压缩
+is_compressed() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if file "$file" 2>/dev/null | grep -qi "compressed\|archive\|zip\|gzip\|bzip2\|rar\|7-zip"; then
+            return 0
+        fi
+    fi
+    return 1
+}
+
+# 检查文件是否是二进制文件
+is_binary() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if file "$file" 2>/dev/null | grep -qi "binary\|executable"; then
+            return 0
+        fi
+    fi
+    return 1
+}
+
+# 检查文件是否是文本文件
+is_text() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if file "$file" 2>/dev/null | grep -qi "text"; then
+            return 0
+        fi
+    fi
+    return 1
+}
+
+# 获取文件的字符编码
+get_file_encoding() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if command -v file >/dev/null 2>&1; then
+            file -i "$file" 2>/dev/null | grep -o "charset=[^;]*" | cut -d= -f2 || echo "未知"
+        else
+            echo "file命令未安装"
+        fi
+    else
+        echo "文件不存在"
+    fi
+}
+
+# 获取文件的行数
+get_line_count() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if command -v wc >/dev/null 2>&1; then
+            wc -l "$file" 2>/dev/null | awk '{print $1}' || echo "计算失败"
+        else
+            echo "wc命令未安装"
+        fi
+    else
+        echo "文件不存在"
+    fi
+}
+
+# 获取文件的单词数
+get_word_count() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if command -v wc >/dev/null 2>&1; then
+            wc -w "$file" 2>/dev/null | awk '{print $1}' || echo "计算失败"
+        else
+            echo "wc命令未安装"
+        fi
+    else
+        echo "文件不存在"
+    fi
+}
+
+# 获取文件的字符数
+get_char_count() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if command -v wc >/dev/null 2>&1; then
+            wc -m "$file" 2>/dev/null | awk '{print $1}' || echo "计算失败"
+        else
+            echo "wc命令未安装"
+        fi
+    else
+        echo "文件不存在"
+    fi
+}
+
+# 获取文件的字节数
+get_byte_count() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if command -v wc >/dev/null 2>&1; then
+            wc -c "$file" 2>/dev/null | awk '{print $1}' || echo "计算失败"
+        else
+            echo "wc命令未安装"
+        fi
+    else
+        echo "文件不存在"
+    fi
+}
+
+# 获取文件的最长行长度
+get_longest_line() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if command -v wc >/dev/null 2>&1; then
+            wc -L "$file" 2>/dev/null | awk '{print $1}' || echo "计算失败"
+        else
+            echo "wc命令未安装"
+        fi
+    else
+        echo "文件不存在"
+    fi
+}
+
+# 检查文件是否包含BOM（字节顺序标记）
+has_bom() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if head -c 3 "$file" 2>/dev/null | od -An -t x1 | grep -q "ef bb bf"; then
+            return 0
+        fi
+    fi
+    return 1
+}
+
+# 获取文件的最后几行
+get_tail_lines() {
+    local file="$1"
+    local lines="${2:-10}"
+    
+    if [[ -f "$file" ]]; then
+        if command -v tail >/dev/null 2>&1; then
+            tail -n "$lines" "$file" 2>/dev/null || echo "读取失败"
+        else
+            echo "tail命令未安装"
+        fi
+    else
+        echo "文件不存在"
+    fi
+}
+
+# 获取文件的开头几行
+get_head_lines() {
+    local file="$1"
+    local lines="${2:-10}"
+    
+    if [[ -f "$file" ]]; then
+        if command -v head >/dev/null 2>&1; then
+            head -n "$lines" "$file" 2>/dev/null || echo "读取失败"
+        else
+            echo "head命令未安装"
+        fi
+    else
+        echo "文件不存在"
+    fi
+}
+
+# 检查文件是否为空
+is_empty() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if [[ ! -s "$file" ]]; then
+            return 0
+        fi
+    fi
+    return 1
+}
+
+# 检查文件是否可读
+is_readable() {
+    local file="$1"
+    if [[ -f "$file" ]] && [[ -r "$file" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# 检查文件是否可写
+is_writable() {
+    local file="$1"
+    if [[ -f "$file" ]] && [[ -w "$file" ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# 检查文件是否设置了SUID位
+has_suid() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if [[ -u "$file" ]]; then
+            return 0
+        fi
+    fi
+    return 1
+}
+
+# 检查文件是否设置了SGID位
+has_sgid() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if [[ -g "$file" ]]; then
+            return 0
+        fi
+    fi
+    return 1
+}
+
+# 检查文件是否设置了粘着位
+has_sticky() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if [[ -k "$file" ]]; then
+            return 0
+        fi
+    fi
+    return 1
+}
+
+# 获取文件的设备号
+get_device_number() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if command -v stat >/dev/null 2>&1; then
+            stat -c %d "$file" 2>/dev/null || echo "未知"
+        else
+            echo "stat命令未安装"
+        fi
+    else
+        echo "文件不存在"
+    fi
+}
+
+# 获取文件的链接计数
+get_link_count() {
+    local file="$1"
+    if [[ -f "$file" ]]; then
+        if command -v stat >/dev/null 2>&1; then
+            stat -c %h "$file" 2>/dev/null || echo "未知"
+        else
+            echo "stat命令未安装"
+        fi
+    else
+        echo "文件不存在"
+    fi
+}
+
+# 计算文件的熵值
+calculate_entropy() {
+    local file="$1"
+    if [[ ! -f "$file" ]]; then
+        echo "文件不存在"
+        return
+    fi
+    
+    if command -v ent >/dev/null 2>&1; then
+        ent "$file" 2>/dev/null | grep -i "entropy" | head -1 || echo "计算失败"
+    else
+        echo "ent命令未安装"
+    fi
+}
+
+# 检查文件是否被加壳/混淆
+check_packed() {
+    local file="$1"
+    if [[ ! -f "$file" ]]; then
+        return 1
+    fi
+    
+    # 检查常见的加壳/混淆迹象
+    local packed_indicators=0
+    
+    # 检查文件头
+    local file_header=$(head -c 100 "$file" 2>/dev/null | xxd 2>/dev/null | head -5)
+    
+    # 常见的加壳文件头
+    local packer_headers=(
+        "UPX"      # UPX加壳
+        "ASPack"   # ASPack加壳
+        "PECompact" # PECompact加壳
+        "Themida"  # Themida加壳
+        "VMProtect" # VMProtect加壳
+    )
+    
+    for header in "${packer_headers[@]}"; do
+        if echo "$file_header" | grep -qi "$header"; then
+            echo -e "${WARN} 检测到加壳: $header"
+            packed_indicators=$((packed_indicators + 1))
+        fi
+    done
+    
+    if [[ $packed_indicators -gt 0 ]]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+# 获取文件的数字签名信息
+get_digital_signature() {
+    local file="$1"
+    if [[ ! -f "$file" ]]; then
+        echo "文件不存在"
+        return
+    fi
+    
+    # 检查Windows PE文件的数字签名
+    if [[ "$file" =~ \.(exe|dll|sys|ocx|cpl|drv)$ ]]; then
+        if command -v osslsigncode >/dev/null 2>&1; then
+            osslsigncode verify "$file" 2>/dev/null | head -20
+        else
+            echo "osslsigncode未安装，无法检查数字签名"
+        fi
+    else
+        echo "非Windows可执行文件，不检查数字签名"
+    fi
+}
+
+# 检查文件是否被感染
+check_infected() {
+    local file="$1"
+    local infection_indicators=0
+    
+    if [[ ! -f "$file" ]]; then
+        return 1
+    fi
+    
+    # 检查常见的感染迹象
+    echo -e "${INFO} 检查感染迹象..."
+    
+    # 1. 检查文件大小异常
+    local file_size=$(stat -c%s "$file" 2>/dev/null || echo 0)
+    local file_type=$(get_file_type "$file")
+    
+    if [[ "$file_type" == *"ELF"* ]] && [[ $file_size -lt 1024 ]]; then
+        echo -e "${WARN} ELF文件过小，可能异常"
+        infection_indicators=$((infection_indicators + 1))
+    fi
+    
+    if [[ "$file_type" == *"PE32"* ]] && [[ $file_size -lt 1024 ]]; then
+        echo -e "${WARN} PE文件过小，可能异常"
+        infection_indicators=$((infection_indicators + 1))
+    fi
+    
+    # 2. 检查文件节区异常
+    if [[ "$file" =~ \.(exe|dll)$ ]]; then
+        if command -v readelf >/dev/null 2>&1; then
+            local section_count=$(readelf -S "$file" 2>/dev/null | grep -c "\[\s*[0-9]\+\]")
+            if [[ $section_count -gt 20 ]]; then
+                echo -e "${WARN} 文件节区过多 ($section_count 个)"
+                infection_indicators=$((infection_indicators + 1))
+            fi
+        fi
+    fi
+    
+    # 3. 检查导入表异常
+    if [[ "$file" =~ \.(exe|dll)$ ]]; then
+        if command -v objdump >/dev/null 2>&1; then
+            local import_count=$(objdump -p "$file" 2>/dev/null | grep -c "DLL Name:")
+            if [[ $import_count -gt 50 ]]; then
+                echo -e "${WARN} 导入DLL过多 ($import_count 个)"
+                infection_indicators=$((infection_indicators + 1))
+            fi
+        fi
+    fi
+    
+    if [[ $infection_indicators -gt 0 ]]; then
+        echo -e "${WARN} 发现 $infection_indicators 个感染迹象"
+        return 1
+    else
+        echo -e "${CHECK} 未发现感染迹象"
+        return 0
+    fi
+}
+
+# 获取文件的详细安全分析
+get_security_analysis() {
+    local file="$1"
+    
+    if [[ ! -f "$file" ]]; then
+        echo -e "${CROSS} 文件不存在: $file"
+        return 1
+    fi
+    
+    echo -e "${CYAN}文件安全分析: $file${NC}"
+    echo -e "${BOLD}┌────────────────────────────────────────────────────────┐${NC}"
+    
+    # 基本信息
+    echo -e "${INFO} 文件路径: $file"
+    echo -e "${INFO} 文件大小: $(get_file_size "$file")"
+    echo -e "${INFO} 文件类型: $(get_file_type "$file")"
+    echo -e "${INFO} 文件权限: $(get_file_permissions "$file")"
+    
+    # 可执行检查
+    if is_executable "$file"; then
+        echo -e "${GREEN}[√] 是可执行文件${NC}"
+    else
+        echo -e "${YELLOW}[!] 不是可执行文件${NC}"
+    fi
+    
+    # 压缩检查
+    if is_compressed "$file"; then
+        echo -e "${INFO} 压缩文件: 是"
+    fi
+    
+    # 加壳检查
+    if check_packed "$file"; then
+        echo -e "${YELLOW}[!] 加壳/混淆: 是"
+    else
+        echo -e "${INFO} 加壳/混淆: 否"
+    fi
+    
+    # 感染检查
+    if ! check_infected "$file"; then
+        echo -e "${YELLOW}[!] 感染迹象: 发现异常"
+    else
+        echo -e "${INFO} 感染迹象: 未发现"
+    fi
+    
+    # 数字签名
+    local signature_info=$(get_digital_signature "$file")
+    if [[ -n "$signature_info" ]] && [[ "$signature_info" != "非Windows可执行文件，不检查数字签名" ]]; then
+        echo -e "${INFO} 数字签名: 是"
+    else
+        echo -e "${INFO} 数字签名: 无"
+    fi
+    
+    # 熵值
+    local entropy=$(calculate_entropy "$file")
+    if [[ -n "$entropy" ]] && [[ "$entropy" != "计算失败" ]] && [[ "$entropy" != "ent命令未安装" ]]; then
+        echo -e "${INFO} 熵值: $entropy"
+    fi
+    
+    echo -e "${BOLD}└────────────────────────────────────────────────────────┘${NC}"
+    
+    return 0
+}
+
+# 记录日志
+log_message() {
+    local level="$1"
+    local message="$2"
+    local timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+    local log_file="$LOG_DIR/file-detection.log"
+    
+    mkdir -p "$LOG_DIR"
+    echo "[$timestamp] [$level] $message" >> "$log_file"
+}
+
+# 创建必要的目录结构
+create_directories() {
+    echo -e "${INFO} 创建必要的目录..."
+    
+    mkdir -p "$VIRUS_LIB_DIR"
+    mkdir -p "$DATA_DIR"
+    mkdir -p "$CACHE_DIR"
+    mkdir -p "$LOG_DIR"
+    
+    # 创建平台目录
+    for platform in Android Linux Windows MacOS Other; do
+        mkdir -p "$VIRUS_LIB_DIR/$platform"
+    done
+    
+    echo -e "${CHECK} 目录创建完成"
+}
+
+# 检查文件完整性
+check_file_integrity() {
+    local file="$1"
+    
+    if [[ ! -f "$file" ]]; then
+        echo -e "${CROSS} 文件不存在: $file"
+        return 1
+    fi
+    
+    echo -e "${CYAN}文件完整性检查: $file${NC}"
+    echo -e "${BOLD}┌────────────────────────────────────────────────────────┐${NC}"
+    
+    # 1. 检查文件大小
+    local file_size=$(stat -c%s "$file" 2>/dev/null || echo 0)
+    echo -e "${INFO} 文件大小: $(get_file_size "$file")"
+    
+    if [[ $file_size -eq 0 ]]; then
+        echo -e "${CROSS} 文件为空"
+    else
+        echo -e "${CHECK} 文件非空"
+    fi
+    
+    # 2. 检查文件是否损坏
+    echo -e "${INFO} 检查文件完整性..."
+    
+    if is_text "$file"; then
+        echo -e "${INFO} 文本文件，检查行尾..."
+        local line_endings=$(file "$file" 2>/dev/null | grep -o "with CRLF\|with LF\|with CR")
+        if [[ -n "$line_endings" ]]; then
+            echo -e "${INFO} 行尾格式: $line_endings"
+        fi
+    elif is_binary "$file"; then
+        echo -e "${INFO} 二进制文件，检查文件头..."
+        
+        # 检查常见文件类型
+        local header=$(head -c 4 "$file" 2>/dev/null | xxd 2>/dev/null | head -1)
+        if [[ -n "$header" ]]; then
+            echo -e "${INFO} 文件头: $header"
+            
+            # Windows PE文件
+            if echo "$header" | grep -q "4d5a"; then
+                echo -e "${GREEN}[√] Windows PE文件签名 (MZ)${NC}"
+            fi
+            
+            # Linux ELF文件
+            if echo "$header" | grep -q "7f454c46"; then
+                echo -e "${GREEN}[√] Linux ELF文件签名${NC}"
+            fi
+        fi
+    fi
+    
+    # 3. 检查文件权限
+    echo -e "${INFO} 文件权限: $(get_file_permissions "$file")"
+    
+    # 4. 检查是否有损坏迹象
+    echo -e "${INFO} 检查损坏迹象..."
+    local file_type=$(get_file_type "$file")
+    
+    if [[ "$file_type" == *"data"* ]] || [[ "$file_type" == *"corrupt"* ]] || [[ "$file_type" == *"损坏"* ]]; then
+        echo -e "${CROSS} 文件可能已损坏"
+    else
+        echo -e "${CHECK} 文件似乎完整"
+    fi
+    
+    echo -e "${BOLD}└────────────────────────────────────────────────────────┘${NC}"
+    
+    return 0
+}
+
+# 检查文件是否为PE文件
+is_pe_file() {
+    local file="$1"
+    
+    if [[ ! -f "$file" ]]; then
+        return 1
+    fi
+    
+    # 检查MZ头部
+    if head -c 2 "$file" 2>/dev/null | xxd 2>/dev/null | grep -q "4d5a"; then
+        return 0
+    fi
+    
+    # 检查文件类型
+    local file_type=$(get_file_type "$file")
+    if [[ "$file_type" == *"PE32"* ]] || [[ "$file_type" == *"MS-DOS"* ]]; then
+        return 0
+    fi
+    
+    return 1
+}
+
+# 检查文件是否为ELF文件
+is_elf_file() {
+    local file="$1"
+    
+    if [[ ! -f "$file" ]]; then
+        return 1
+    fi
+    
+    # 检查ELF头部
+    if head -c 4 "$file" 2>/dev/null | xxd 2>/dev/null | grep -q "7f454c46"; then
+        return 0
+    fi
+    
+    # 检查文件类型
+    local file_type=$(get_file_type "$file")
+    if [[ "$file_type" == *"ELF"* ]]; then
+        return 0
+    fi
+    
+    return 1
+}
+
+# 获取PE文件信息
+get_pe_info() {
+    local file="$1"
+    
+    if [[ ! -f "$file" ]]; then
+        echo "文件不存在"
+        return
+    fi
+    
+    if ! is_pe_file "$file"; then
+        echo "不是PE文件"
+        return
+    fi
+    
+    echo -e "${CYAN}PE文件信息: $file${NC}"
+    echo -e "${BOLD}┌────────────────────────────────────────────────────────┐${NC}"
+    
+    if command -v objdump >/dev/null 2>&1; then
+        # 获取PE文件头信息
+        objdump -f "$file" 2>/dev/null | head -20
+    else
+        echo "objdump命令未安装"
+    fi
+    
+    echo -e "${BOLD}└────────────────────────────────────────────────────────┘${NC}"
+}
+
+# 获取ELF文件信息
+get_elf_info() {
+    local file="$1"
+    
+    if [[ ! -f "$file" ]]; then
+        echo "文件不存在"
+        return
+    fi
+    
+    if ! is_elf_file "$file"; then
+        echo "不是ELF文件"
+        return
+    fi
+    
+    echo -e "${CYAN}ELF文件信息: $file${NC}"
+    echo -e "${BOLD}┌────────────────────────────────────────────────────────┐${NC}"
+    
+    if command -v readelf >/dev/null 2>&1; then
+        # 获取ELF文件头信息
+        readelf -h "$file" 2>/dev/null
+    else
+        echo "readelf命令未安装"
+    fi
+    
+    echo -e "${BOLD}└────────────────────────────────────────────────────────┘${NC}"
+}

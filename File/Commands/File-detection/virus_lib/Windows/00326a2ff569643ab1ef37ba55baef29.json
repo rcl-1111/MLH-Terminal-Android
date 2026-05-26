@@ -1,0 +1,26 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2026-05-16",
+  "description": "Trojan-Virus-Library Individual Virus File",
+  "author": "rcl-1111",
+  "name": "2345pcsafe_v3.9.0.10615.exe",
+  "type": "Trojan",
+  "platform": "Windows",
+  "md5_hash": "00326a2ff569643ab1ef37ba55baef29",
+  "sha1_hash": "6ce0159ad55074306263bd2a98914f5fd9f8ce59",
+  "sha256_hash": "7053590db9a225b5217bf8a959c22563b4cfd0d6a9dd21473b206a37ecde1919",
+  "risk_level": "High",
+  "description": "2345病毒样本（）别人给的",
+  "detection_date": "2024-01-01",
+  "signature": "恶意行为",
+  "reference": "",
+  "tags": ["后门", "信息窃取", "Windows"],
+  "behavior": [
+    "创建系统后门",
+    "窃取用户敏感信息",
+    "自启动"
+  ],
+  "mitigation": [
+    "使用杀毒软件扫描",
+  ]
+}

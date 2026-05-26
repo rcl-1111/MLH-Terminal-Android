@@ -1,0 +1,214 @@
+#!/bin/bash
+# File-detection更新模块
+
+source "$(dirname "$0")/config"
+source "$(dirname "$0")/utils"
+
+# 检查本地版本
+check_local_version() {
+    local version_file="$DATA_DIR/version"
+    if [[ -f "$version_file" ]]; then
+        LOCAL_VERSION=$(cat "$version_file" 2>/dev/null || echo "0.0.0")
+    else
+        LOCAL_VERSION="0.0.0"
+    fi
+    echo -e "${INFO} 本地病毒库版本: $LOCAL_VERSION"
+}
+
+# 检查远程版本
+check_remote_version() {
+    if ! check_network; then
+        echo -e "${CROSS} 网络不可用，无法检查更新"
+        return 1
+    fi
+    
+    echo -e "${INFO} 正在检查远程版本..."
+    
+    # 下载README.md
+    local temp_readme="$CACHE_DIR/README.md"
+    if download_file "$VIRUS_LIB_URL/README.md" "$temp_readme"; then
+        # 从README.md中提取版本号
+        REMOTE_VERSION=$(grep -i "Trojan_virus_library_version" "$temp_readme" 2>/dev/null | grep -o "[0-9]\+\.[0-9]\+\.[0-9]\+" || echo "0.0.0")
+        
+        if [[ -z "$REMOTE_VERSION" ]] || [[ "$REMOTE_VERSION" == "0.0.0" ]]; then
+            # 尝试其他匹配模式
+            REMOTE_VERSION=$(grep -o "version.*[0-9]\+\.[0-9]\+\.[0-9]\+" "$temp_readme" 2>/dev/null | grep -o "[0-9]\+\.[0-9]\+\.[0-9]\+" || echo "0.0.0")
+        fi
+        
+        echo -e "${INFO} 远程病毒库版本: $REMOTE_VERSION"
+        rm -f "$temp_readme"
+        
+        # 保存远程版本
+        echo "$REMOTE_VERSION" > "$DATA_DIR/remote_version"
+        echo $(date +%s) > "$DATA_DIR/last_check"
+        
+        return 0
+    else
+        echo -e "${CROSS} 无法获取远程版本"
+        return 1
+    fi
+}
+
+# 更新病毒库
+update_virus_library() {
+    echo -e "${PLUS} 开始更新病毒库..."
+    
+    # 检查本地版本
+    check_local_version
+    
+    # 检查远程版本
+    if ! check_remote_version; then
+        return 1
+    fi
+    
+    # 比较版本
+    if [[ "$LOCAL_VERSION" == "$REMOTE_VERSION" ]]; then
+        echo -e "${INFO} 病毒库已是最新版本"
+        return 0
+    fi
+    
+    echo -e "${PLUS} 发现新版本: $LOCAL_VERSION -> $REMOTE_VERSION"
+    echo -e "${INFO} 开始下载病毒库文件..."
+    
+    # 下载各平台病毒库
+    for platform in "Android" "Linux" "Windows" "MacOS" "Other"; do
+        download_platform_viruses "$platform"
+    done
+    
+    # 更新本地版本
+    echo "$REMOTE_VERSION" > "$DATA_DIR/version"
+    echo -e "${CHECK} 病毒库更新完成: $REMOTE_VERSION"
+    
+    return 0
+}
+
+# 下载平台病毒库
+download_platform_viruses() {
+    local platform="$1"
+    echo -e "${INFO} 更新 $platform 病毒库..."
+    
+    # 创建平台目录
+    mkdir -p "$VIRUS_LIB_DIR/$platform"
+    
+    # 方法1: 尝试下载病毒索引文件
+    local index_url="$VIRUS_LIB_URL/Virus/$platform/virus_index.txt"
+    local index_file="$CACHE_DIR/${platform}_index.txt"
+    
+    echo -e "${INFO} 尝试下载病毒索引..."
+    if download_file "$index_url" "$index_file"; then
+        if [[ -f "$index_file" ]]; then
+            local virus_count=0
+            echo -e "${INFO} 正在下载单个病毒文件..."
+            
+            # 读取索引文件，下载每个病毒文件
+            while IFS= read -r virus_hash; do
+                # 跳过空行和注释
+                if [[ -z "$virus_hash" ]] || [[ "$virus_hash" == \#* ]]; then
+                    continue
+                fi
+                
+                # 清理哈希值
+                virus_hash=$(echo "$virus_hash" | tr -d '\r' | xargs)
+                
+                if [[ -n "$virus_hash" ]]; then
+                    local virus_url="$VIRUS_LIB_URL/Virus/$platform/$virus_hash.json"
+                    local virus_file="$VIRUS_LIB_DIR/$platform/$virus_hash.json"
+                    
+                    if [[ ! -f "$virus_file" ]]; then
+                        echo -e "${INFO} 下载病毒文件: $virus_hash.json"
+                        download_file "$virus_url" "$virus_file"
+                        ((virus_count++))
+                    else
+                        echo -e "${INFO} 已存在: $virus_hash.json"
+                    fi
+                fi
+            done < "$index_file"
+            
+            echo -e "${CHECK} 已处理 $virus_count 个病毒文件"
+            rm -f "$index_file"
+            return
+        fi
+    fi
+    
+    # 方法2: 如果没有索引文件，尝试下载旧结构的example.json
+    echo -e "${WARN} 未找到病毒索引，尝试旧结构..."
+    local example_url="$VIRUS_LIB_URL/Virus/$platform/example.json"
+    local example_file="$VIRUS_LIB_DIR/$platform/example.json"
+    
+    if download_file "$example_url" "$example_file"; then
+        echo -e "${CHECK} 已下载示例病毒库"
+    else
+        echo -e "${CROSS} 无法下载 $platform 病毒库"
+    fi
+    
+    # 方法3: 尝试下载其他可能的病毒文件
+    echo -e "${INFO} 尝试发现更多病毒文件..."
+    for i in {1..20}; do
+        local virus_url="$VIRUS_LIB_URL/Virus/$platform/virus_$i.json"
+        local virus_file="$VIRUS_LIB_DIR/$platform/virus_$i.json"
+        
+        echo -e "${INFO} 检查: virus_$i.json"
+        if curl -s -I "$virus_url" 2>/dev/null | head -1 | grep -q "200"; then
+            download_file "$virus_url" "$virus_file"
+        fi
+    done
+    
+    echo -e "${CHECK} $platform 病毒库更新完成"
+}
+
+# 手动更新
+manual_update() {
+    echo -e "${PLUS} 开始手动更新病毒库..."
+    update_virus_library
+}
+
+# 自动更新检查
+auto_update_check() {
+    local now=$(date +%s)
+    local last_check=0
+    
+    if [[ -f "$DATA_DIR/last_check" ]]; then
+        last_check=$(cat "$DATA_DIR/last_check" 2>/dev/null || echo 0)
+    fi
+    
+    local diff=$((now - last_check))
+    
+    if [[ $diff -ge $CHECK_INTERVAL ]]; then
+        echo -e "${INFO} 自动检查更新..."
+        if check_network; then
+            check_remote_version
+            
+            if [[ -f "$DATA_DIR/remote_version" ]]; then
+                REMOTE_VERSION=$(cat "$DATA_DIR/remote_version")
+                if [[ "$LOCAL_VERSION" != "$REMOTE_VERSION" ]]; then
+                    echo -e "${WARN} 发现新版本 $REMOTE_VERSION，请运行 'file-detection update' 更新"
+                fi
+            fi
+        fi
+    fi
+}
+
+# 清理旧病毒库文件
+cleanup_old_virus_files() {
+    echo -e "${INFO} 清理旧病毒库文件..."
+    
+    for platform in "Android" "Linux" "Windows" "MacOS" "Other"; do
+        local platform_dir="$VIRUS_LIB_DIR/$platform"
+        if [[ -d "$platform_dir" ]]; then
+            # 清理损坏的JSON文件
+            find "$platform_dir" -name "*.json" -size 0 -delete 2>/dev/null
+            
+            # 检查JSON文件有效性
+            for json_file in "$platform_dir"/*.json; do
+                if [[ -f "$json_file" ]]; then
+                    if ! jq empty "$json_file" 2>/dev/null; then
+                        echo -e "${WARN} 删除无效JSON文件: $(basename "$json_file")"
+                        rm -f "$json_file"
+                    fi
+                fi
+            done
+        fi
+    done
+    
+    echo -e "${CHECK} 清理完成"
+}

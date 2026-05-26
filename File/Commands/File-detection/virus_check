@@ -1,0 +1,164 @@
+#!/bin/bash
+# File-detection病毒检测模块
+
+source "$(dirname "$0")/config"
+source "$(dirname "$0")/utils"
+
+# 检测单个文件
+detect_single_file() {
+    local file="$1"
+    local check_type="$2"
+    local result=0
+    
+    echo -e "${PLUS} 正在检测文件: $file"
+    
+    if [[ ! -f "$file" ]]; then
+        echo -e "${CROSS} 文件不存在: $file"
+        return 1
+    fi
+    
+    # 计算哈希值
+    local md5_hash=$(get_md5 "$file")
+    local sha1_hash=$(get_sha1 "$file")
+    local sha256_hash=$(get_sha256 "$file")
+    
+    # 基本文件信息
+    echo -e "${INFO} 文件大小: $(get_file_size "$file")"
+    echo -e "${INFO} 文件类型: $(get_file_type "$file")"
+    
+    # 检查文件扩展名
+    if ! check_file_extension "$file"; then
+        result=1
+    fi
+    
+    # 根据检查类型执行检测
+    case "$check_type" in
+        "-v"|"--virus")
+            # 病毒检测
+            echo -e "${INFO} 正在检查病毒库..."
+            
+            if ! check_virus_library "$file" "$md5_hash" "$sha1_hash" "$sha256_hash"; then
+                result=1
+            else
+                echo -e "${CHECK} 未在病毒库中发现匹配"
+            fi
+            
+            # 检查文件内容
+            echo -e "${INFO} 正在分析文件内容..."
+            if ! check_dangerous_content "$file"; then
+                result=1
+            fi
+            ;;
+            
+        "-a"|"--all")
+            # 全部检测
+            echo -e "${INFO} 执行全面检测..."
+            
+            # 1. 检查文件扩展名
+            echo -e "${INFO} 检查文件类型..."
+            if ! check_file_extension "$file"; then
+                result=1
+            fi
+            
+            # 2. 病毒库检测
+            echo -e "${INFO} 检查病毒库..."
+            if ! check_virus_library "$file" "$md5_hash" "$sha1_hash" "$sha256_hash"; then
+                result=1
+            fi
+            
+            # 3. 内容检测
+            echo -e "${INFO} 分析文件内容..."
+            if ! check_dangerous_content "$file"; then
+                result=1
+            fi
+            
+            # 4. 权限检查
+            echo -e "${INFO} 检查文件权限..."
+            local perms=$(get_file_permissions "$file")
+            if echo "$perms" | grep -q "rwx"; then
+                echo -e "${WARN} 文件具有执行权限: $perms"
+                result=1
+            fi
+            
+            # 5. 文件位置检查
+            echo -e "${INFO} 检查文件位置..."
+            if [[ "$file" == *"/tmp/"* ]] || [[ "$file" == *"/dev/"* ]] || [[ "$file" == *"/proc/"* ]]; then
+                echo -e "${WARN} 文件位于临时或系统目录"
+                result=1
+            fi
+            
+            # 6. 文件大小检查
+            echo -e "${INFO} 检查文件大小..."
+            local size=$(stat -c%s "$file" 2>/dev/null || echo 0)
+            if [[ $size -eq 0 ]]; then
+                echo -e "${WARN} 文件大小为0字节，可能异常"
+                result=1
+            elif [[ $size -gt 100000000 ]]; then
+                echo -e "${WARN} 文件过大 ($(get_file_size "$file"))，可能包含隐藏数据"
+                result=1
+            fi
+            ;;
+            
+        *)
+            echo -e "${CROSS} 未知的检测类型: $check_type"
+            return 1
+            ;;
+    esac
+    
+    # 输出结果
+    if [[ $result -eq 0 ]]; then
+        echo -e "${CHECK} 文件检测完成: 未发现明显威胁"
+        log_message "SAFE" "文件检测安全: $file"
+    else
+        echo -e "${CROSS} 文件检测完成: 发现可疑特征"
+        log_message "WARN" "文件检测可疑: $file"
+    fi
+    
+    return $result
+}
+
+# 列出可检测的文件类型
+list_detectable_types() {
+    echo -e "${CYAN}可检测的文件类型:${NC}"
+    echo -e "${BOLD}┌────────────────────────────────────────────────────────┐${NC}"
+    
+    echo -e "${GREEN}可执行文件:${NC}"
+    for type in "${EXECUTABLE_TYPES[@]}"; do
+        echo -e "  .$type"
+    done
+    
+    echo -e ""
+    echo -e "${GREEN}文档文件:${NC}"
+    for type in "${DOCUMENT_TYPES[@]}"; do
+        echo -e "  .$type"
+    done
+    
+    echo -e ""
+    echo -e "${GREEN}媒体文件:${NC}"
+    for type in "${MEDIA_TYPES[@]}"; do
+        echo -e "  .$type"
+    done
+    
+    echo -e ""
+    echo -e "${GREEN}压缩文件:${NC}"
+    for type in "${ARCHIVE_TYPES[@]}"; do
+        echo -e "  .$type"
+    done
+    
+    echo -e ""
+    echo -e "${GREEN}脚本文件:${NC}"
+    for type in "${SCRIPT_TYPES[@]}"; do
+        echo -e "  .$type"
+    done
+    
+    echo -e ""
+    echo -e "${YELLOW}特殊检测:${NC}"
+    echo -e "  • 可执行权限检查"
+    echo -e "  • 危险命令扫描"
+    echo -e "  • 可疑URL检测"
+    echo -e "  • 病毒库匹配"
+    echo -e "  • 文件权限分析"
+    echo -e "  • 文件位置分析"
+    
+    echo -e "${BOLD}└────────────────────────────────────────────────────────┘${NC}"
+}

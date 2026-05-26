@@ -1,0 +1,44 @@
+#!/bin/bash
+# SQLMap 移除脚本
+# 版本: 1.0.0
+
+# 加载配置
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$SCRIPT_DIR/config"
+
+echo "================================================"
+echo "        移除 MLH-Terminal SQLMap 工具        "
+echo "================================================"
+echo ""
+
+# 确认删除
+read -p "确定要移除 SQLMap 吗？(y/N): " confirm
+if [[ ! "$confirm" =~ ^[Yy]$ ]]; then
+    echo "操作已取消"
+    exit 0
+fi
+
+echo ""
+echo "开始移除..."
+
+# 删除 SQLMap 目录
+if [[ -d "$SQLMAP_DIR" ]]; then
+    echo "删除 SQLMap 目录..."
+    rm -rf "$SQLMAP_DIR"
+fi
+
+# 删除安装标记
+if [[ -f "$INSTALL_MARKER" ]]; then
+    echo "删除安装标记..."
+    rm -f "$INSTALL_MARKER"
+fi
+
+# 删除版本文件
+if [[ -f "$VERSION_FILE" ]]; then
+    echo "删除版本文件..."
+    rm -f "$VERSION_FILE"
+fi
+
+echo ""
+echo "移除完成!"
+echo "================================================"

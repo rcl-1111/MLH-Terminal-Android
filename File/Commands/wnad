@@ -1,0 +1,30 @@
+#!/bin/bash
+# WNAD 入口转发器
+# 转发到 Tools/Wifi/WNAD/ 下的真实入口
+
+# 获取当前脚本的绝对路径（兼容 PATH 调用和直接调用）
+SCRIPT_PATH=""
+if command -v type >/dev/null 2>&1 && type -P "wnad" >/dev/null 2>&1; then
+    # 通过 PATH 定位（优先，处理 bare name 调用）
+    SCRIPT_PATH="$(type -P "wnad")"
+elif command -v readlink >/dev/null 2>&1; then
+    # 通过 BASH_SOURCE + readlink 解析
+    SCRIPT_PATH="$(readlink -f "${BASH_SOURCE[0]}" 2>/dev/null)"
+elif command -v which >/dev/null 2>&1; then
+    SCRIPT_PATH="$(which "wnad" 2>/dev/null)"
+fi
+
+if [ -z "$SCRIPT_PATH" ]; then
+    SCRIPT_PATH="${BASH_SOURCE[0]}"
+fi
+
+SCRIPT_DIR="$(cd "$(dirname "$SCRIPT_PATH")" && pwd 2>/dev/null)"
+REAL_WNAD="$SCRIPT_DIR/Tools/Wifi/WNAD/wnad"
+
+if [ -f "$REAL_WNAD" ]; then
+    exec "$REAL_WNAD" "$@"
+else
+    echo -e "\033[1;31m[!]\033[0m 错误: WNAD 主程序不存在"
+    echo -e "\033[1;33m[*]\033[0m 预期路径: $REAL_WNAD"
+    exit 1
+fi

@@ -1,0 +1,152 @@
+#!/bin/bash
+# File-detection哈希工具模块
+
+source "$(dirname "$0")/config"
+source "$(dirname "$0")/utils"
+
+# 显示文件哈希信息
+show_hash_info() {
+    local file="$1"
+    
+    if [[ ! -f "$file" ]]; then
+        echo -e "${CROSS} 文件不存在: $file"
+        return 1
+    fi
+    
+    echo -e "${CYAN}文件哈希信息: $file${NC}"
+    echo -e "${BOLD}┌────────────────────────────────────────────────────────┐${NC}"
+    
+    # MD5
+    local md5_hash=$(get_md5 "$file")
+    if [[ "$md5_hash" != "计算失败" ]] && [[ "$md5_hash" != "文件不存在" ]]; then
+        echo -e "${INFO} MD5:    $md5_hash"
+    fi
+    
+    # SHA1
+    local sha1_hash=$(get_sha1 "$file")
+    if [[ "$sha1_hash" != "计算失败" ]] && [[ "$sha1_hash" != "文件不存在" ]]; then
+        echo -e "${INFO} SHA1:   $sha1_hash"
+    fi
+    
+    # SHA256
+    local sha256_hash=$(get_sha256 "$file")
+    if [[ "$sha256_hash" != "计算失败" ]] && [[ "$sha256_hash" != "文件不存在" ]]; then
+        echo -e "${INFO} SHA256: $sha256_hash"
+    fi
+    
+    echo -e "${BOLD}└────────────────────────────────────────────────────────┘${NC}"
+    
+    return 0
+}
+
+# 显示完整文件信息（修复版）
+show_full_file_info() {
+    local file="$1"
+    
+    if [[ ! -f "$file" ]]; then
+        echo -e "${CROSS} 文件不存在: $file"
+        return 1
+    fi
+    
+    echo -e "${CYAN}文件详细信息: $file${NC}"
+    echo -e "${BOLD}┌────────────────────────────────────────────────────────┐${NC}"
+    
+    # 基本信息
+    echo -e "${INFO} 文件路径: $file"
+    echo -e "${INFO} 文件大小: $(get_file_size "$file")"
+    echo -e "${INFO} 文件类型: $(get_file_type "$file")"
+    echo -e "${INFO} 文件权限: $(get_file_permissions "$file")"
+    
+    # 时间信息
+    local create_time=$(get_creation_time "$file")
+    echo -e "${INFO} 创建时间: $create_time"
+    echo -e "${INFO} 修改时间: $(get_modification_time "$file")"
+    
+    # 哈希信息
+    echo -e ""
+    echo -e "${INFO} 哈希值:"
+    local md5_hash=$(get_md5 "$file")
+    local sha1_hash=$(get_sha1 "$file")
+    local sha256_hash=$(get_sha256 "$file")
+    
+    if [[ "$md5_hash" != "计算失败" ]] && [[ "$md5_hash" != "文件不存在" ]]; then
+        echo -e "  MD5:    $md5_hash"
+    fi
+    if [[ "$sha1_hash" != "计算失败" ]] && [[ "$sha1_hash" != "文件不存在" ]]; then
+        echo -e "  SHA1:   $sha1_hash"
+    fi
+    if [[ "$sha256_hash" != "计算失败" ]] && [[ "$sha256_hash" != "文件不存在" ]]; then
+        echo -e "  SHA256: $sha256_hash"
+    fi
+    
+    # 可执行文件检查
+    echo -e ""
+    echo -e "${INFO} 可执行文件检查:"
+    
+    if is_executable "$file"; then
+        echo -e "  ${GREEN}[√] 是可执行文件${NC}"
+        
+        # 显示详细的可执行文件信息
+        local file_type=$(get_file_type "$file")
+        
+        if [[ "$file_type" == *"PE32"* ]]; then
+            echo -e "  类型: Windows 32位可执行文件"
+            
+            # 检查是否加壳
+            if command -v upx >/dev/null 2>&1; then
+                echo -e "${INFO} 加壳检查..."
+                local upx_check=$(upx -l "$file" 2>/dev/null)
+                if echo "$upx_check" | grep -q "packed"; then
+                    echo -e "  ${YELLOW}[!] 检测到UPX加壳${NC}"
+                else
+                    echo -e "  ${GREEN}[√] 未检测到加壳${NC}"
+                fi
+            fi
+        elif [[ "$file_type" == *"PE32+"* ]]; then
+            echo -e "  类型: Windows 64位可执行文件"
+        elif [[ "$file_type" == *"ELF"* ]]; then
+            echo -e "  类型: Linux可执行文件"
+        fi
+    else
+        echo -e "  ${YELLOW}[!] 不是可执行文件${NC}"
+        
+        # 检查文件扩展名
+        local extension="${file##*.}"
+        extension=$(echo "$extension" | tr '[:upper:]' '[:lower:]')
+        
+        if [[ "$extension" == "exe" ]] || [[ "$extension" == "com" ]] || [[ "$extension" == "dll" ]]; then
+            echo -e "  ${YELLOW}[!] 但具有可执行文件扩展名: .$extension${NC}"
+            echo -e "  可能原因:"
+            echo -e "    1. 文件损坏"
+            echo -e "    2. 文件格式不正确"
+            echo -e "    3. 缺少必要的权限"
+        fi
+    fi
+    
+    # 文件属性检查
+    echo -e ""
+    echo -e "${INFO} 文件属性:"
+    
+    if is_readable "$file"; then
+        echo -e "  ${GREEN}[√] 可读${NC}"
+    else
+        echo -e "  ${RED}[×] 不可读${NC}"
+    fi
+    
+    if is_writable "$file"; then
+        echo -e "  ${GREEN}[√] 可写${NC}"
+    else
+        echo -e "  ${YELLOW}[!] 不可写${NC}"
+    fi
+    
+    # 磁盘使用情况
+    echo -e ""
+    echo -e "${INFO} 磁盘使用:"
+    echo -e "  实际占用: $(get_disk_usage "$file")"
+    echo -e "  Inode编号: $(get_inode_number "$file")"
+    echo -e "  硬链接数: $(get_hardlink_count "$file")"
+    
+    echo -e "${BOLD}└────────────────────────────────────────────────────────┘${NC}"
+    
+    return 0
+}
