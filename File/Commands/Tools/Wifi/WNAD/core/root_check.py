@@ -12,7 +12,16 @@ def is_root() -> bool:
     """
     检测当前是否拥有 root 权限
     兼容 Android Termux 环境
+    Windows 上直接返回 True（不限制）
     """
+    # Windows 无 root 概念，直接放行
+    try:
+        from core.utils import is_windows
+        if is_windows():
+            return True
+    except Exception:
+        pass
+
     # 方法1: os.geteuid()
     try:
         if os.geteuid() == 0:

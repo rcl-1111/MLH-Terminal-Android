@@ -11,8 +11,7 @@ import os
 import subprocess
 import re
 import threading
-from datetime import datetime
-from core.utils import C, CHECK, CROSS, INFO, ROOT, print_table, save_results
+from core.utils import C, CHECK, CROSS, INFO, ROOT, print_table
 from core.root_check import require_root, require_root_graceful
 from core.network import get_oui_vendor
 
@@ -212,44 +211,24 @@ def arp_table():
     ARP 表查看（非 root 阉割版）
     读取 /proc/net/arp 显示本机已知邻居设备
     """
-    arp_path = "/proc/net/arp"
-    if not os.path.isfile(arp_path):
-        print(f" {CROSS} 无法访问 {arp_path}")
-        print(f" {INFO} 在 Android 上可能需要 root 权限")
+    from core.network import get_neighbor_table
+
+    table = get_neighbor_table()
+    if not table:
+        print(f" {CROSS} 无法获取邻居设备表")
         return
 
     print(f" {INFO} 本机 ARP 表（已知邻居设备）:\n")
 
-    with open(arp_path) as f:
-        lines = f.readlines()
-
-    if len(lines) <= 1:
-        print(f" {INFO} ARP 表为空")
-        return
-
     devices = []
-    for line in lines[1:]:
-        parts = line.strip().split()
-        if len(parts) >= 4:
-            ip = parts[0]
-            mac = parts[3]
-            iface = parts[5] if len(parts) > 5 else "?"
-
-            if mac == "00:00:00:00:00:00":
-                continue
-
-            vendor = get_oui_vendor(mac)
-            devices.append((ip, mac, iface, vendor))
+    for ip, info in sorted(table.items()):
+        mac = info["mac"]
+        iface = info.get("iface", "?")
+        vendor = get_oui_vendor(mac)
+        devices.append((ip, mac, iface, vendor))
 
     if devices:
         headers = ["IP 地址", "MAC 地址", "接口", "厂商"]
         print_table(headers, devices)
-
-        # 保存结果
-        save_results("arp_table", {
-            "time": datetime.now().isoformat(),
-            "count": len(devices),
-            "devices": [{"ip": d[0], "mac": d[1], "iface": d[2], "vendor": d[3]} for d in devices],
-        })
     else:
         print(f" {INFO} ARP 表中无有效设备")

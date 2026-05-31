@@ -1,0 +1,26 @@
+# WNAD WiFi 弱密码字典（精简版）
+# 适用于家用路由器常见弱密码
+12345678
+123456789
+admin123
+password
+admin
+root
+1234
+12345
+123456
+1234567
+88888888
+66666666
+00000000
+11111111
+22222222
+abcdefgh
+abc123
+qwertyui
+qwerty123
+passw0rd
+pass123
+letmein
+football
+baseball

@@ -7,9 +7,9 @@ WNAD - IP 查询模块
 import socket
 import ipaddress
 import subprocess
+import threading
 import concurrent.futures
-from datetime import datetime
-from core.utils import C, CHECK, CROSS, INFO, print_table, progress_bar, save_results
+from core.utils import C, CHECK, CROSS, INFO, print_table, progress_bar
 
 
 def resolve_domain(domain: str) -> list:
@@ -85,20 +85,28 @@ def scan_cidr(cidr: str, max_workers: int = 50, timeout: float = 1.0):
     processed = 0
 
     def ping_host(ip_str: str):
-        """Ping 检测主机存活，返回 (IP, 主机名)"""
+        """Ping 检测主机存活，返回 (IP, hostname, mac, vendor)"""
         nonlocal processed
         try:
+            from core.utils import ping_cmd
+            cmd = ping_cmd(ip_str, timeout=timeout)
             if subprocess.run(
-                ["ping", "-c", "1", "-W", str(int(timeout)), ip_str],
-                capture_output=True, timeout=timeout + 1
+                cmd, capture_output=True, timeout=timeout + 1
             ).returncode == 0:
-                # 尝试反向解析主机名
                 hostname = ""
-                try:
-                    hostname = socket.gethostbyaddr(ip_str)[0]
-                except Exception:
-                    pass
-                return (ip_str, hostname)
+                mac = ""
+                vendor = ""
+
+                # 设备名解析 (DNS反解 → mDNS → NetBIOS → DHCP)
+                from core.network import resolve_device_name
+                hostname = resolve_device_name(ip_str)
+                from core.network import get_neighbor_table, get_oui_vendor
+                neigh = get_neighbor_table()
+                if ip_str in neigh:
+                    mac = neigh[ip_str]["mac"]
+                    vendor = get_oui_vendor(mac)
+
+                return (ip_str, hostname, mac, vendor)
         except Exception:
             pass
         finally:
@@ -110,8 +118,17 @@ def scan_cidr(cidr: str, max_workers: int = 50, timeout: float = 1.0):
     # 跳过网络地址和广播地址（对 /24 以上）
     hosts_to_scan = list(network.hosts()) if network.prefixlen < 31 else [ip for ip in network]
 
+    # 信号量限制并发子进程数（Windows 防 ping.exe 崩溃）
+    from core.utils import is_windows
+    ping_limit = 8 if is_windows() else max_workers
+    ping_sema = threading.BoundedSemaphore(ping_limit)
+
+    def _ping_wrapper(ip_str: str) -> tuple:
+        with ping_sema:
+            return ping_host(ip_str)
+
     with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
-        futures = {executor.submit(ping_host, str(ip)): str(ip) for ip in hosts_to_scan}
+        futures = {executor.submit(_ping_wrapper, str(ip)): str(ip) for ip in hosts_to_scan}
         for future in concurrent.futures.as_completed(futures):
             result = future.result()
             if result:
@@ -121,18 +138,13 @@ def scan_cidr(cidr: str, max_workers: int = 50, timeout: float = 1.0):
     if live_hosts:
         print(f" {CHECK} 发现 {len(live_hosts)} 个存活主机:\n")
         rows = []
-        for i, (ip, hostname) in enumerate(live_hosts):
-            dev_name = hostname if hostname else "-"
-            rows.append([str(i + 1), ip, dev_name])
-        print_table(["#", "IP 地址", "设备名"], rows)
-
-        # 保存结果
-        save_results("cidr_scan", {
-            "time": datetime.now().isoformat(),
-            "cidr": cidr,
-            "count": len(live_hosts),
-            "hosts": [{"ip": h[0], "hostname": h[1]} for h in live_hosts],
-        })
+        for i, (ip, hostname, mac, vendor) in enumerate(live_hosts):
+            # 设备名优先显示 hostname，没有则用厂商名替代
+            dev_name = hostname if hostname else (vendor if vendor and vendor != "未知" else "-")
+            mac_disp = mac if mac else "-"
+            vendor_disp = vendor if vendor else "-"
+            rows.append([str(i + 1), ip, dev_name, mac_disp, vendor_disp])
+        print_table(["#", "IP 地址", "设备名", "MAC 地址", "厂商"], rows)
     else:
         print(f" {INFO} 未发现存活主机")
 

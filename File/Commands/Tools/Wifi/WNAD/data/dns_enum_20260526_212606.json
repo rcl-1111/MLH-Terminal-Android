@@ -1,0 +1,47 @@
+{
+  "time": "2026-05-26T21:26:06.697825",
+  "domain": "example.com",
+  "server": "8.8.8.8",
+  "records": [
+    {
+      "type": "A",
+      "value": "104.20.23.154",
+      "ttl": 300
+    },
+    {
+      "type": "A",
+      "value": "172.66.147.243",
+      "ttl": 300
+    },
+    {
+      "type": "MX",
+      "value": " (pref=0)",
+      "ttl": 241
+    },
+    {
+      "type": "NS",
+      "value": "elliott.ns.cloudflare.",
+      "ttl": 21600
+    },
+    {
+      "type": "NS",
+      "value": "hera.",
+      "ttl": 21600
+    },
+    {
+      "type": "TXT",
+      "value": "v=spf1 -all",
+      "ttl": 300
+    },
+    {
+      "type": "TXT",
+      "value": "_k2n1y4vw3qtb4skdx9e7dxt97qrmmq9",
+      "ttl": 300
+    },
+    {
+      "type": "SOA",
+      "value": "elliott.ns.cloudflare. dns.",
+      "ttl": 52
+    }
+  ]
+}

@@ -9,7 +9,7 @@ import re
 import os
 import time
 import signal
-from core.utils import C, CHECK, CROSS, INFO, ROOT, WARN, print_table, save_results
+from core.utils import C, CHECK, CROSS, INFO, ROOT, WARN, print_table
 from core.root_check import require_root_graceful
 from core.network import get_wifi_info
 
@@ -352,15 +352,6 @@ def wifi_scan_info(iface: str = None):
                 print_table(headers, rows)
                 if len(aps) > 20:
                     print(f"\n {INFO} 显示前 20 个，共 {len(aps)} 个 AP")
-
-                # 保存结果
-                from datetime import datetime
-                save_results("wifi_scan", {
-                    "time": datetime.now().isoformat(),
-                    "current_ssid": wifi_info["ssid"],
-                    "current_signal": wifi_info["signal"],
-                    "aps": [{"bssid": a["bssid"], "ssid": a["ssid"], "signal": a["signal"]} for a in aps],
-                })
             else:
                 print(f" {INFO} 未发现 AP")
         else:

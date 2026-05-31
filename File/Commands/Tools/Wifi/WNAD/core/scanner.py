@@ -12,9 +12,8 @@ import concurrent.futures
 import struct
 from urllib.request import urlopen
 from urllib.error import URLError
-from core.utils import C, CHECK, CROSS, INFO, print_table, progress_bar, save_results
+from core.utils import C, CHECK, CROSS, INFO, print_table, progress_bar
 from core.network import get_gateway, get_oui_vendor
-from datetime import datetime
 
 
 # ── 常用服务端口 → 协议名称 ──
@@ -59,49 +58,27 @@ def parse_cidr_from_ip(ip: str) -> str:
 
 
 def scan_arp():
-    """ARP 扫描局域网设备（解析 /proc/net/arp）"""
-    arp_path = "/proc/net/arp"
-    if not os.path.isfile(arp_path):
-        print(f" {CROSS} 无法访问 {arp_path}（无 root 或无 ARP 表）")
-        print(f" {INFO} 可尝试使用 {C.CYAN}scan --ping{C.NC} 代替")
+    """ARP 扫描局域网设备"""
+    from core.network import get_neighbor_table
+
+    table = get_neighbor_table()
+    if not table:
+        print(f" {CROSS} 无法获取邻居设备表")
+        print(f" {INFO} 可尝试使用 {C.CYAN}scan --ping{C.NC} 或 {C.CYAN}discover{C.NC} 代替")
         return []
 
-    print(f" {INFO} 正在读取 ARP 表...\n")
+    print(f" {INFO} 读取 ARP 表...\n")
     devices = []
 
-    with open(arp_path) as f:
-        lines = f.readlines()
-
-    if len(lines) <= 1:
-        print(f" {INFO} ARP 表为空")
-        return []
-
-    for line in lines[1:]:
-        parts = line.strip().split()
-        if len(parts) >= 4:
-            ip = parts[0]
-            hw_type = parts[1]
-            flags = parts[2]
-            mac = parts[3]
-
-            # 跳过未完成的条目
-            if mac == "00:00:00:00:00:00" or flags == "0x00":
-                continue
-
-            vendor = get_oui_vendor(mac)
-            devices.append((ip, mac, vendor))
+    for ip, info in sorted(table.items()):
+        mac = info["mac"]
+        vendor = get_oui_vendor(mac)
+        devices.append((ip, mac, vendor))
 
     if devices:
         print(f" {CHECK} 发现 {len(devices)} 个设备:\n")
         headers = ["IP 地址", "MAC 地址", "厂商"]
         print_table(headers, devices)
-
-        # 保存结果
-        save_results("arp_scan", {
-            "time": datetime.now().isoformat(),
-            "count": len(devices),
-            "devices": [{"ip": d[0], "mac": d[1], "vendor": d[2]} for d in devices],
-        })
     else:
         print(f" {INFO} ARP 表中无有效设备")
 
@@ -197,16 +174,6 @@ def scan_ports(ip: str, port_range: str, max_workers: int = 100, timeout: float 
             banner = p["banner"][:40] if p["banner"] else ""
             rows.append([str(p["port"]), service, f"{C.GREEN}OPEN{C.NC}", banner])
         print_table(["端口", "服务", "状态", "Banner"], rows)
-
-        # 保存结果
-        save_results("port_scan", {
-            "time": datetime.now().isoformat(),
-            "target": ip,
-            "port_range": port_range,
-            "ports_scanned": len(ports),
-            "open_ports": [{"port": p["port"], "service": p["service"], "banner": p["banner"]}
-                          for p in open_ports],
-        })
     else:
         print(f" {INFO} 未发现开放端口")
 
